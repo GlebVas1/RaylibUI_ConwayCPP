@@ -2,8 +2,6 @@
 
 UI::UI() {
     canvas_ = std::make_shared<UICanvas>();
-
-
 };
 
 UI& UI::GetInstance() {
@@ -23,7 +21,7 @@ void UI::Start() {
 
     
     canvas_->SetPosition(0, 0);
-    canvas_->SetDimensions(400, 400);
+    canvas_->SetDimensions(600, 600);
     canvas_->SetCanvasTextureDimensions(20, 20);
     canvas_->SetShowGrid(true);
 

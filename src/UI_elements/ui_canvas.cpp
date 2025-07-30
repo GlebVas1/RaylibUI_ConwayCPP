@@ -27,10 +27,10 @@ void UICanvas::Draw() {
             static_cast<float>(main_texture_height_)
         },
         Rectangle({
-            static_cast<float>(x_position),
-            static_cast<float>(y_position),
-            static_cast<float>(width),
-            static_cast<float>(height)
+            static_cast<float>(x_position_),
+            static_cast<float>(y_position_),
+            static_cast<float>(width_),
+            static_cast<float>(height_)
         }),
         Vector2{0.0f, 0.0f},
         0.0f,
@@ -43,14 +43,14 @@ void UICanvas::Draw() {
             Rectangle{
                 0,
                 0,
-                static_cast<float>(width),
-                static_cast<float>(height)
+                static_cast<float>(width_),
+                static_cast<float>(height_)
             },
             Rectangle({
-                static_cast<float>(x_position),
-                static_cast<float>(y_position),
-                static_cast<float>(width),
-                static_cast<float>(height)
+                static_cast<float>(x_position_),
+                static_cast<float>(y_position_),
+                static_cast<float>(width_),
+                static_cast<float>(height_)
             }),
             Vector2{0.0f, 0.0f},
             0.0f,
@@ -75,21 +75,21 @@ void UICanvas::InitializeMainTexture() {
 }
 
 void UICanvas::InitializeMainGridTexture() {
-    uint8_t* data = static_cast<uint8_t*>(malloc(width * height * 4));
-    memset(data, 0, 4 * width * height);
+    uint8_t* data = static_cast<uint8_t*>(malloc(width_ * height_ * 4));
+    memset(data, 0, 4 * width_ * height_);
 
-    RenderTexture2D grid_render_texture = LoadRenderTexture(width, height);
+    RenderTexture2D grid_render_texture = LoadRenderTexture(width_, height_);
     SetTextureFilter(grid_render_texture.texture, TEXTURE_FILTER_TRILINEAR);
 
     BeginTextureMode(grid_render_texture);
 
-    size_t cell_width = width / main_texture_width_;
-    size_t cell_height = height / main_texture_height_;
+    size_t cell_width = width_ / main_texture_width_;
+    size_t cell_height = height_ / main_texture_height_;
     ClearBackground(Color{0, 0, 0, 0});
     
     BeginBlendMode(BLEND_SUBTRACT_COLORS);
 
-    DrawRectangle(0, 0, width, height, grid_color_);
+    DrawRectangle(0, 0, width_, height_, grid_color_);
 
     for (size_t x = 0; x < main_texture_width_; ++x) {
         for (size_t y = 0; y < main_texture_height_; ++y) {
