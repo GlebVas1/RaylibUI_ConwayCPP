@@ -83,13 +83,13 @@ void UICanvas::InitializeMainGridTexture() {
 
     BeginTextureMode(grid_render_texture);
 
-    
-
     size_t cell_width = width / main_texture_width_;
     size_t cell_height = height / main_texture_height_;
     ClearBackground(Color{0, 0, 0, 0});
+    
+    BeginBlendMode(BLEND_SUBTRACT_COLORS);
+
     DrawRectangle(0, 0, width, height, grid_color_);
-    BeginBlendMode(BLEND_ALPHA);
 
     for (size_t x = 0; x < main_texture_width_; ++x) {
         for (size_t y = 0; y < main_texture_height_; ++y) {
@@ -106,7 +106,7 @@ void UICanvas::InitializeMainGridTexture() {
                     0,
                     0,
                     0,
-                    128
+                    255
                 })
             );
         }

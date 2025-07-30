@@ -153,28 +153,16 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
   thread_creation_mutex.unlock();
 
   while (processing_) {
-    /* {
-      std::lock_guard<std::mutex> l(debug_m);
-      std::cout << "Thread " << thread_id << " waits" << std::endl;
-    } */
 
     {
       std::unique_lock<std::mutex> lk(compute_start_mutex);
-      //compute_start_cv.wait(lk, [&](){ return should_start.load(); });
       compute_start_cv.wait(lk, [&](){ return thread_should_start[thread_id].load(std::memory_order_acq_rel); });
     }
 
     thread_should_start[thread_id].store(false, std::memory_order_acq_rel);
-
-    /* {
-      std::lock_guard<std::mutex> l(debug_m);
-      std::cout << "Thread " << thread_id << " starts" << std::endl;
-    } */
-    //should_start.store(false);
     
     auto buff_r = GetReadBuffer();
     auto buff_w = GetWriteBuffer();
-
 
     for (size_t x = start_x; x < field_height_; x += threads_count) {
       for (size_t y = 0; y < field_width_; ++y) {
@@ -182,17 +170,8 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
       }
     }
 
-   /*  {
-      std::lock_guard<std::mutex> l(debug_m);
-      std::cout << "Thread " << thread_id << " edns" << std::endl;
-    } */
-
     current_threads_finished.fetch_add(1, std::memory_order_acq_rel);
     if (current_threads_finished.load() == threads_count) {
-      /* {
-        std::lock_guard<std::mutex> l(debug_m);
-        std::cout << "Thread " << thread_id << " notif with " << current_threads_finished.load(std::memory_order_acquire) << std::endl;
-      }  */
       compute_end_cv.notify_one();
     }
   }
@@ -200,46 +179,34 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
 }
 
 void Field::MultiThreadUpdating() {
-  size_t i = 0;
-  /* while (++i) {
-    std::cout << "AAAAAAAAaaaaa " << i << std::endl;
-  } */
-  while (true) {
 
+  size_t frame_counter = 0;
+
+  while (true) {
     std::this_thread::sleep_for(std::chrono::milliseconds(frame_milliseconds_delay_));
+    
     {
       std::lock_guard<std::mutex> l(debug_m);
-      std::cout << "Update start frame "  << ++i << std::endl;
+      std::cout << "Update start frame "  << ++frame_counter << std::endl;
     }
-    //should_start.store(true);
 
     // ranged for will not work
     for (size_t i = 0; i < threads_count; ++i) {
       thread_should_start[i].store(true, std::memory_order_acq_rel);
     }
 
-    /* {
-        std::lock_guard<std::mutex> lk(compute_start_mutex);
-        std::cerr << "Notifying...\n";
-    } */
     compute_start_cv.notify_all();
-
-   /*  {
-      std::lock_guard<std::mutex> l(debug_m);
-      std::cout << "Update notified and waiting" << std::endl;
-    } */
-
 
     std::unique_lock<std::mutex> lk(compute_end_mutex);
     compute_end_cv.wait(lk, [&](){ return current_threads_finished.load(std::memory_order_acquire) == threads_count; });
 
     SwitchBuffer();
-    /* {
-      std::lock_guard<std::mutex> l(debug_m);
-      std::cout << "Update stop waits " << std::endl;
-    } */
-    //should_start.store(true);
   
     current_threads_finished.store(0, std::memory_order_release);
   }
+
+  for (size_t i = 0; i < threads_count; ++i) {
+    computing_threads_[i].join();
+  }
+  
 }
