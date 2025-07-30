@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "field.h"
 
+#include "UI_elements/ui_canvas.h"
+
 class UI {
     private:
     UI();
@@ -10,14 +12,7 @@ class UI {
     int window_width = 600;
     int window_height = 600;
 
-    int main_texture_width_ = 500;
-    int main_texture_height_ = 500;
-
-    uint8_t* color_buffer_ = nullptr;
-    std::shared_ptr<Texture2D> main_texture_ = nullptr;
-
-    void InitializeMainTexture();
-    void DrawRenderTexture();
+    std::shared_ptr<UICanvas> canvas_ = nullptr;
     public: 
 
     static UI& GetInstance();

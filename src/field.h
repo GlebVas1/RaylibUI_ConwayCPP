@@ -8,8 +8,8 @@ class Field {
     Field();
     ~Field();
 
-    size_t field_width_ = 500;
-    size_t field_height_ = 500;
+    size_t field_width_ = 20;
+    size_t field_height_ = 20;
     
     uint8_t read_buffer_ = 0;
     uint8_t* buffer_0_;
@@ -29,7 +29,7 @@ class Field {
     std::vector<GameColor>* current_pallete_ = nullptr;
 
     bool processing_ = true;
-    size_t threads_count = 20;
+    size_t threads_count = 2;
     std::atomic<size_t> current_threads_finished;
 
     std::mutex thread_creation_mutex;
