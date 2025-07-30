@@ -82,8 +82,8 @@ class Field {
     }
 
     void SetPixels() {
-        for (size_t x = 15; x < 90; ++x) {
-            for (size_t y = 30; y < 90; ++y) {
+        for (size_t x = 3; x < 6; ++x) {
+            for (size_t y = 2; y < 10; ++y) {
                 SetPixel(x, y, FULL_, GetReadBuffer());
             }
         }

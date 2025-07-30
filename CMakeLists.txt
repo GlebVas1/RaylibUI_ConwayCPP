@@ -9,8 +9,9 @@ add_compile_options(-g -fsanitize=address)
 add_link_options(-g -fsanitize=address)
 
 file(GLOB SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
+file(GLOB SRC_UI ${PROJECT_SOURCE_DIR}/src/UI_elements/*.cpp)
 
-add_executable(speedrun main.cpp ${SRC})
+add_executable(speedrun main.cpp ${SRC} ${SRC_UI})
 
 target_include_directories(speedrun PUBLIC ${PROJECT_SOURCE_DIR}/src)
 target_include_directories(speedrun PUBLIC ${PROJECT_SOURCE_DIR}/raylib/src/include)

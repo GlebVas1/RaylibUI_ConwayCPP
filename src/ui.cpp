@@ -1,6 +1,10 @@
 #include "ui.h"
 
-UI::UI() {};
+UI::UI() {
+    canvas_ = std::make_shared<UICanvas>();
+
+
+};
 
 UI& UI::GetInstance() {
     static UI obj;
@@ -17,7 +21,7 @@ void UI::Start() {
     
     InitWindow(window_width, window_height, ".");
 
-    canvas_ = std::make_shared<UICanvas>();
+    
     canvas_->SetPosition(0, 0);
     canvas_->SetDimensions(400, 400);
     canvas_->SetCanvasTextureDimensions(20, 20);
@@ -26,10 +30,12 @@ void UI::Start() {
     canvas_->Init();
 
     SetTargetFPS(60);
-    ClearBackground(WHITE);
+    
     while (!WindowShouldClose()) {
         //f->UpdateField();
+        
         BeginDrawing();
+        ClearBackground(WHITE);
         canvas_->Draw();
         EndDrawing();
     }

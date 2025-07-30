@@ -21,7 +21,7 @@ class UICanvas : public UIElement {
 
     bool show_grid_ = false;
 
-    Color grid_color_ = WHITE;
+    Color grid_color_ = GREEN;
 
     public: 
 

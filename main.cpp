@@ -8,11 +8,12 @@ int main() {
   std::cout << "A";
   UI& ui = UI::GetInstance();
   Field& f = Field::GetInstance();
+
   ui.SetColorBuffer(f.GetColorBuffer());
   f.SetPixels();
 
   auto gcp = GameColorBW();
-  auto gr = GameRule_DEFAULT;
+  auto gr = GameRule_STATIC;
   
   f.SetColorPallette(&gcp);
   f.SetGameRule(&gr);

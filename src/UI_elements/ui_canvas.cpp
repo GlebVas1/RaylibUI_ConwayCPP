@@ -1,10 +1,6 @@
 #include "ui_canvas.h"
 
 void UICanvas::Draw() {
-
-}
-
-void UICanvas::Draw() {
     uint8_t* data = static_cast<uint8_t*>(malloc(main_texture_width_ * main_texture_height_ * 4));
     std::memcpy(data, color_buffer_, main_texture_width_ * main_texture_height_ * 4);
     Image img = {
@@ -18,7 +14,9 @@ void UICanvas::Draw() {
     Color* pixels = LoadImageColors(img);
     UpdateTexture(*main_texture_, pixels);
     UnloadImage(img);
-    DrawTexture(*main_texture_, x_position, y_position, WHITE);
+    //DrawTexture(*main_texture_, x_position, y_position, WHITE);
+    
+    //return;
 
     DrawTexturePro(
         *main_texture_,
@@ -85,30 +83,35 @@ void UICanvas::InitializeMainGridTexture() {
 
     BeginTextureMode(grid_render_texture);
 
-    DrawRectangle(0, 0, width, height, grid_color_);
+    
 
     size_t cell_width = width / main_texture_width_;
     size_t cell_height = height / main_texture_height_;
+    ClearBackground(Color{0, 0, 0, 0});
+    DrawRectangle(0, 0, width, height, grid_color_);
+    BeginBlendMode(BLEND_ALPHA);
+
     for (size_t x = 0; x < main_texture_width_; ++x) {
         for (size_t y = 0; y < main_texture_height_; ++y) {
             DrawRectangleRounded(
             Rectangle{
-                    static_cast<float>(x + 1),
-                    static_cast<float>(y + 1),
+                    static_cast<float>(x * cell_width + 1),
+                    static_cast<float>(y * cell_height + 1),
                     static_cast<float>(cell_width - 1),
                     static_cast<float>(cell_height - 1)
                 },
-                0.9f,
+                0.4f, 
                 0,
                 Color({
                     0,
                     0,
                     0,
-                    0
+                    128
                 })
             );
         }
     }
+    EndBlendMode();
 
     EndTextureMode();
 
@@ -118,12 +121,12 @@ void UICanvas::InitializeMainGridTexture() {
 
 
 void UICanvas::ReinitializeMainTexture() {
-    UnloadTexture(*main_texture_);
+   // UnloadTexture(*main_texture_);
     InitializeMainTexture();
 }
 
 void UICanvas::ReinitializeMainGridTexture() {
-    UnloadTexture(*main_grid_texture_);
+   // UnloadTexture(*main_grid_texture_);
     InitializeMainGridTexture();
 }
 
