@@ -1,0 +1,23 @@
+#pragma once
+#include "stdafx.h"
+
+struct GameRule {
+  std::string name = "DEFAULT";
+/* 1 for this byte val
+    0b010000100 means 7 and 2
+ */
+  size_t neigh_to_die = 0b111110011;
+  size_t neigh_to_arrive = 0b000001000;
+  size_t neigh_to_getting_older = 0b111110011;
+  unsigned char maximum_age = 6;
+  size_t radius = 1;
+  
+/* I've never thought that I'd code it like this */
+  bool is_dying(size_t neigh_count) { return neigh_to_die & (1ul << (neigh_count)); }
+  bool is_arriving(size_t neigh_count) { return neigh_to_arrive & (1ul << (neigh_count)); }
+  bool is_getting_older(size_t neigh_count) { return neigh_to_getting_older & (1ul << (neigh_count)); }
+};
+
+extern GameRule GameRule_STATIC;
+extern GameRule GameRule_DEFAULT; 
+
