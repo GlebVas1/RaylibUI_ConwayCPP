@@ -3,7 +3,9 @@
 Field::Field() :
     buffer_0_(static_cast<uint8_t*>(malloc(field_width_ * field_height_))),
     buffer_1_(static_cast<uint8_t*>(malloc(field_width_ * field_height_))),
-    color_buffer_(static_cast<uint8_t*>(malloc(field_width_ * field_height_ * 4))) { }
+    color_buffer_(static_cast<uint8_t*>(malloc(field_width_ * field_height_ * 4))),
+    controller_(Controller::GetInstance())
+{ }
 
 Field::~Field() {
     free(buffer_0_);
@@ -209,4 +211,10 @@ void Field::MultiThreadUpdating() {
     computing_threads_[i].join();
   }
   
+}
+
+void Field::SetPixelAt(int x, int y, uint8_t val) {
+  size_t x_at = static_cast<size_t>((x + field_width_) % field_width_);
+  size_t y_at = static_cast<size_t>((y + field_height_) % field_height_);
+  SetPixel(x_at, y_at, val, GetReadBuffer());
 }

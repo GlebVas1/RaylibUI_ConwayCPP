@@ -149,3 +149,17 @@ void UICanvas::SetCanvasTextureDimensions(int x, int y) {
 void UICanvas::SetColorBuffer(uint8_t* buffer) {
     color_buffer_ = buffer;
 } 
+
+void UICanvas::Update() {
+    bool mouse_on_canvas = CheckCollisionPointRec(GetMousePosition(), Rectangle{
+        static_cast<float>(x_position_),
+        static_cast<float>(y_position_),
+        static_cast<float>(width_),
+        static_cast<float>(height_)
+    });
+    if (mouse_on_canvas) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            ui.SetPixel(1, 1);
+        } 
+    }
+}

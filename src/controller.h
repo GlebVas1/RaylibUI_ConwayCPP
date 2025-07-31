@@ -3,6 +3,9 @@
 #include "ui.h"
 #include "field.h"
 
+class UI;
+class Field;
+
 class Controller {
     private:
     Field& field;
@@ -10,6 +13,7 @@ class Controller {
     Controller();
     ~Controller();
     public:
-    Controller& GetInstance();
+    static Controller& GetInstance();
+    void SetFieldPixel(size_t x, size_t y, uint8_t val);
     void StartUI();
 };

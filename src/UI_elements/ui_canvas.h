@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "raylib.h"
+
 #include "ui_element_class.h"
 
 class UICanvas : public UIElement {
@@ -25,8 +26,9 @@ class UICanvas : public UIElement {
 
     public: 
 
-    void Draw() override;
-    void Init() override;
+    void Draw() ;
+    void Init() ;
+    void Update() ;
 
     void SetShowGrid(bool val);
 

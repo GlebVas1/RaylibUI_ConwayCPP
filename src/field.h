@@ -2,11 +2,16 @@
 #include "stdafx.h"
 #include "game_rule.h"
 #include "game_colors.h"
+#include "controller.h"
+
+class Controller;
 
 class Field {
     private:
     Field();
     ~Field();
+
+    Controller& controller_;
 
     size_t field_width_ = 20;
     size_t field_height_ = 20;

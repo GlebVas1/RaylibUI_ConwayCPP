@@ -11,3 +11,7 @@ Controller& Controller::GetInstance() {
 void Controller::StartUI() {
 
 }
+
+void Controller::SetFieldPixel(size_t x, size_t y, uint8_t val) {
+    field.SetPixelAt(x, y, val);
+}

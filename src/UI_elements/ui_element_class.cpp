@@ -18,15 +18,20 @@ void UIElement::Init() {}
 
 void UIElement::Update() {}
 
-UIElement::UIElement() {}
+UIElement::UIElement() : ui(UI::GetInstance()) {}
 
-UIElement::UIElement(int width, int height) : width_(width), height_(height) {}
+UIElement::UIElement(int width, int height) :
+    width_(width),
+    height_(height),
+    ui(UI::GetInstance())
+{}
 
 UIElement::UIElement(int x_pos, int y_pos, int width, int height) :
     width_(width),
     height_(height),
     x_position_(x_pos),
-    y_position_(y_pos) 
+    y_position_(y_pos),
+    ui(UI::GetInstance())
 {}
 
 void UIElement::SetXPosition(int x) {

@@ -1,6 +1,6 @@
 #include "ui.h"
 
-UI::UI() {
+UI::UI() : controller_(Controller::GetInstance()) {
     canvas_ = std::make_shared<UICanvas>();
 };
 
@@ -43,4 +43,8 @@ void UI::Start() {
 
 void UI::SetColorBuffer(uint8_t* new_color_buffer) {
     canvas_->SetColorBuffer(new_color_buffer);
+}
+
+void UI::SetPixel(size_t x, size_t y) {
+    controller_.SetFieldPixel(x, y, val_to_set_);
 }

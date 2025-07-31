@@ -1,8 +1,12 @@
 #pragma once
 #include "stdafx.h"
+#include "ui.h"
+
+class UI;
 
 class UIElement {
     protected:
+    UI& ui;
     int width_ = 0;
     int height_ = 0;
     int x_position_ = 0;
@@ -17,7 +21,7 @@ class UIElement {
 
     void SetXPosition(int x);
     void SetYPosition(int y);
-    
+
     inline int GetWidth();
     inline int GetHeight();
     inline int GetXPosition();
