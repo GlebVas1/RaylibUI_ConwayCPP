@@ -13,8 +13,8 @@ class Field {
 
     Controller* controller_;
 
-    size_t field_width_ = 20;
-    size_t field_height_ = 20;
+    size_t field_width_ = 50;
+    size_t field_height_ = 50;
     
     uint8_t read_buffer_ = 0;
     uint8_t* buffer_0_;
@@ -51,7 +51,7 @@ class Field {
     //average bool can be ovverding due to cache
     std::vector<std::atomic_bool> thread_should_start;
 
-    size_t frame_milliseconds_delay_ = 100;
+    size_t frame_milliseconds_delay_ = 40;
 
     inline size_t BufferIndex(size_t x, size_t y);
 

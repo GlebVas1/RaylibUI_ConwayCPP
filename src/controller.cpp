@@ -3,13 +3,10 @@
 #include "field.h"
 
 Controller::Controller() {
-    std::cout << "A " << std::endl;
     ui = &UI::GetInstance();
     ui->SetController(this);
-    std::cout << "B " << std::endl;
     field = &Field::GetInstance();
     field->SetController(this);
-    std::cout << "C " << std::endl;
 }
 
 Controller::~Controller() {}
@@ -20,11 +17,18 @@ Controller& Controller::GetInstance() {
 }
 
 void Controller::StartUI() {
-    std::cout << "AAAA" << std::endl;
     ui->InitializeElements();
     ui->SetColorBuffer(field->GetColorBuffer());
-    
-    std::cout << "BBB" << std::endl;
+
+    auto gcp = GameColorFlame();
+    //auto gr = GameRule_STATIC;
+    auto gr = GameRule_FREESTAR;
+    field->SetColorPallette(&gcp);
+    field->SetGameRule(&gr);
+
+    ui->SetColorPallette(gcp);
+    ui->SetColorCount(gr.maximum_age);
+
     ui->Start();
 }
 
@@ -33,9 +37,9 @@ void Controller::SetFieldPixel(size_t x, size_t y, uint8_t val) {
 }
 
 void Controller::Start() {
-    auto gcp = GameColorBW();
-    auto gr = GameRule_STATIC;
-
+    auto gcp = GameColorFlame();
+    //auto gr = GameRule_STATIC;
+    auto gr = GameRule_FREESTAR;
     field->SetColorPallette(&gcp);
     field->SetGameRule(&gr);
 

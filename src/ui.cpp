@@ -21,10 +21,11 @@ void UI::Start() {
 
     canvas_->SetPosition(0, 0);
     canvas_->SetDimensions(600, 600);
-    canvas_->SetCanvasTextureDimensions(20, 20);
+    canvas_->SetCanvasTextureDimensions(50, 50);
     canvas_->SetShowGrid(true);
 
     canvas_->Init();
+    pallete_->Init();
 
     SetTargetFPS(60);
     
@@ -63,8 +64,27 @@ void UI::SetController(Controller* controller) {
 
 void UI::InitializeElements() {
     canvas_ = std::make_shared<UICanvas>();
+    pallete_ = std::make_shared<UIPallete>();
+    pallete_->SetXPosition(1100);
+    pallete_->SetYPosition(20);
 }
 
 void UI::AddUIElement(UIElement* elem_ptr) {
     elements_.push_back(elem_ptr);
+}
+
+void UI::SetBrushValue(uint8_t val) {
+    val_to_set_ = val;
+}
+
+void UI::SetColorPallette(const std::vector<GameColor>& pallette) {
+    pallete_->SetColorPallette(pallette);
+}
+
+void UI::SetColorCount(size_t color_count) {
+    pallete_->SetColorCount(color_count);
+}
+    
+void UI::SetSelectedColor(uint8_t val) {
+    pallete_->SetSelectedColor(0);
 }

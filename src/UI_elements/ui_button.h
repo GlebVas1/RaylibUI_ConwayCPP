@@ -7,9 +7,9 @@
 
 class UIButton : public UIElement, UIMouseState, UITextComponent {
     private:
-        Color default_c_;
-        Color covered_c_;
-        Color pressed_c_;
+        Color default_c_ = { 0, 0, 0, 255};
+        Color covered_c_  = { 128, 128, 128, 255};
+        Color pressed_c_  = { 0, 0, 0, 255};
         float roundness_;
         std::function<void()> binding;
 
