@@ -1,12 +1,12 @@
 #pragma once
 #include "stdafx.h"
-#include "ui.h"
+// #include "ui.h"
 
-class UI;
+//class UI;
 
 class UIElement {
     protected:
-    UI& ui;
+  //  UI& ui;
     int width_ = 0;
     int height_ = 0;
     int x_position_ = 0;

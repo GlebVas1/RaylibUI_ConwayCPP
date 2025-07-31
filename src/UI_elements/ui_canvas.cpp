@@ -159,7 +159,7 @@ void UICanvas::Update() {
     });
     if (mouse_on_canvas) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            ui.SetPixel(1, 1);
+           // ui.SetPixel(1, 1);
         } 
     }
 }

@@ -1,4 +1,4 @@
-#pragma once
+/* #pragma once
 #include "stdafx.h"
 #include "ui.h"
 #include "field.h"
@@ -17,3 +17,5 @@ class Controller {
     void SetFieldPixel(size_t x, size_t y, uint8_t val);
     void StartUI();
 };
+
+ */

@@ -1,4 +1,4 @@
-#include "controller.h"
+/* #include "controller.h"
 
 Controller::Controller() : field(Field::GetInstance()), ui(UI::GetInstance()) {}
 
@@ -14,4 +14,4 @@ void Controller::StartUI() {
 
 void Controller::SetFieldPixel(size_t x, size_t y, uint8_t val) {
     field.SetPixelAt(x, y, val);
-}
+} */

@@ -26,9 +26,9 @@ class UICanvas : public UIElement {
 
     public: 
 
-    void Draw() ;
-    void Init() ;
-    void Update() ;
+    void Draw() override;
+    void Init() override;
+    void Update() override;
 
     void SetShowGrid(bool val);
 

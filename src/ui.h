@@ -3,17 +3,14 @@
 #include "raylib.h"
 
 #include "UI_elements/ui_canvas.h"
-#include "controller.h"
-
-class Controller;
-class UICanvas;
+//#include "controller.h"
 
 class UI {
     private:
     UI();
     ~UI();
 
-    Controller& controller_;
+   // Controller& controller_;
     int window_width = 1200;
     int window_height = 600;
 

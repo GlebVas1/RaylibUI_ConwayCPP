@@ -3,8 +3,8 @@
 Field::Field() :
     buffer_0_(static_cast<uint8_t*>(malloc(field_width_ * field_height_))),
     buffer_1_(static_cast<uint8_t*>(malloc(field_width_ * field_height_))),
-    color_buffer_(static_cast<uint8_t*>(malloc(field_width_ * field_height_ * 4))),
-    controller_(Controller::GetInstance())
+    color_buffer_(static_cast<uint8_t*>(malloc(field_width_ * field_height_ * 4)))
+    //controller_(Controller::GetInstance())
 { }
 
 Field::~Field() {
