@@ -1,4 +1,4 @@
-/* #pragma once
+#pragma once
 #include "stdafx.h"
 #include "ui.h"
 #include "field.h"
@@ -18,4 +18,3 @@ class Controller {
     void StartUI();
 };
 
- */

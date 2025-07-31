@@ -1,7 +1,7 @@
 #include "ui.h"
 
-//UI::UI() : controller_(Controller::GetInstance()) {
-UI::UI() {
+UI::UI() : controller_(Controller::GetInstance()) {
+//UI::UI() {
     canvas_ = std::make_shared<UICanvas>();
 };
 
@@ -35,7 +35,7 @@ void UI::Start() {
         
         BeginDrawing();
         ClearBackground(WHITE);
-        canvas_->Draw();
+        // canvas_->Draw();
         EndDrawing();
     }
 }
