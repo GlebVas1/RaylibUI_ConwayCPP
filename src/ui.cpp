@@ -19,7 +19,6 @@ void UI::Start() {
     
     InitWindow(window_width, window_height, ".");
 
-    
     canvas_->SetPosition(0, 0);
     canvas_->SetDimensions(600, 600);
     canvas_->SetCanvasTextureDimensions(20, 20);
@@ -30,16 +29,25 @@ void UI::Start() {
     SetTargetFPS(60);
     
     while (!WindowShouldClose()) {
-        //f->UpdateField();
-        
+        UpdateUIElements();
         BeginDrawing();
         ClearBackground(WHITE);
-        canvas_->Draw();
+        DrawUIElements();
         EndDrawing();
     }
 }
 
+void UI::UpdateUIElements() {
+    for (auto elem : elements_) {
+        elem->Update();
+    }
+}
 
+void UI::DrawUIElements() {
+    for (auto elem : elements_) {
+        elem->Draw();
+    }
+}
 
 void UI::SetColorBuffer(uint8_t* new_color_buffer) {
     canvas_->SetColorBuffer(new_color_buffer);
@@ -55,4 +63,8 @@ void UI::SetController(Controller* controller) {
 
 void UI::InitializeElements() {
     canvas_ = std::make_shared<UICanvas>();
+}
+
+void UI::AddUIElement(UIElement* elem_ptr) {
+    elements_.push_back(elem_ptr);
 }

@@ -13,6 +13,7 @@ class UI {
     private:
     UI();
     ~UI();
+    std::vector<UIElement*> elements_;
 
     Controller* controller_ = nullptr;
     int window_width = 1200;
@@ -20,6 +21,10 @@ class UI {
 
     uint8_t val_to_set_ = 255;
     std::shared_ptr<UICanvas> canvas_ = nullptr;
+
+    void UpdateUIElements();
+    void DrawUIElements();
+    
     public: 
 
     static UI& GetInstance();
@@ -34,4 +39,5 @@ class UI {
 
     void InitializeElements();
 
+    void AddUIElement(UIElement* elen_ptr);
 };

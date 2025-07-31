@@ -159,7 +159,9 @@ void UICanvas::Update() {
     });
     if (mouse_on_canvas) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-           ui.SetPixel(1, 1);
+            size_t x = static_cast<size_t>(static_cast<float>(main_texture_width_) * GetMousePosition().x / width_);
+            size_t y = static_cast<size_t>(static_cast<float>(main_texture_height_) * GetMousePosition().y/ height_);
+            ui.SetPixel(y, x);
         } 
     }
 }

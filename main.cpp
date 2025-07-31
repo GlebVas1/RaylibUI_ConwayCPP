@@ -29,7 +29,6 @@ int main() {
   /* t1.join(); */
   Controller& main_controller = Controller::GetInstance();
   std::cout << "II " << std::endl;
-  main_controller.StartField();
+  main_controller.Start();
   std::cout << "III " << std::endl;
-  main_controller.StartUI();
 }

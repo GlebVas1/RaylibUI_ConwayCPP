@@ -217,6 +217,7 @@ void Field::SetPixelAt(int x, int y, uint8_t val) {
   size_t x_at = static_cast<size_t>((x + field_width_) % field_width_);
   size_t y_at = static_cast<size_t>((y + field_height_) % field_height_);
   SetPixel(x_at, y_at, val, GetReadBuffer());
+  SetPixel(x_at, y_at, val, GetWriteBuffer());
 }
 
 void Field::SetController(Controller* controller) {

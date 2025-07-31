@@ -21,8 +21,9 @@ Controller& Controller::GetInstance() {
 
 void Controller::StartUI() {
     std::cout << "AAAA" << std::endl;
-    ui->SetColorBuffer(field->GetColorBuffer());
     ui->InitializeElements();
+    ui->SetColorBuffer(field->GetColorBuffer());
+    
     std::cout << "BBB" << std::endl;
     ui->Start();
 }
@@ -31,7 +32,7 @@ void Controller::SetFieldPixel(size_t x, size_t y, uint8_t val) {
     field->SetPixelAt(x, y, val);
 }
 
-void Controller::StartField() {
+void Controller::Start() {
     auto gcp = GameColorBW();
     auto gr = GameRule_STATIC;
 
@@ -41,5 +42,8 @@ void Controller::StartField() {
     field->CreateUpdateThreads();
 
     std::thread t(&Field::MultiThreadUpdating, field);
+   
+    StartUI();
     t.join();
 }
+

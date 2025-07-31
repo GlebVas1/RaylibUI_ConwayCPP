@@ -11,10 +11,12 @@ class Controller {
     UI* ui;
     Controller();
     ~Controller();
+    std::thread* field_multi_thread_ = nullptr;
     public:
     static Controller& GetInstance();
     void SetFieldPixel(size_t x, size_t y, uint8_t val);
     void StartUI();
-    void StartField();
+    void Start();
+    void ThreadsJoin();
 };
 
