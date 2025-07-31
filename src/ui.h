@@ -5,7 +5,6 @@
 #include "UI_elements/ui_canvas.h"
 // #include "UI_elements/ui_button.h"
 
-#include "controller.h"
 #include "UI_elements/ui_element_class.h"
 
 class Controller;
@@ -15,7 +14,7 @@ class UI {
     UI();
     ~UI();
 
-    Controller& controller_;
+    Controller* controller_ = nullptr;
     int window_width = 1200;
     int window_height = 600;
 
@@ -31,5 +30,8 @@ class UI {
 
     void SetPixel(size_t x, size_t y);
     
+    void SetController(Controller* controller);
+
+    void InitializeElements();
 
 };

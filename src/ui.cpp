@@ -1,9 +1,8 @@
 #include "ui.h"
+#include "controller.h"
 
-UI::UI() : controller_(Controller::GetInstance()) {
-//UI::UI() {
-    canvas_ = std::make_shared<UICanvas>();
-};
+//cause of UI elemnts structure elemnts arent crated there
+UI::UI() { };
 
 UI& UI::GetInstance() {
     static UI obj;
@@ -11,7 +10,7 @@ UI& UI::GetInstance() {
 }
 
 UI::~UI() {
-    CloseWindow();
+    // CloseWindow();
 }
 
 void UI::Start() {
@@ -35,7 +34,7 @@ void UI::Start() {
         
         BeginDrawing();
         ClearBackground(WHITE);
-        // canvas_->Draw();
+        canvas_->Draw();
         EndDrawing();
     }
 }
@@ -47,5 +46,13 @@ void UI::SetColorBuffer(uint8_t* new_color_buffer) {
 }
 
 void UI::SetPixel(size_t x, size_t y) {
-    //controller_.SetFieldPixel(x, y, val_to_set_);
+    controller_->SetFieldPixel(x, y, val_to_set_);
+}
+
+void UI::SetController(Controller* controller) {
+    controller_ = controller;
+}
+
+void UI::InitializeElements() {
+    canvas_ = std::make_shared<UICanvas>();
 }

@@ -11,8 +11,6 @@ void UIElement::SetPosition(int x, int y) {
     y_position_ = y;
 }
 
-
-
 void UIElement::Draw() {}
 
 void UIElement::Init() {}

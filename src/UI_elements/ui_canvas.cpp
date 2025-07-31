@@ -1,5 +1,5 @@
 #include "ui_canvas.h"
-
+#include "ui.h"
 void UICanvas::Draw() {
     uint8_t* data = static_cast<uint8_t*>(malloc(main_texture_width_ * main_texture_height_ * 4));
     std::memcpy(data, color_buffer_, main_texture_width_ * main_texture_height_ * 4);
@@ -159,7 +159,7 @@ void UICanvas::Update() {
     });
     if (mouse_on_canvas) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-           // ui.SetPixel(1, 1);
+           ui.SetPixel(1, 1);
         } 
     }
 }
