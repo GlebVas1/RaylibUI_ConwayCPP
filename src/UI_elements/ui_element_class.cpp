@@ -65,3 +65,24 @@ int UIElement::GetHeight() { return height_; };
 int UIElement::GetXPosition() { return x_position_; };
 
 int UIElement::GetYPosition() { return y_position_; };
+
+int UIElement::GetAbsoluteXPosition() {
+    int x = parrent_ == nullptr ? 0 : parrent_->GetAbsoluteXPosition();
+    return x_position_ + x;
+}
+
+int UIElement::GetAbsoluteYPosition() {
+    int y = parrent_ == nullptr ? 0 : parrent_->GetAbsoluteYPosition();
+    return y_position_ + y;
+}
+
+void UIElement::SetParrent(UIElement* parrent) {
+    if (parrent_ != nullptr) {
+        parrent_->children_.erase(this);
+    }
+    if (parrent != nullptr) {
+        parrent->children_.insert(this);
+    }
+
+    parrent_ = parrent;
+}

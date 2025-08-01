@@ -73,7 +73,7 @@ void UIPallete::UIPalleteButton::Update() {
     if (mouse_on_button) {
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             state_ = MouseState::MOUSE_PRESSED;
-            this_pallete->selected_color_ = this_pallete->color_pallete_val_[id_];
+            this_pallete->selected_val_ = this_pallete->color_pallete_val_[id_];
             this_pallete->selected_button = id_;
         } else {
             state_ = MouseState::MOUSE_HOVERED;
@@ -138,12 +138,12 @@ void UIPallete::SetColorCount(size_t color_count) {
     colors_count_ = color_count;
 }
 
-uint8_t UIPallete::GetSelectedColor() {
-    return selected_color_;
+uint8_t UIPallete::GetSelectedVal() {
+    return selected_val_;
 }
 
-void UIPallete::SetSelectedColor(uint8_t val) {
-    selected_color_ = val;
+void UIPallete::SetSelectedVal(uint8_t val) {
+    selected_val_ = val;
 }
 
 void UIPallete::Update() {

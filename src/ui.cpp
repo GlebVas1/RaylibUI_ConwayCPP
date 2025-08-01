@@ -19,10 +19,10 @@ void UI::Start() {
     
     InitWindow(window_width, window_height, ".");
 
-    canvas_->SetPosition(0, 0);
-    canvas_->SetDimensions(1280, 1280);
-    canvas_->SetCanvasTextureDimensions(50, 50);
-    canvas_->SetShowGrid(true);
+    canvas_->SetPosition(10, 10);
+    canvas_->SetDimensions(1060, 1060);
+    canvas_->SetCanvasTextureDimensions(600, 600);
+    // canvas_->SetShowGrid(true);
 
     canvas_->Init();
     pallete_->Init();
@@ -32,7 +32,7 @@ void UI::Start() {
     while (!WindowShouldClose()) {
         UpdateUIElements();
         BeginDrawing();
-        ClearBackground(WHITE);
+        ClearBackground(ui_background_color);
         DrawUIElements();
         EndDrawing();
     }
@@ -55,7 +55,7 @@ void UI::SetColorBuffer(uint8_t* new_color_buffer) {
 }
 
 void UI::SetPixel(size_t x, size_t y) {
-    controller_->SetFieldPixel(x, y, val_to_set_);
+    controller_->SetFieldPixel(x, y, pallete_->GetSelectedVal());
 }
 
 void UI::SetController(Controller* controller) {
@@ -64,6 +64,8 @@ void UI::SetController(Controller* controller) {
 
 void UI::InitializeElements() {
     canvas_ = std::make_shared<UICanvas>();
+    canvas_->SetCanvasGridColor(ui_background_color);
+
     pallete_ = std::make_shared<UIPallete>();
     pallete_->SetXPosition(1100);
     pallete_->SetYPosition(20);
@@ -71,10 +73,6 @@ void UI::InitializeElements() {
 
 void UI::AddUIElement(UIElement* elem_ptr) {
     elements_.push_back(elem_ptr);
-}
-
-void UI::SetBrushValue(uint8_t val) {
-    val_to_set_ = val;
 }
 
 void UI::SetColorPallette(const std::vector<GameColor>& pallette) {
@@ -86,5 +84,15 @@ void UI::SetColorCount(size_t color_count) {
 }
     
 void UI::SetSelectedColor(uint8_t val) {
-    pallete_->SetSelectedColor(0);
+    pallete_->SetSelectedVal(0);
+}
+
+void UI::DrawBrush(size_t x, size_t y) {
+    for (int x1 = -brush_radius_; x1 < brush_radius_; ++x1){
+        for (int y1 = -brush_radius_; y1 < brush_radius_; ++y1) {
+            if (x1 * x1 + y1 * y1 < brush_radius_ * brush_radius_) {
+                controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), pallete_->GetSelectedVal());
+            }
+        }
+    }
 }

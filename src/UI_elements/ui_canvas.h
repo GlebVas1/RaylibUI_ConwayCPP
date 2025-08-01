@@ -35,4 +35,6 @@ class UICanvas : public UIElement {
     void SetCanvasTextureDimensions(int x, int y);
 
     void SetColorBuffer(uint8_t* buffer);
+
+    void SetCanvasGridColor(Color c);
 };

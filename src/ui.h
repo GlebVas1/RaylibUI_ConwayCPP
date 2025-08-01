@@ -7,25 +7,27 @@
 // #include "UI_elements/ui_button.h"
 
 #include "UI_elements/ui_element_class.h"
+#include "ui_color_theme.h"
 
 class Controller;
 
-class UI {
+class UI : public UIColorTheme {
     private:
     UI();
     ~UI();
     std::vector<UIElement*> elements_;
 
     Controller* controller_ = nullptr;
-    int window_width = 2020;
-    int window_height = 1280;
+    int window_width = 1920;
+    int window_height = 1080;
 
-    uint8_t val_to_set_ = 255;
     std::shared_ptr<UICanvas> canvas_ = nullptr;
     std::shared_ptr<UIPallete> pallete_ = nullptr;
 
     void UpdateUIElements();
     void DrawUIElements();
+
+    int brush_radius_ = 45;
 
     public: 
 
@@ -43,11 +45,11 @@ class UI {
 
     void AddUIElement(UIElement* elen_ptr);
 
-    void SetBrushValue(uint8_t);
-
     void SetColorPallette(const std::vector<GameColor>& pallette);
 
     void SetColorCount(size_t color_count);
 
     void SetSelectedColor(uint8_t val);
+
+    void DrawBrush(size_t x, size_t y);
 };

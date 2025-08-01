@@ -41,7 +41,7 @@ class UIPallete : public UIElement {
     size_t colors_count_ = 0;
     std::vector<GameColor> color_pallete_;
     std::vector<uint8_t> color_pallete_val_;
-    size_t selected_color_ = 0;
+    size_t selected_val_ = 0;
     size_t selected_button = 0;
 
     int button_width_ = 30;
@@ -63,8 +63,8 @@ class UIPallete : public UIElement {
 
     void SetColorPallette(const std::vector<GameColor>& pallette);
     void SetColorCount(size_t color_count);
-    void SetSelectedColor(uint8_t val);
+    void SetSelectedVal(uint8_t val);
 
-    uint8_t GetSelectedColor();
+    uint8_t GetSelectedVal();
 
 };

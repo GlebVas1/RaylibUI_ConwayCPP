@@ -11,11 +11,16 @@ class UIElement {
     int height_ = 0;
     int x_position_ = 0;
     int y_position_ = 0;
+    
+    UIElement* parrent_ = nullptr;
+    std::unordered_set<UIElement*> children_;
+
     public:
     // Don't want make it = 0, to not mandatory implement them
     virtual void Init();
     virtual void Draw();
     virtual void Update();
+
     void SetDimensions(int x, int y);
     void SetPosition(int x, int y);
 
@@ -29,6 +34,11 @@ class UIElement {
     inline int GetHeight();
     inline int GetXPosition();
     inline int GetYPosition();
+
+    inline int GetAbsoluteXPosition();
+    inline int GetAbsoluteYPosition();
+
+    void SetParrent(UIElement* parrent);
 
     UIElement();
     UIElement(int width, int height);
