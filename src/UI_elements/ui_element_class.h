@@ -44,6 +44,6 @@ class UIElement {
     UIElement(int width, int height);
     UIElement(int x_pos, int y_pos, int width, int height);
 
-    // virtual ~UIElement(); 
+    // virtual ~UIElement() {}; 
     // isn't used because there no such cases
 };

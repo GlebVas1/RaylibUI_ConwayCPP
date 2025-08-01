@@ -63,7 +63,8 @@ void UI::SetController(Controller* controller) {
 }
 
 void UI::InitializeElements() {
-    canvas_ = std::make_shared<UICanvas>();
+    canvas_ = std::make_shared<UIMainCanvas>();
+    //auto b = std::make_shared<UIMainCanvas>();
     canvas_->SetCanvasGridColor(ui_background_color);
 
     pallete_ = std::make_shared<UIPallete>();

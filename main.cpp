@@ -4,6 +4,29 @@
 #include "game_colors.h"
 #include "game_rule.h"
 #include "controller.h"
+
+
+/* class A {
+    public:
+    A() {}
+    A(int ) {}
+    virtual void f() {}
+};
+
+class B : public A {
+    public:
+    virtual void f() {
+        std::cout << "f2" << std::endl;
+    }
+};
+
+class C : public B {
+    public:
+    void f() {
+        std::cout << "f3" << std::endl;
+    }
+}; */
+
 int main() {
 
   //std::cout << "A1" << std::endl;
@@ -31,4 +54,7 @@ int main() {
   std::cout << "II " << std::endl;
   main_controller.Start();
   std::cout << "III " << std::endl;
+
+  //auto a = std::make_shared<C>();
 }
+

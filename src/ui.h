@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "raylib.h"
 
-#include "UI_elements/ui_canvas.h"
+#include "UI_elements/ui_main_canvas.h"
 #include "UI_elements/ui_pallete.h"
 // #include "UI_elements/ui_button.h"
 

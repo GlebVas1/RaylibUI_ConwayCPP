@@ -151,21 +151,7 @@ void UICanvas::SetColorBuffer(uint8_t* buffer) {
     color_buffer_ = buffer;
 } 
 
-void UICanvas::Update() {
-    bool mouse_on_canvas = CheckCollisionPointRec(GetMousePosition(), Rectangle{
-        static_cast<float>(x_position_),
-        static_cast<float>(y_position_),
-        static_cast<float>(width_),
-        static_cast<float>(height_)
-    });
-    if (mouse_on_canvas) {
-        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            size_t x = static_cast<size_t>(static_cast<float>(main_texture_width_) * (GetMousePosition().x - x_position_) / width_);
-            size_t y = static_cast<size_t>(static_cast<float>(main_texture_height_) * (GetMousePosition().y - y_position_) / height_);
-            ui.DrawBrush(y, x);
-        } 
-    }
-}
+void UICanvas::Update() {}
 
 void UICanvas::SetCanvasGridColor(Color c) {
     grid_color_ = c;

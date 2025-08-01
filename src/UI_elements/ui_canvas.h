@@ -5,7 +5,7 @@
 #include "ui_element_class.h"
 
 class UICanvas : public UIElement {
-    private:
+    protected:
     std::shared_ptr<Texture2D> main_texture_ = nullptr;
     std::shared_ptr<Texture2D> main_grid_texture_ = nullptr;
 
@@ -25,10 +25,10 @@ class UICanvas : public UIElement {
     Color grid_color_ = WHITE;
 
     public: 
-
-    void Draw() override;
-    void Init() override;
-    void Update() override;
+    
+    virtual void Draw();
+    virtual void Init();
+    virtual void Update();
 
     void SetShowGrid(bool val);
 
@@ -37,4 +37,5 @@ class UICanvas : public UIElement {
     void SetColorBuffer(uint8_t* buffer);
 
     void SetCanvasGridColor(Color c);
+
 };
