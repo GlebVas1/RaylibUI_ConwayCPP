@@ -11,6 +11,14 @@ void UIElement::SetPosition(int x, int y) {
     y_position_ = y;
 }
 
+void UIElement::SetWidth(int x) {
+    width_ = x;
+}
+
+void UIElement::SetHeight(int y) {
+    height_ = y;
+}
+
 void UIElement::Draw() {}
 
 void UIElement::Init() {}

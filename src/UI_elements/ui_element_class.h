@@ -22,6 +22,9 @@ class UIElement {
     void SetXPosition(int x);
     void SetYPosition(int y);
 
+    void SetWidth(int x);
+    void SetHeight(int y);
+
     inline int GetWidth();
     inline int GetHeight();
     inline int GetXPosition();

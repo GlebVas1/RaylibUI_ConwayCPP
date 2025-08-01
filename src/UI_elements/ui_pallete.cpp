@@ -6,8 +6,6 @@ void UIPallete::UIPalleteButton::SetId(size_t id) {
 
 void UIPallete::UIPalleteButton::Draw() {
 
-    Color default_frame_c = {10, 10, 10, 255};
-    Color selected_frame_c = {50, 255, 50, 255};
 
     Rectangle main_field{
         static_cast<float>(x_position_),
@@ -38,7 +36,12 @@ void UIPallete::UIPalleteButton::Draw() {
     }
 
     DrawRectangleRounded(main_field, roundness_, 0, background_color);
-    DrawRectangleRoundedLinesEx(main_field_line, roundness_, 0, 2, id_ == this_pallete->selected_button ? selected_frame_c : default_frame_c);
+    DrawRectangleRoundedLinesEx(
+        main_field_line,
+        roundness_,
+        0,
+        id_ == this_pallete->selected_button ? 3 : 1,
+        BLACK);
 }
 
 void UIPallete::UIPalleteButton::SetXPosition(int x) {
@@ -82,18 +85,22 @@ void UIPallete::UIPalleteButton::Update() {
 
 void UIPallete::UIPalleteButton::SetColors(GameColor c) {
     default_c_ = { c.r, c.g, c.b, 255 };
-    covered_c_ = {
-        std::min<uint8_t>(static_cast<int>(c.r - 20), 0),
-        std::min<uint8_t>(static_cast<int>(c.g - 20), 0),
-        std::min<uint8_t>(static_cast<int>(c.b- 20), 0),
+    /* covered_c_ = {
+        std::max<uint8_t>(static_cast<int>(c.r - 10), 0),
+        std::max<uint8_t>(static_cast<int>(c.g - 10), 0),
+        std::max<uint8_t>(static_cast<int>(c.b - 10), 0),
         255
     };
     pressed_c_ = {
-        std::min<uint8_t>(static_cast<int>(c.r - 50), 0),
-        std::min<uint8_t>(static_cast<int>(c.g - 50), 0),
-        std::min<uint8_t>(static_cast<int>(c.b - 50), 0),
+        std::max<uint8_t>(static_cast<int>(c.r - 50), 0),
+        std::max<uint8_t>(static_cast<int>(c.g - 50), 0),
+        std::max<uint8_t>(static_cast<int>(c.b - 50), 0),
         255
-    };
+    }; */
+    Color black_low = {0, 0, 0, 40};
+    Color black_high = {0, 0, 0, 90};
+    covered_c_ = ColorAlphaBlend(default_c_, black_low, WHITE);
+    pressed_c_ = ColorAlphaBlend(default_c_, black_high, WHITE);
 }
 
 void UIPallete::UIPalleteButton::SetPallete(UIPallete* pallette) {
@@ -107,16 +114,20 @@ void UIPallete::InitializeButtons() {
     const uint8_t EMPTY_ = 0;
     unsigned char offset = (FULL_ - EMPTY_) / colors_count_;
     for (size_t i = 0; i < colors_count_; ++i) {
+        buttons_[i].SetId(i);
         buttons_[i].SetPallete(this);
-        buttons_[i].SetDimensions(50, 50);
-        buttons_[i].SetXPosition(x_position_);
-        buttons_[i].SetYPosition(y_position_ + 60 * i);
+        buttons_[i].SetDimensions(button_width_, button_height_);
+        buttons_[i].SetXPosition(button_width_spacing_ + x_position_);
+        buttons_[i].SetYPosition(button_height_spacing_ + y_position_ + (button_height_ + button_height_spacing_)  * i);
         buttons_[i].SetColors(color_pallete_[FULL_ - i * offset]);
         color_pallete_val_[i] = FULL_ - i * offset;
     }
 }
 void UIPallete::Init() {
     InitializeButtons();
+    SetDimensions(button_width_ + 2 * button_width_spacing_,
+                  button_height_spacing_ * (colors_count_ + 1) + button_height_ * colors_count_);
+
 }
 
 void UIPallete::SetColorPallette(const std::vector<GameColor>& pallette) {
@@ -142,6 +153,26 @@ void UIPallete::Update() {
 }
 
 void UIPallete::Draw() {
+
+    Rectangle main_field{
+        static_cast<float>(x_position_),
+        static_cast<float>(y_position_),
+        static_cast<float>(width_),
+        static_cast<float> (height_)
+    };
+
+    Rectangle main_field_line{
+        static_cast<float>(x_position_ + 1),
+        static_cast<float>(y_position_ + 1),
+        static_cast<float>(width_ - 1),
+        static_cast<float> (height_ - 1)
+    };
+
+    DrawRectangleRounded(main_field, roundness_, 0, background_color_);
+    DrawRectangleRoundedLinesEx(main_field_line, roundness_, 0, 2, BLACK);
+
+
+
     for (auto& button : buttons_) {
         button.Draw();
     }

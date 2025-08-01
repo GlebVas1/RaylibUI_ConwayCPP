@@ -43,6 +43,18 @@ class UIPallete : public UIElement {
     std::vector<uint8_t> color_pallete_val_;
     size_t selected_color_ = 0;
     size_t selected_button = 0;
+
+    int button_width_ = 30;
+    int button_height_ = 30;
+    int button_width_spacing_= 5;
+    int button_height_spacing_ = 5;
+    
+    float button_roundness_ = 0.4f;
+
+    float roundness_ = 0.1;
+
+    Color background_color_ = {120, 130, 130, 255 };
+
     void InitializeButtons();
     public:
     void Update() override;

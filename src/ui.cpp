@@ -20,7 +20,7 @@ void UI::Start() {
     InitWindow(window_width, window_height, ".");
 
     canvas_->SetPosition(0, 0);
-    canvas_->SetDimensions(600, 600);
+    canvas_->SetDimensions(1280, 1280);
     canvas_->SetCanvasTextureDimensions(50, 50);
     canvas_->SetShowGrid(true);
 

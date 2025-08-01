@@ -71,6 +71,7 @@ void UICanvas::InitializeMainTexture() {
         .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 
     };
     main_texture_ = std::make_shared<Texture2D>(LoadTextureFromImage(img0));
+    
     UnloadImage(img0);
 }
 
@@ -83,13 +84,15 @@ void UICanvas::InitializeMainGridTexture() {
 
     BeginTextureMode(grid_render_texture);
 
-    size_t cell_width = width_ / main_texture_width_;
-    size_t cell_height = height_ / main_texture_height_;
+    float cell_width = static_cast<float>(width_) / main_texture_width_;
+    float cell_height = static_cast<float>(height_) / main_texture_height_;
     ClearBackground(Color{0, 0, 0, 0});
     
+    DrawRectangle(0, 0, width_, height_, grid_color_);
+
     BeginBlendMode(BLEND_SUBTRACT_COLORS);
 
-    DrawRectangle(0, 0, width_, height_, grid_color_);
+    
 
     for (size_t x = 0; x < main_texture_width_; ++x) {
         for (size_t y = 0; y < main_texture_height_; ++y) {
@@ -159,8 +162,8 @@ void UICanvas::Update() {
     });
     if (mouse_on_canvas) {
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            size_t x = static_cast<size_t>(static_cast<float>(main_texture_width_) * GetMousePosition().x / width_);
-            size_t y = static_cast<size_t>(static_cast<float>(main_texture_height_) * GetMousePosition().y/ height_);
+            size_t x = static_cast<size_t>(static_cast<float>(main_texture_width_) * (GetMousePosition().x - x_position_) / width_);
+            size_t y = static_cast<size_t>(static_cast<float>(main_texture_height_) * (GetMousePosition().y - y_position_) / height_);
             ui.SetPixel(y, x);
         } 
     }

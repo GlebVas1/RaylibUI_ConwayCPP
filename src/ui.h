@@ -17,8 +17,8 @@ class UI {
     std::vector<UIElement*> elements_;
 
     Controller* controller_ = nullptr;
-    int window_width = 1200;
-    int window_height = 600;
+    int window_width = 2020;
+    int window_height = 1280;
 
     uint8_t val_to_set_ = 255;
     std::shared_ptr<UICanvas> canvas_ = nullptr;
