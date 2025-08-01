@@ -12,4 +12,8 @@ class UIColorTheme {
 
     Color ui_line_color = BLACK;
 
+    Color ui_button_default = {120, 130, 130, 255 };
+    Color ui_button_hovered = {110, 120, 120, 255 };
+    Color ui_button_pressed = {50, 50, 50, 255 };
+    
 };

@@ -4,9 +4,12 @@
 
 #include "UI_elements/ui_main_canvas.h"
 #include "UI_elements/ui_pallete.h"
+#include "UI_elements/ui_panel.h"
 // #include "UI_elements/ui_button.h"
 
 #include "UI_elements/ui_element_class.h"
+
+#include "UI_elements/ui_spinbox.h"
 #include "ui_color_theme.h"
 
 class Controller;
@@ -17,17 +20,31 @@ class UI : public UIColorTheme {
     ~UI();
     std::vector<UIElement*> elements_;
 
+    std::shared_ptr<UIElement> null_widget_;
+
     Controller* controller_ = nullptr;
     int window_width = 1920;
     int window_height = 1080;
 
-    std::shared_ptr<UICanvas> canvas_ = nullptr;
+    
+    std::shared_ptr<UIPanel> main_canvas_panel_ = nullptr;
+    std::shared_ptr<UIMainCanvas> main_canvas_ = nullptr;
+
+
     std::shared_ptr<UIPallete> pallete_ = nullptr;
 
+    std::shared_ptr<UISpinBox> brush_size_spinbox_ = nullptr;
+
+    std::shared_ptr<UIPanel> brush_settings_panel_ = nullptr;
+
+
     void UpdateUIElements();
+
+    void DrawElement(UIElement* root);
+
     void DrawUIElements();
 
-    int brush_radius_ = 45;
+    float brush_radius_ = 45;
 
     public: 
 

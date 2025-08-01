@@ -37,26 +37,26 @@ void UICanvas::Draw() {
         WHITE
     );
 
-    if (show_grid_) {
-        DrawTexturePro(
-            *main_grid_texture_,
-            Rectangle{
-                0,
-                0,
-                static_cast<float>(width_),
-                static_cast<float>(height_)
-            },
-            Rectangle({
-                static_cast<float>(x_position_),
-                static_cast<float>(y_position_),
-                static_cast<float>(width_),
-                static_cast<float>(height_)
-            }),
-            Vector2{0.0f, 0.0f},
-            0.0f,
-            WHITE
-        );
-    }
+    
+    DrawTexturePro(
+        *main_grid_texture_,
+        Rectangle{
+            0,
+            0,
+            static_cast<float>(width_),
+            static_cast<float>(height_)
+        },
+        Rectangle({
+            static_cast<float>(x_position_),
+            static_cast<float>(y_position_),
+            static_cast<float>(width_),
+            static_cast<float>(height_)
+        }),
+        Vector2{0.0f, 0.0f},
+        0.0f,
+        WHITE
+    );
+    
     UnloadImageColors(pixels);
 }
 
@@ -92,25 +92,44 @@ void UICanvas::InitializeMainGridTexture() {
 
     BeginBlendMode(BLEND_SUBTRACT_COLORS);
 
-    for (size_t x = 0; x < main_texture_width_; ++x) {
-        for (size_t y = 0; y < main_texture_height_; ++y) {
-            DrawRectangleRounded(
-            Rectangle{
-                    static_cast<float>(x * cell_width + 1.1f),
-                    static_cast<float>(y * cell_height + 1.1f),
-                    static_cast<float>(cell_width - 1.1f),
-                    static_cast<float>(cell_height - 1.1f)
-                },
-                0.4f, 
-                0,
-                Color({
+    if (show_grid_) {
+        for (size_t x = 0; x < main_texture_width_; ++x) {
+            for (size_t y = 0; y < main_texture_height_; ++y) {
+                DrawRectangleRounded(
+                Rectangle{
+                        static_cast<float>(x * cell_width + 1.1f),
+                        static_cast<float>(y * cell_height + 1.1f),
+                        static_cast<float>(cell_width - 1.1f),
+                        static_cast<float>(cell_height - 1.1f)
+                    },
+                    0.4f, 
                     0,
-                    0,
-                    0,
-                    255
-                })
-            );
+                    Color({
+                        0,
+                        0,
+                        0,
+                        255
+                    })
+                );
+            }
         }
+    } else {
+        DrawRectangleRounded(
+        Rectangle{
+                1.1f,
+                1.1f,
+                static_cast<float>(width_) - 1.1f,
+                static_cast<float>(height_) -1.1f
+            },
+            0.005f, 
+            0,
+            Color({
+                0,
+                0,
+                0,
+                255
+            })
+        );
     }
     EndBlendMode();
 

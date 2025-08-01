@@ -86,3 +86,11 @@ void UIElement::SetParrent(UIElement* parrent) {
 
     parrent_ = parrent;
 }
+
+UIElement* UIElement::GetParrent() {
+    return parrent_;
+}
+
+std::unordered_set<UIElement*> UIElement::GetChildren() {
+    return children_;
+}
