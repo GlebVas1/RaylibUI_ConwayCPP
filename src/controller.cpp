@@ -20,7 +20,7 @@ void Controller::StartUI() {
     ui->InitializeElements();
     ui->SetColorBuffer(field->GetColorBuffer());
 
-    auto gcp = GameColorFlame();
+    auto gcp = GameColorPinkGreen();
     //auto gr = GameRule_STATIC;
     auto gr = GameRule_SPIRALS;
     field->SetColorPallette(&gcp);
@@ -37,11 +37,6 @@ void Controller::SetFieldPixel(int x, int y, uint8_t val) {
 }
 
 void Controller::Start() {
-    auto gcp = GameColorFlame();
-    //auto gr = GameRule_STATIC;
-    auto gr = GameRule_FREESTAR;
-    field->SetColorPallette(&gcp);
-    field->SetGameRule(&gr);
 
     field->CreateUpdateThreads();
 

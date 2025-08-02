@@ -7,5 +7,10 @@ struct GameColor {
   uint8_t b = 0;
 };
 
-std::vector<GameColor> GameColorBW();
 std::vector<GameColor> GameColorFlame();
+std::vector<GameColor> GameColorNecron();
+std::vector<GameColor> GameColorWater();
+std::vector<GameColor> GameColorPinkGreen();
+std::vector<GameColor> GameColorBW();
+std::vector<GameColor> GameColorPaint();
+std::vector<GameColor> GameColorSand();
