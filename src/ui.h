@@ -10,6 +10,7 @@
 #include "UI_elements/ui_element_class.h"
 
 #include "UI_elements/ui_spinbox.h"
+#include "UI_elements/ui_check_box.h"
 #include "ui_color_theme.h"
 
 class Controller;
@@ -33,8 +34,10 @@ class UI : public UIColorTheme {
 
     std::shared_ptr<UIPallete> pallete_ = nullptr;
 
+    float brush_radius_ = 45;
+    bool brush_round_ = false;
     std::shared_ptr<UISpinBox> brush_size_spinbox_ = nullptr;
-
+    std::shared_ptr<UICheckbox> brush_round_checkbox = nullptr;
     std::shared_ptr<UIPanel> brush_settings_panel_ = nullptr;
 
 
@@ -44,7 +47,7 @@ class UI : public UIColorTheme {
 
     void DrawUIElements();
 
-    float brush_radius_ = 45;
+   
 
     public: 
 

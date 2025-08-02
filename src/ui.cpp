@@ -97,6 +97,9 @@ void UI::InitializeElements() {
     brush_size_spinbox_ = std::make_shared<UISpinBox>(20, 20, &brush_radius_, 1.0f);
     brush_size_spinbox_->SetMaxValue(100.0f);
     brush_size_spinbox_->SetParrent(brush_settings_panel_.get());
+
+    brush_round_checkbox = std::make_shared<UICheckbox>(20, 50, &brush_round_, "Round");
+    brush_round_checkbox->SetParrent(brush_settings_panel_.get());
     
 }
 
@@ -119,7 +122,11 @@ void UI::SetSelectedColor(uint8_t val) {
 void UI::DrawBrush(size_t x, size_t y) {
     for (int x1 = -brush_radius_; x1 < brush_radius_; ++x1){
         for (int y1 = -brush_radius_; y1 < brush_radius_; ++y1) {
-            if (x1 * x1 + y1 * y1 < brush_radius_ * brush_radius_) {
+            if (brush_round_) {
+                if (x1 * x1 + y1 * y1 < brush_radius_ * brush_radius_) {
+                    controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), pallete_->GetSelectedVal());
+                }
+            } else {
                 controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), pallete_->GetSelectedVal());
             }
         }
