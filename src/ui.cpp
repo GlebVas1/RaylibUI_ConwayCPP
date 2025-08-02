@@ -19,12 +19,16 @@ void UI::Start() {
     
     InitWindow(window_width, window_height, ".");
 
- 
+    main_canvas_->SetPosition(10, 10);
+    main_canvas_->SetDimensions(1060, 1060);
+    main_canvas_->SetCanvasTextureDimensions(600, 600);
     // canvas_->SetShowGrid(true);
-
+    
+    main_canvas_panel_->Init();
     main_canvas_->Init();
     pallete_->Init();
     brush_settings_panel_->Init();
+    
 
     SetTargetFPS(60);
     
@@ -72,32 +76,28 @@ void UI::SetController(Controller* controller) {
 void UI::InitializeElements() {
     null_widget_ = std::make_shared<UIElement>();
 
-    main_canvas_panel_ = std::make_shared<UIPanel> (0, 0, 1080, 1080, 0.05f);
+    main_canvas_panel_ = std::make_shared<UIPanel>(0, 0, 1080, 1080, 0.015f);
     main_canvas_panel_->SetParrent(null_widget_.get());
+    
+
 
     main_canvas_ = std::make_shared<UIMainCanvas>();
     main_canvas_->SetParrent(main_canvas_panel_.get());
-    
     main_canvas_->SetCanvasGridColor(ui_background_color);
-    main_canvas_->SetPosition(10, 10);
-    main_canvas_->SetDimensions(1060, 1060);
-    main_canvas_->SetCanvasTextureDimensions(600, 600);
 
     pallete_ = std::make_shared<UIPallete>();
-    pallete_->SetXPosition(1100);
+    pallete_->SetXPosition(1400);
     pallete_->SetYPosition(20);
-
-    brush_size_spinbox_ = std::make_shared<UISpinBox>();
-    brush_size_spinbox_->SetXPosition(1200);
-    brush_size_spinbox_->SetYPosition(100);
-    brush_size_spinbox_->SetDimensions(60, 25);
-    brush_size_spinbox_->SetMaxValue(100.0f);
-    brush_size_spinbox_->SetValuePtr(&brush_radius_);
-    brush_size_spinbox_->SetStep(1.0f);
-
-
+    pallete_->SetParrent(null_widget_.get());
 
     brush_settings_panel_ = std::make_shared<UIPanel>(1100, 40, 180, 180, 0.1f);
+    brush_settings_panel_->SetParrent(null_widget_.get());
+    
+
+    brush_size_spinbox_ = std::make_shared<UISpinBox>(20, 20, &brush_radius_, 1.0f);
+    brush_size_spinbox_->SetMaxValue(100.0f);
+    brush_size_spinbox_->SetParrent(brush_settings_panel_.get());
+    
 }
 
 void UI::AddUIElement(UIElement* elem_ptr) {

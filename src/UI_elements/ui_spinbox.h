@@ -19,6 +19,10 @@ class UISpinBox : public UIElement, public UIMouseState {
     MouseState right_state_;
 
     public:
+
+    UISpinBox();
+    UISpinBox(int x, int y, float* ptr, float step = 0.1f);
+
     void Update();
     void Draw() override;
     

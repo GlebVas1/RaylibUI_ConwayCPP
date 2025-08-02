@@ -27,8 +27,8 @@ void UICanvas::Draw() {
             static_cast<float>(main_texture_height_)
         },
         Rectangle({
-            static_cast<float>(x_position_),
-            static_cast<float>(y_position_),
+            static_cast<float>(GetAbsoluteXPosition()),
+            static_cast<float>(GetAbsoluteYPosition()),
             static_cast<float>(width_),
             static_cast<float>(height_)
         }),
@@ -47,8 +47,8 @@ void UICanvas::Draw() {
             static_cast<float>(height_)
         },
         Rectangle({
-            static_cast<float>(x_position_),
-            static_cast<float>(y_position_),
+            static_cast<float>(GetAbsoluteXPosition()),
+            static_cast<float>(GetAbsoluteYPosition()),
             static_cast<float>(width_),
             static_cast<float>(height_)
         }),
@@ -63,6 +63,7 @@ void UICanvas::Draw() {
 
 void UICanvas::InitializeMainTexture() {
     uint8_t* data0 = static_cast<uint8_t*>(malloc(main_texture_width_ * main_texture_width_ * 4));
+    //std::cout << "AAA " << (void*)data0 << std::endl;
     Image img0 = {
         .data = data0,
         .width = main_texture_width_,

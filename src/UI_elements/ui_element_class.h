@@ -35,8 +35,8 @@ class UIElement {
     inline int GetXPosition();
     inline int GetYPosition();
 
-    inline int GetAbsoluteXPosition();
-    inline int GetAbsoluteYPosition();
+    int GetAbsoluteXPosition();
+    int GetAbsoluteYPosition();
 
     void SetParrent(UIElement* parrent);
     UIElement* GetParrent();

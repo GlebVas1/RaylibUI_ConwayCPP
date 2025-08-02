@@ -30,6 +30,7 @@ UIShadowEffect::UIShadowEffect(int x, int y, int width, int height, float roundn
 
     
     shadow = std::make_shared<Texture2D>(rend_shadow.texture);
+    std::cout << " AAA " << (void*)shadow.get() << std::endl;
     SetTextureFilter(*shadow, TEXTURE_FILTER_TRILINEAR);
 
 }

@@ -40,7 +40,7 @@ void UIPallete::UIPalleteButton::Draw() {
         main_field_line,
         roundness_,
         0,
-        id_ == this_pallete->selected_button ? 3 : 1,
+        id_ == this_pallete->selected_button ? 4 : 2,
         BLACK);
 }
 
@@ -117,8 +117,8 @@ void UIPallete::InitializeButtons() {
         buttons_[i].SetId(i);
         buttons_[i].SetPallete(this);
         buttons_[i].SetDimensions(button_width_, button_height_);
-        buttons_[i].SetXPosition(button_width_spacing_ + x_position_);
-        buttons_[i].SetYPosition(button_height_spacing_ + y_position_ + (button_height_ + button_height_spacing_)  * i);
+        buttons_[i].SetXPosition(button_width_spacing_ + GetAbsoluteXPosition());
+        buttons_[i].SetYPosition(button_height_spacing_ + GetAbsoluteYPosition() + (button_height_ + button_height_spacing_)  * i);
         buttons_[i].SetColors(color_pallete_[FULL_ - i * offset]);
         color_pallete_val_[i] = FULL_ - i * offset;
     }
@@ -127,6 +127,7 @@ void UIPallete::Init() {
     InitializeButtons();
     SetDimensions(button_width_ + 2 * button_width_spacing_,
                   button_height_spacing_ * (colors_count_ + 1) + button_height_ * colors_count_);
+    shadow_ = std::make_shared<UIShadowEffect>(GetAbsoluteXPosition() - 5, GetAbsoluteYPosition() - 5, width_ + 10, height_ + 10, 0.5f, 3); 
 
 }
 
@@ -153,17 +154,17 @@ void UIPallete::Update() {
 }
 
 void UIPallete::Draw() {
-
+    shadow_->Draw();
     Rectangle main_field{
-        static_cast<float>(x_position_),
-        static_cast<float>(y_position_),
+        static_cast<float>(GetAbsoluteXPosition()),
+        static_cast<float>(GetAbsoluteYPosition()),
         static_cast<float>(width_),
         static_cast<float> (height_)
     };
 
     Rectangle main_field_line{
-        static_cast<float>(x_position_ + 1),
-        static_cast<float>(y_position_ + 1),
+        static_cast<float>(GetAbsoluteXPosition() + 1),
+        static_cast<float>(GetAbsoluteYPosition() + 1),
         static_cast<float>(width_ - 1),
         static_cast<float> (height_ - 1)
     };

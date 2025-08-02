@@ -6,6 +6,7 @@
 #include "raylib.h"
 
 #include "ui_mouse_state.h"
+#include "ui_shadow_effect.h"
 
 class UIPallete : public UIElement {
     private:
@@ -36,7 +37,7 @@ class UIPallete : public UIElement {
     };
 
     friend UIPalleteButton;
-
+    std::shared_ptr<UIShadowEffect> shadow_;
     std::vector<UIPalleteButton> buttons_;
     size_t colors_count_ = 0;
     std::vector<GameColor> color_pallete_;

@@ -19,43 +19,43 @@ void UISpinBox::Draw() {
     std::string str = std::to_string(*value_);
 
     Rectangle main_field{
-        static_cast<float>(x_position_),
-        static_cast<float>(y_position_),
+        static_cast<float>(GetAbsoluteXPosition()),
+        static_cast<float>(GetAbsoluteYPosition()),
         static_cast<float>(width_),
         static_cast<float> (height_)
     };
 
     Rectangle main_field_line{
-        static_cast<float>(x_position_ + 1),
-        static_cast<float>(y_position_ + 1),
+        static_cast<float>(GetAbsoluteXPosition() + 1),
+        static_cast<float>(GetAbsoluteYPosition() + 1),
         static_cast<float>(width_ - 1),
         static_cast<float> (height_ - 1)
     };
 
     Rectangle main_field_left{
-        static_cast<float>(x_position_),
-        static_cast<float>(y_position_),
+        static_cast<float>(GetAbsoluteXPosition()),
+        static_cast<float>(GetAbsoluteYPosition()),
         static_cast<float>(buttons_width_),
         static_cast<float> (height_)
     };
 
     Rectangle main_field_left_line{
-        static_cast<float>(x_position_ + 1),
-        static_cast<float>(y_position_ + 1),
+        static_cast<float>(GetAbsoluteXPosition() + 1),
+        static_cast<float>(GetAbsoluteYPosition() + 1),
         static_cast<float>(buttons_width_ - 1),
         static_cast<float> (height_ - 1)
     };
 
     Rectangle main_field_right{
-        static_cast<float>(x_position_ + width_ - buttons_width_),
-        static_cast<float>(y_position_),
+        static_cast<float>(GetAbsoluteXPosition() + width_ - buttons_width_),
+        static_cast<float>(GetAbsoluteYPosition()),
         static_cast<float>(buttons_width_),
         static_cast<float> (height_)
     };
 
     Rectangle main_field_right_line{
-        static_cast<float>(x_position_ + width_ - buttons_width_ + 1),
-        static_cast<float>(y_position_ + 1),
+        static_cast<float>(GetAbsoluteXPosition() + width_ - buttons_width_ + 1),
+        static_cast<float>(GetAbsoluteYPosition() + 1),
         static_cast<float>(buttons_width_ - 1),
         static_cast<float> (height_ - 1)
     };
@@ -97,7 +97,7 @@ void UISpinBox::Draw() {
     DrawRectangleRounded(main_field_right, roundness_, 0, right_color);
     DrawRectangleRoundedLinesEx(main_field_right_line, roundness_, 0, 2, ui.ui_line_color);
 
-    DrawText(TextFormat("%02.0f", *value_), x_position_ + width_ / 2 - 8 , y_position_ + height_ / 2 - 5, 14, WHITE);
+    DrawText(TextFormat("%02.0f", *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 5, 14, WHITE);
 }
 
 
@@ -120,15 +120,15 @@ void UISpinBox::DecreaseValue() {
 
 void UISpinBox::Update() {
     bool mouse_on_left_button = CheckCollisionPointRec(GetMousePosition(), Rectangle{
-        static_cast<float>(x_position_),
-        static_cast<float>(y_position_),
+        static_cast<float>(GetAbsoluteXPosition()),
+        static_cast<float>(GetAbsoluteYPosition()),
         static_cast<float>(buttons_width_),
         static_cast<float>(height_)
     });
 
     bool mouse_on_right_button = CheckCollisionPointRec(GetMousePosition(), Rectangle{
-        static_cast<float>(x_position_ + width_ - buttons_width_),
-        static_cast<float>(y_position_),
+        static_cast<float>(GetAbsoluteXPosition() + width_ - buttons_width_),
+        static_cast<float>(GetAbsoluteYPosition()),
         static_cast<float>(buttons_width_),
         static_cast<float>(height_)
     });
@@ -167,4 +167,13 @@ void UISpinBox::SetMinValue(float val) {
 
 void UISpinBox::SetStep(float val) {
     step_ = val;
+}
+
+UISpinBox::UISpinBox() {}
+
+UISpinBox::UISpinBox(int x, int y, float* val, float step) {
+    SetPosition(x, y);
+    SetDimensions(60, 25);
+    SetValuePtr(val);
+    SetStep(step);
 }
