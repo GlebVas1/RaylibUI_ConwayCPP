@@ -21,7 +21,7 @@ void UI::Start() {
 
     main_canvas_->SetPosition(10, 10);
     main_canvas_->SetDimensions(1060, 1060);
-    main_canvas_->SetCanvasTextureDimensions(600, 600);
+    main_canvas_->SetCanvasTextureDimensions(1060, 1060);
     // canvas_->SetShowGrid(true);
     
     main_canvas_panel_->Init();
@@ -30,7 +30,7 @@ void UI::Start() {
     brush_settings_panel_->Init();
     
 
-    SetTargetFPS(60);
+    SetTargetFPS(100);
     
     while (!WindowShouldClose()) {
         UpdateUIElements();
@@ -100,6 +100,12 @@ void UI::InitializeElements() {
 
     brush_round_checkbox = std::make_shared<UICheckbox>(20, 50, &brush_round_, "Round");
     brush_round_checkbox->SetParrent(brush_settings_panel_.get());
+
+    brush_random_checkbox = std::make_shared<UICheckbox>(20, 80, &brush_random_, "Random");
+    brush_random_checkbox->SetParrent(brush_settings_panel_.get());
+
+    brush_object_toogle = std::make_shared<UIToggle>(20, 130, &brush_object_mode_, "Object");
+    brush_object_toogle->SetParrent(brush_settings_panel_.get());
     
 }
 
@@ -122,12 +128,13 @@ void UI::SetSelectedColor(uint8_t val) {
 void UI::DrawBrush(size_t x, size_t y) {
     for (int x1 = -brush_radius_; x1 < brush_radius_; ++x1){
         for (int y1 = -brush_radius_; y1 < brush_radius_; ++y1) {
+            uint8_t val_to_set = brush_random_ ? pallete_->GetRandomVal() : pallete_->GetSelectedVal();
             if (brush_round_) {
                 if (x1 * x1 + y1 * y1 < brush_radius_ * brush_radius_) {
-                    controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), pallete_->GetSelectedVal());
+                    controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), val_to_set);
                 }
             } else {
-                controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), pallete_->GetSelectedVal());
+                controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), val_to_set);
             }
         }
     }

@@ -178,3 +178,7 @@ void UIPallete::Draw() {
         button.Draw();
     }
 }
+
+uint8_t UIPallete::GetRandomVal() {
+    return color_pallete_val_[rand() % colors_count_];
+}

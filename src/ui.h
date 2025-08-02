@@ -11,6 +11,8 @@
 
 #include "UI_elements/ui_spinbox.h"
 #include "UI_elements/ui_check_box.h"
+#include "UI_elements/ui_toogle.h"
+
 #include "ui_color_theme.h"
 
 class Controller;
@@ -36,10 +38,13 @@ class UI : public UIColorTheme {
 
     float brush_radius_ = 45;
     bool brush_round_ = false;
+    bool brush_random_ = false;
+    bool brush_object_mode_ = false;
     std::shared_ptr<UISpinBox> brush_size_spinbox_ = nullptr;
     std::shared_ptr<UICheckbox> brush_round_checkbox = nullptr;
+    std::shared_ptr<UICheckbox> brush_random_checkbox = nullptr;
     std::shared_ptr<UIPanel> brush_settings_panel_ = nullptr;
-
+    std::shared_ptr<UIToggle> brush_object_toogle = nullptr;
 
     void UpdateUIElements();
 

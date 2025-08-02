@@ -21,4 +21,4 @@ struct GameRule {
 extern GameRule GameRule_STATIC;
 extern GameRule GameRule_DEFAULT; 
 extern GameRule GameRule_FREESTAR;
-
+extern GameRule GameRule_SPIRALS;

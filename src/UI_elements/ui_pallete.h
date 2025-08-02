@@ -66,6 +66,8 @@ class UIPallete : public UIElement {
     void SetColorCount(size_t color_count);
     void SetSelectedVal(uint8_t val);
 
+    uint8_t GetRandomVal();
+    
     uint8_t GetSelectedVal();
 
 };

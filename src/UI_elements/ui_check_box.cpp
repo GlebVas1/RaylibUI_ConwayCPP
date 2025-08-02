@@ -15,6 +15,9 @@ void UICheckbox::SetBoolPtr(bool* ptr) {
 }
 
 void UICheckbox::Draw() {
+    if (value_ == nullptr) {
+        return;
+    }
     Color background_color;
 
     switch (state_)
@@ -37,7 +40,7 @@ void UICheckbox::Draw() {
         box_size_,
         2, 
         box_roundness_,
-        ui.ui_accent_color_3,
+        background_color,
         ui.ui_line_color
     );
 
@@ -58,7 +61,7 @@ void UICheckbox::Draw() {
     DrawText(
         text_.c_str(), 
         GetAbsoluteXPosition() + x_pos_ + box_size_ + 10, 
-        GetAbsoluteYPosition() + box_size_ / 2, 
+        GetAbsoluteYPosition() + y_pos_ + box_size_ / 2 - 4, 
         14, 
         ui.ui_text_dark);
 }

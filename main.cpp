@@ -50,6 +50,7 @@ int main() {
   ui.Start();
   t.join(); */
   /* t1.join(); */
+  srand(time(NULL));
   Controller& main_controller = Controller::GetInstance();
   std::cout << "II " << std::endl;
   main_controller.Start();
