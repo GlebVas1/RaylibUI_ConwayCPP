@@ -11,8 +11,8 @@ void UIMainCanvas::Update() {
 
     if (mouse_on_canvas) {
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            size_t x = static_cast<size_t>(static_cast<float>(main_texture_width_) * (GetMousePosition().x - x_position_) / width_);
-            size_t y = static_cast<size_t>(static_cast<float>(main_texture_height_) * (GetMousePosition().y - y_position_) / height_);
+            size_t x = static_cast<size_t>(static_cast<float>(main_texture_width_) * (GetMousePosition().x - GetAbsoluteXPosition()) / width_);
+            size_t y = static_cast<size_t>(static_cast<float>(main_texture_height_) * (GetMousePosition().y - GetAbsoluteYPosition()) / height_);
             ui.DrawBrush(y, x);
         } 
     }

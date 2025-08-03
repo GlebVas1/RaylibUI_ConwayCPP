@@ -16,6 +16,7 @@ struct GameRule {
   bool is_dying(size_t neigh_count) { return neigh_to_die & (1ul << (neigh_count)); }
   bool is_arriving(size_t neigh_count) { return neigh_to_arrive & (1ul << (neigh_count)); }
   bool is_getting_older(size_t neigh_count) { return neigh_to_getting_older & (1ul << (neigh_count)); }
+  const std::string& GetName() { return name; } 
 };
 
 extern GameRule GameRule_STATIC;

@@ -18,5 +18,7 @@ class Controller {
     void StartUI();
     void Start();
     void ThreadsJoin();
+
+    void SetFieldRule(size_t);
 };
 

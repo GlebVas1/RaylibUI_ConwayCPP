@@ -46,3 +46,6 @@ void Controller::Start() {
     t.join();
 }
 
+void Controller::SetFieldRule(size_t ind) {
+    field->SetGameRule(&ALL_RULES[ind]);
+}

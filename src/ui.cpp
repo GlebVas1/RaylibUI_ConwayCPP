@@ -1,6 +1,6 @@
 #include "ui.h"
 #include "controller.h"
-
+#include "game_rule.h"
 //cause of UI elemnts structure elemnts arent crated there
 UI::UI() { };
 
@@ -28,7 +28,10 @@ void UI::Start() {
     main_canvas_->Init();
     pallete_->Init();
     brush_settings_panel_->Init();
+    game_rule_panel_->Init();
     
+    game_rule_list_->SetVector(ALL_RULES);
+    game_rule_list_->Init();
 
     SetTargetFPS(100);
     
@@ -117,7 +120,11 @@ void UI::InitializeElements() {
     brush_object_toogle_ = std::make_shared<UIToggle>(10, 130, &brush_object_mode_, "Object");
     brush_object_toogle_->SetParrent(brush_settings_panel_.get());
 
-    
+    game_rule_panel_ = std::make_shared<UIPanel>(1100, 200, 145, 160, 0.1f);
+    game_rule_panel_->SetParrent(null_widget_.get());
+
+    game_rule_list_ = std::make_shared<UIList<GameRule>>(10, 10, &game_rule_selected_);
+    game_rule_list_->SetParrent(game_rule_panel_.get());
     
 }
 
@@ -150,4 +157,8 @@ void UI::DrawBrush(size_t x, size_t y) {
             }
         }
     }
+}
+
+void UI::SetRule() {
+    controller_->SetFieldRule(game_rule_selected_);
 }
