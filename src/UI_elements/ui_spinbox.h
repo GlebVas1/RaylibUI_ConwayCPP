@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "raylib.h"
 
-#include "ui.h"
 #include "ui_mouse_state.h" 
 #include "ui_element_class.h"
 #include "ui_text_fromat.h"

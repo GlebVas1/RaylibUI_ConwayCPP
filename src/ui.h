@@ -20,6 +20,9 @@
 #include "ui_color_theme.h"
 
 #include "UI_elements/ui_text_fromat.h"
+#include "UI_elements/ui_list.h"
+
+class GameRule;
 
 class Controller;
 
@@ -55,7 +58,9 @@ class UI : public UIColorTheme {
     std::shared_ptr<UIToggle> brush_object_toogle_ = nullptr;
     std::shared_ptr<UILabel> brush_settings_label_ = nullptr;
     std::shared_ptr<UILabel> brush_settings_size_label_ = nullptr;
-    
+
+
+    std::shared_ptr<UIList<GameRule>> game_rule_list_ = nullptr;
     void UpdateUIElements();
 
     void DrawElement(UIElement* root);

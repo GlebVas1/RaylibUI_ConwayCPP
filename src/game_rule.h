@@ -19,6 +19,23 @@ struct GameRule {
 };
 
 extern GameRule GameRule_STATIC;
-extern GameRule GameRule_DEFAULT; 
+extern GameRule GameRule_DEFAULT;
+extern GameRule GameRule_DEFAULT100GEN;
+
+extern GameRule GameRule_DIAMEB;
+extern GameRule GameRule_TREE;
+extern GameRule GameRule_TREEGENER;
+
+
 extern GameRule GameRule_FREESTAR;
+extern GameRule GameRule_STARWARS;
+
+extern GameRule GameRule_STICKS;
+extern GameRule GameRule_FADES;
 extern GameRule GameRule_SPIRALS;
+extern GameRule GameRule_REPLS;
+extern GameRule GameRule_TR_GR;
+extern GameRule GameRule_INF;
+extern GameRule GameRule_LINES;
+
+extern std::vector<GameRule> ALL_RULES;
