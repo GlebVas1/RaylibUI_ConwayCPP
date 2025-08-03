@@ -50,6 +50,9 @@ int main() {
   ui.Start();
   t.join(); */
   /* t1.join(); */
+
+  ChangeDirectory(GetApplicationDirectory());
+  
   srand(time(NULL));
   Controller& main_controller = Controller::GetInstance();
   std::cout << "II " << std::endl;

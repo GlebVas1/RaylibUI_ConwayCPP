@@ -99,7 +99,8 @@ void UISpinBox<T>::Draw() {
     DrawRectangleRounded(main_field_right, roundness_, 0, right_color);
     DrawRectangleRoundedLinesEx(main_field_right_line, roundness_, 0, 2, ui.ui_line_color);
 
-    DrawText(TextFormat(UITextFormat<T>::format_, *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 6, 14, WHITE);
+    UITools::DrawTextDefault(GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 8, TextFormat(UITextFormat<T>::format_, *value_), 18, ui.ui_text_light);
+    //DrawText(TextFormat(UITextFormat<T>::format_, *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 6, 14, WHITE);
 }
 
 

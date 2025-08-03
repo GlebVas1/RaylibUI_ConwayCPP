@@ -1,6 +1,7 @@
 #include "ui.h"
 #include "controller.h"
 #include "game_rule.h"
+#include "UI_Tools/ui_tools.h"
 //cause of UI elemnts structure elemnts arent crated there
 UI::UI() { };
 
@@ -17,7 +18,14 @@ void UI::Start() {
 
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     
-    InitWindow(window_width, window_height, ".");
+    InitWindow(window_width, window_height, "Conway");
+
+    UITools::GetMainFont();
+    
+    
+
+    //Font font = LoadFontEx("../resources/fonts/jaipur.ttf", 32, 0, 250);
+    SetTextLineSpacing(2); 
 
     main_canvas_->SetPosition(10, 10);
     main_canvas_->SetDimensions(1060, 1060);
@@ -30,7 +38,11 @@ void UI::Start() {
     brush_settings_panel_->Init();
     game_rule_panel_->Init();
     
-    game_rule_list_->SetVector(ALL_RULES);
+    std::vector<std::string> game_rule_names;
+    for (const auto& elem : ALL_RULES) {
+        game_rule_names.push_back(elem.name);
+    }
+    game_rule_list_->SetVector(game_rule_names);
     game_rule_list_->Init();
 
     SetTargetFPS(100);
@@ -38,6 +50,7 @@ void UI::Start() {
     while (!WindowShouldClose()) {
         UpdateUIElements();
         BeginDrawing();
+        
         ClearBackground(ui_background_color);
         DrawUIElements();
         EndDrawing();
@@ -123,7 +136,7 @@ void UI::InitializeElements() {
     game_rule_panel_ = std::make_shared<UIPanel>(1100, 200, 145, 160, 0.1f);
     game_rule_panel_->SetParrent(null_widget_.get());
 
-    game_rule_list_ = std::make_shared<UIList<GameRule>>(10, 10, &game_rule_selected_);
+    game_rule_list_ = std::make_shared<UIList>(10, 10, 175, 180, &game_rule_selected_);
     game_rule_list_->SetParrent(game_rule_panel_.get());
     
 }

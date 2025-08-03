@@ -56,11 +56,18 @@ void UIToggle::Draw() {
         ui.ui_line_color
     );
 
-    DrawText(
+    /* DrawText(
         text_.c_str(), 
         GetAbsoluteXPosition() + x_pos_ + box_width_ + 10, 
         GetAbsoluteYPosition() + height_ / 2 - 4, 
         14, 
+        ui.ui_text_dark); */
+
+    UITools::DrawTextDefault(
+        GetAbsoluteXPosition() + x_pos_ + box_width_ + 10, 
+        GetAbsoluteYPosition() + height_ / 2 - 8,
+        text_.c_str(), 
+        18, 
         ui.ui_text_dark);
   //  UITools::DrawRectangle
 }

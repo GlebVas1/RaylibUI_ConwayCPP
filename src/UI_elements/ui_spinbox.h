@@ -5,7 +5,7 @@
 #include "ui_mouse_state.h" 
 #include "ui_element_class.h"
 #include "ui_text_fromat.h"
-
+#include "../UI_Tools/ui_tools.h"
 template <typename T>
 class UISpinBox : public UIElement, UIMouseState, UITextFormat<T> {
     private:

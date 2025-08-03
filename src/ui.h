@@ -60,8 +60,9 @@ class UI : public UIColorTheme {
     std::shared_ptr<UILabel> brush_settings_size_label_ = nullptr;
 
     size_t game_rule_selected_ = 4;
+    std::vector<std::string> game_rule_names_;
     std::shared_ptr<UIPanel> game_rule_panel_ = nullptr;
-    std::shared_ptr<UIList<GameRule>> game_rule_list_ = nullptr;
+    std::shared_ptr<UIList> game_rule_list_ = nullptr;
 
     void UpdateUIElements();
 

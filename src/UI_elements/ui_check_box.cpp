@@ -58,11 +58,18 @@ void UICheckbox::Draw() {
         );
     }
 
-    DrawText(
+    /* DrawText(
         text_.c_str(), 
         GetAbsoluteXPosition() + x_pos_ + box_size_ + 10, 
         GetAbsoluteYPosition() + y_pos_ + box_size_ / 2 - 4, 
         14, 
+        ui.ui_text_dark); */
+
+    UITools::DrawTextDefault(
+        GetAbsoluteXPosition() + x_pos_ + box_size_ + 10, 
+        GetAbsoluteYPosition() + y_pos_ + box_size_ / 2 - 8,
+        text_.c_str(), 
+        18, 
         ui.ui_text_dark);
 }
 
