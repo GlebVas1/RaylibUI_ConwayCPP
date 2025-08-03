@@ -99,7 +99,7 @@ void UISpinBox<T>::Draw() {
     DrawRectangleRounded(main_field_right, roundness_, 0, right_color);
     DrawRectangleRoundedLinesEx(main_field_right_line, roundness_, 0, 2, ui.ui_line_color);
 
-    DrawText(TextFormat(UITextFormat<T>::format_, *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 5, 14, WHITE);
+    DrawText(TextFormat(UITextFormat<T>::format_, *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 6, 14, WHITE);
 }
 
 
@@ -182,7 +182,7 @@ UISpinBox<T>::UISpinBox() {}
 template<typename T>
 UISpinBox<T>::UISpinBox(int x, int y, T* val, T step) {
     SetPosition(x, y);
-    SetDimensions(60, 25);
+    SetDimensions(60, 20);
     SetValuePtr(val);
     SetStep(step);
 }

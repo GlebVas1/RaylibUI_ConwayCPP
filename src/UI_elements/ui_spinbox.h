@@ -17,7 +17,7 @@ class UISpinBox : public UIElement, UIMouseState, UITextFormat<T> {
 
     float roundness_ = 0.1;
 
-    int buttons_width_ = 15;
+    int buttons_width_ = 12;
 
     MouseState left_state_;
     MouseState right_state_;

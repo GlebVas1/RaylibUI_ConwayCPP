@@ -18,4 +18,8 @@ namespace UITools {
         DrawRectangleRounded(main_field, roundness, 0, background);
         DrawRectangleRoundedLinesEx(main_field_line, roundness, 0, thikness, line);
     }
+
+    void DrawText(int x, int y, const std::string& str, int font_size, Color col) {
+        DrawText(str.c_str(), x, y, font_size, col);
+    }
 }

@@ -10,7 +10,7 @@
 #include "UI_elements/ui_panel.h"
 
 #include "UI_elements/ui_spinbox.h"
-
+#include "UI_elements/ui_label.h"
 
 
 #include "UI_elements/ui_check_box.h"
@@ -49,10 +49,11 @@ class UI : public UIColorTheme {
     bool brush_random_ = false;
     bool brush_object_mode_ = false;
     std::shared_ptr<UISpinBox<int>> brush_size_spinbox_ = nullptr;
-    std::shared_ptr<UICheckbox> brush_round_checkbox = nullptr;
-    std::shared_ptr<UICheckbox> brush_random_checkbox = nullptr;
+    std::shared_ptr<UICheckbox> brush_round_checkbox_ = nullptr;
+    std::shared_ptr<UICheckbox> brush_random_checkbox_ = nullptr;
     std::shared_ptr<UIPanel> brush_settings_panel_ = nullptr;
-    std::shared_ptr<UIToggle> brush_object_toogle = nullptr;
+    std::shared_ptr<UIToggle> brush_object_toogle_ = nullptr;
+    std::shared_ptr<UILabel> brush_settings_label_ = nullptr;
 
     void UpdateUIElements();
 

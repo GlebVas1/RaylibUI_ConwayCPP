@@ -91,23 +91,30 @@ void UI::InitializeElements() {
     pallete_->SetYPosition(20);
     pallete_->SetParrent(null_widget_.get());
 
-    brush_settings_panel_ = std::make_shared<UIPanel>(1100, 40, 180, 180, 0.1f);
+    brush_settings_panel_ = std::make_shared<UIPanel>(1100, 40, 145, 160, 0.1f);
     brush_settings_panel_->SetParrent(null_widget_.get());
     
 
-    brush_size_spinbox_ = std::make_shared<UISpinBox<int>>(20, 20, &brush_radius_, 1.0f);
+
+    brush_settings_label_ = std::make_shared<UILabel>(10, 10, "Brush settings");
+    brush_settings_label_->SetParrent(brush_settings_panel_.get());
+
+    brush_size_spinbox_ = std::make_shared<UISpinBox<int>>(10, 40, &brush_radius_, 1.0f);
     brush_size_spinbox_->SetMaxValue(100);
     brush_size_spinbox_->SetMinValue(1);
     brush_size_spinbox_->SetParrent(brush_settings_panel_.get());
 
-    brush_round_checkbox = std::make_shared<UICheckbox>(20, 50, &brush_round_, "Round");
-    brush_round_checkbox->SetParrent(brush_settings_panel_.get());
 
-    brush_random_checkbox = std::make_shared<UICheckbox>(20, 80, &brush_random_, "Random");
-    brush_random_checkbox->SetParrent(brush_settings_panel_.get());
+    brush_round_checkbox_ = std::make_shared<UICheckbox>(10, 70, &brush_round_, "Round");
+    brush_round_checkbox_->SetParrent(brush_settings_panel_.get());
 
-    brush_object_toogle = std::make_shared<UIToggle>(20, 130, &brush_object_mode_, "Object");
-    brush_object_toogle->SetParrent(brush_settings_panel_.get());
+    brush_random_checkbox_ = std::make_shared<UICheckbox>(10, 100, &brush_random_, "Random");
+    brush_random_checkbox_->SetParrent(brush_settings_panel_.get());
+
+    brush_object_toogle_ = std::make_shared<UIToggle>(10, 130, &brush_object_mode_, "Object");
+    brush_object_toogle_->SetParrent(brush_settings_panel_.get());
+
+    
     
 }
 
