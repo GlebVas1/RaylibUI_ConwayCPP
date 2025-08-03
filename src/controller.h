@@ -20,5 +20,6 @@ class Controller {
     void ThreadsJoin();
 
     void SetFieldRule(size_t);
+    void SetPause(float val);
 };
 

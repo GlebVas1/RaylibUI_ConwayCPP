@@ -77,7 +77,12 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
 
   uint8_t current_cell = GetPixel(x, y, buffer_to_read);
   SetPixel(x, y, current_cell, buffer_to_write);
-
+  
+  if (paused_) {
+    const auto this_color = (*current_pallete_)[current_cell];
+    SetPixelColor(x, y, this_color.r, this_color.g, this_color.b);
+    return;
+  }
 
   if (current_cell == EMPTY_) {
     if (current_rule_->is_arriving(neigh_count)) {
@@ -222,4 +227,8 @@ void Field::SetPixelAt(int x, int y, uint8_t val) {
 
 void Field::SetController(Controller* controller) {
   controller_ = controller;
+}
+
+void Field::SetPause(float val) {
+  paused_ = val;
 }

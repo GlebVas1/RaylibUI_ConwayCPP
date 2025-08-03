@@ -23,7 +23,7 @@ void UI::Start() {
     UITools::GetMainFont();
     
     
-
+    float pause = false;
     //Font font = LoadFontEx("../resources/fonts/jaipur.ttf", 32, 0, 250);
     SetTextLineSpacing(2); 
 
@@ -49,6 +49,10 @@ void UI::Start() {
     
     while (!WindowShouldClose()) {
         UpdateUIElements();
+        if (IsKeyPressed(KEY_SPACE)) {
+            pause = !pause;
+            controller_->SetPause(pause);
+        }
         BeginDrawing();
         
         ClearBackground(ui_background_color);

@@ -108,10 +108,11 @@ void UIList::Update() {
 
     if (mouse_on_list) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            size_t y = static_cast<size_t>(static_cast<float>(elements_.size()) * (GetMousePosition().y - GetAbsoluteYPosition() + y_offset) / (float)list_render_texture_->texture.height);
+            size_t y = static_cast<size_t>(static_cast<float>(elements_.size()) * (GetMousePosition().y - GetAbsoluteYPosition() + y_offset) / full_list_height);
             *selected_ = y;
             ui.SetRule();
-        } 
+        }
+        slider_position_ = std::max(0.0f, std::min(1.0f, slider_position_+ GetMouseWheelMove() * 0.16f));
     }
 
     bool mouse_on_slider = CheckCollisionPointRec(GetMousePosition(), Rectangle{

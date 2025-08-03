@@ -34,6 +34,8 @@ class Field {
     std::vector<GameColor>* current_pallete_ = nullptr;
 
     bool processing_ = true;
+
+    bool paused_ = false;
     size_t threads_count = 55;
     std::atomic<size_t> current_threads_finished;
 
@@ -101,6 +103,8 @@ class Field {
     void SetFrameDelayMilliseconds(size_t val);
 
     void SetPixelAt(int x, int y, uint8_t val);
+
+    void SetPause(float val);
 
     uint8_t GetPixelAt(int x, int y);
 
