@@ -7,8 +7,8 @@ class UIToggle : public UIElement, UIMouseState {
     private:
     bool* value_;
     std::string text_;
-    int slider_width_ = 10;
-    int box_width_ = 30;
+    int slider_width_ = 17;
+    int box_width_ = 35;
     int x_pos_ = 0;
     public:
     UIToggle();

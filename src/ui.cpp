@@ -74,6 +74,7 @@ void UI::SetController(Controller* controller) {
 }
 
 void UI::InitializeElements() {
+
     null_widget_ = std::make_shared<UIElement>();
 
     main_canvas_panel_ = std::make_shared<UIPanel>(0, 0, 1080, 1080, 0.015f);
@@ -94,8 +95,9 @@ void UI::InitializeElements() {
     brush_settings_panel_->SetParrent(null_widget_.get());
     
 
-    brush_size_spinbox_ = std::make_shared<UISpinBox>(20, 20, &brush_radius_, 1.0f);
-    brush_size_spinbox_->SetMaxValue(100.0f);
+    brush_size_spinbox_ = std::make_shared<UISpinBox<int>>(20, 20, &brush_radius_, 1.0f);
+    brush_size_spinbox_->SetMaxValue(100);
+    brush_size_spinbox_->SetMinValue(1);
     brush_size_spinbox_->SetParrent(brush_settings_panel_.get());
 
     brush_round_checkbox = std::make_shared<UICheckbox>(20, 50, &brush_round_, "Round");

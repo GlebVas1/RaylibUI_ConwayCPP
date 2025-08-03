@@ -1,15 +1,19 @@
 #pragma once
 #include "stdafx.h"
 #include "raylib.h"
-#include "ui_element_class.h"
-#include "ui_mouse_state.h"
 
-class UISpinBox : public UIElement, public UIMouseState {
+#include "ui.h"
+#include "ui_mouse_state.h" 
+#include "ui_element_class.h"
+#include "ui_text_fromat.h"
+
+template <typename T>
+class UISpinBox : public UIElement, UIMouseState, UITextFormat<T> {
     private:
-    float* value_;
-    float step_ = 0.1f;
-    float min_value = 0.0f;
-    float max_value = 1.0f;
+    T* value_;
+    T step_ = 0;
+    T min_value = 0;
+    T max_value = 1;
 
     float roundness_ = 0.1;
 
@@ -21,19 +25,22 @@ class UISpinBox : public UIElement, public UIMouseState {
     public:
 
     UISpinBox();
-    UISpinBox(int x, int y, float* ptr, float step = 0.1f);
+    UISpinBox(int x, int y, T* ptr, T step = 0.1f);
 
     void Update();
     void Draw() override;
     
-    void SetValuePtr(float* ptr);
+    void SetValuePtr(T* ptr);
     void NormalizeValue();
 
     void DecreaseValue();
     void IncreaseValue();
 
-    void SetMaxValue(float val);
-    void SetMinValue(float val);
+    void SetMaxValue(T val);
+    void SetMinValue(T val);
 
-    void SetStep(float val);
+    void SetStep(T val);
 };
+
+
+#include "ui_spinbox.ipp"

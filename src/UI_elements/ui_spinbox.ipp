@@ -1,18 +1,20 @@
-#include "ui_spinbox.h"
-#include "ui.h"
 
-void UISpinBox::SetValuePtr(float* ptr) {
+
+template<typename T>
+void UISpinBox<T>::SetValuePtr(T* ptr) {
     value_ = ptr;
 }
 
-void UISpinBox::NormalizeValue() {
+template<typename T>
+void UISpinBox<T>::NormalizeValue() {
     if (value_ == nullptr) {
         return;
     }
     *value_ = std::min(max_value, std::max(min_value, *value_));
 }
 
-void UISpinBox::Draw() {
+template<typename T>
+void UISpinBox<T>::Draw() {
     if (value_ == nullptr) {
         return;
     }
@@ -97,12 +99,12 @@ void UISpinBox::Draw() {
     DrawRectangleRounded(main_field_right, roundness_, 0, right_color);
     DrawRectangleRoundedLinesEx(main_field_right_line, roundness_, 0, 2, ui.ui_line_color);
 
-    DrawText(TextFormat("%02.0f", *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 5, 14, WHITE);
+    DrawText(TextFormat(UITextFormat<T>::format_, *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 5, 14, WHITE);
 }
 
 
-
-void UISpinBox::IncreaseValue() {
+template<typename T>
+void UISpinBox<T>::IncreaseValue() {
     if (value_ == nullptr) {
         return;
     }
@@ -110,7 +112,8 @@ void UISpinBox::IncreaseValue() {
     NormalizeValue();
 }
 
-void UISpinBox::DecreaseValue() {
+template<typename T>
+void UISpinBox<T>::DecreaseValue() {
     if (value_ == nullptr) {
         return;
     }
@@ -118,7 +121,8 @@ void UISpinBox::DecreaseValue() {
     NormalizeValue();
 }
 
-void UISpinBox::Update() {
+template<typename T>
+void UISpinBox<T>::Update() {
     bool mouse_on_left_button = CheckCollisionPointRec(GetMousePosition(), Rectangle{
         static_cast<float>(GetAbsoluteXPosition()),
         static_cast<float>(GetAbsoluteYPosition()),
@@ -157,23 +161,29 @@ void UISpinBox::Update() {
 
 }
 
-void UISpinBox::SetMaxValue(float val) {
+template<typename T>
+void UISpinBox<T>::SetMaxValue(T val) {
     max_value = val;
 }
 
-void UISpinBox::SetMinValue(float val) {
+template<typename T>
+void UISpinBox<T>::SetMinValue(T val) {
     min_value = val;
 }
 
-void UISpinBox::SetStep(float val) {
+template<typename T>
+void UISpinBox<T>::SetStep(T val) {
     step_ = val;
 }
 
-UISpinBox::UISpinBox() {}
+template<typename T>
+UISpinBox<T>::UISpinBox() {}
 
-UISpinBox::UISpinBox(int x, int y, float* val, float step) {
+template<typename T>
+UISpinBox<T>::UISpinBox(int x, int y, T* val, T step) {
     SetPosition(x, y);
     SetDimensions(60, 25);
     SetValuePtr(val);
     SetStep(step);
 }
+

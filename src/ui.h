@@ -1,24 +1,32 @@
+
 #pragma once
 #include "stdafx.h"
 #include "raylib.h"
 
+#include "UI_elements/ui_element_class.h"
+
 #include "UI_elements/ui_main_canvas.h"
 #include "UI_elements/ui_pallete.h"
 #include "UI_elements/ui_panel.h"
-// #include "UI_elements/ui_button.h"
-
-#include "UI_elements/ui_element_class.h"
 
 #include "UI_elements/ui_spinbox.h"
+
+
+
 #include "UI_elements/ui_check_box.h"
 #include "UI_elements/ui_toogle.h"
 
+
 #include "ui_color_theme.h"
+
+#include "UI_elements/ui_text_fromat.h"
 
 class Controller;
 
+
 class UI : public UIColorTheme {
     private:
+
     UI();
     ~UI();
     std::vector<UIElement*> elements_;
@@ -36,11 +44,11 @@ class UI : public UIColorTheme {
 
     std::shared_ptr<UIPallete> pallete_ = nullptr;
 
-    float brush_radius_ = 45;
+    int brush_radius_ = 45;
     bool brush_round_ = false;
     bool brush_random_ = false;
     bool brush_object_mode_ = false;
-    std::shared_ptr<UISpinBox> brush_size_spinbox_ = nullptr;
+    std::shared_ptr<UISpinBox<int>> brush_size_spinbox_ = nullptr;
     std::shared_ptr<UICheckbox> brush_round_checkbox = nullptr;
     std::shared_ptr<UICheckbox> brush_random_checkbox = nullptr;
     std::shared_ptr<UIPanel> brush_settings_panel_ = nullptr;
@@ -55,6 +63,8 @@ class UI : public UIColorTheme {
    
 
     public: 
+
+    float asd = 232.12354f;
 
     static UI& GetInstance();
 

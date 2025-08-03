@@ -20,9 +20,9 @@ void Controller::StartUI() {
     ui->InitializeElements();
     ui->SetColorBuffer(field->GetColorBuffer());
 
-    auto gcp = GameColorPinkGreen();
+    auto gcp = GameColorWater();
     //auto gr = GameRule_STATIC;
-    auto gr = GameRule_SPIRALS;
+    auto gr = GameRule_FREESTAR;
     field->SetColorPallette(&gcp);
     field->SetGameRule(&gr);
 
