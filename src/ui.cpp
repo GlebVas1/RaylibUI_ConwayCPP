@@ -105,6 +105,9 @@ void UI::InitializeElements() {
     brush_size_spinbox_->SetParrent(brush_settings_panel_.get());
 
 
+    brush_settings_size_label_ = std::make_shared<UILabel>(80, 43, "Size");
+    brush_settings_size_label_->SetParrent(brush_settings_panel_.get());
+
     brush_round_checkbox_ = std::make_shared<UICheckbox>(10, 70, &brush_round_, "Round");
     brush_round_checkbox_->SetParrent(brush_settings_panel_.get());
 

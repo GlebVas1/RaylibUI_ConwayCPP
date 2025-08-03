@@ -54,7 +54,8 @@ class UI : public UIColorTheme {
     std::shared_ptr<UIPanel> brush_settings_panel_ = nullptr;
     std::shared_ptr<UIToggle> brush_object_toogle_ = nullptr;
     std::shared_ptr<UILabel> brush_settings_label_ = nullptr;
-
+    std::shared_ptr<UILabel> brush_settings_size_label_ = nullptr;
+    
     void UpdateUIElements();
 
     void DrawElement(UIElement* root);

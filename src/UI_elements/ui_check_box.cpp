@@ -51,8 +51,8 @@ void UICheckbox::Draw() {
             GetAbsoluteYPosition() + y_pos_ + offset,
             check_size_,
             check_size_,
-            2, 
-            box_roundness_,
+            0, 
+            check_roundness_,
             ui.ui_text_dark,
             ui.ui_line_color
         );
