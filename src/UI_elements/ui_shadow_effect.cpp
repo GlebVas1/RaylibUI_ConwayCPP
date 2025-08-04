@@ -8,6 +8,7 @@ UIShadowEffect::UIShadowEffect(int x, int y, int width, int height, float roundn
     // set all alpha to 255
     memset(data, 0, 4 * new_height * new_width);
     
+    std::cout << " " << new_width << " " << new_height << std::endl;
     RenderTexture2D rend_shadow = LoadRenderTexture(new_width, new_height);
     SetTextureFilter(rend_shadow.texture, TEXTURE_FILTER_TRILINEAR);
 

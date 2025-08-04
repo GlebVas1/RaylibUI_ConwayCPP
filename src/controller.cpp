@@ -28,6 +28,7 @@ void Controller::StartUI() {
 
     ui->SetColorPallette(gcp);
     ui->SetColorCount(gr.maximum_age);
+    // ui->InitPalette();
 
     ui->Start();
 }
@@ -53,6 +54,7 @@ void Controller::SetFieldRule(size_t ind) {
 void Controller::SetPalette(size_t ind) {
     field->SetColorPallette(&(ALL_PALLETTES[ind].pallette));
     ui->SetColorPallette(ALL_PALLETTES[ind].pallette);
+    ui->InitPalette();
 }
 
 void Controller::SetPause(float val) {

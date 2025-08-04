@@ -94,6 +94,72 @@ std::vector<GameColor> GameColorSand() {
     return GameColorGradient(clrs, {0, 78, 150, 255});
 }
 
+std::vector<GameColor> GameColorAqua() {
+    std::vector<GameColor> clrs{
+        {0, 0, 0}, 
+        {34, 40, 65}, 
+        {34, 62, 102}, 
+        {34, 104, 139}, 
+        {28, 184, 189}, 
+        {38, 226, 163}};
+    return GameColorGradient(clrs, {0, 30, 78, 100, 150, 255});
+}
+
+std::vector<GameColor> GameColorCoral() {
+    std::vector<GameColor> clrs{
+        {113, 115, 100},
+        {111, 134, 157},
+        {242, 99, 90},
+        {90, 166, 242}};
+    return GameColorGradient(clrs, {0, 78, 150, 255});
+}
+
+std::vector<GameColor> GameColorRed() {
+    std::vector<GameColor> clrs{
+        {70, 48, 46},
+        {112, 60, 56}, 
+        {115, 58, 52}, 
+        {197, 44, 33}, 
+        {240, 18, 1}};
+    return GameColorGradient(clrs, {0, 78, 130, 180, 255});
+}
+
+std::vector<GameColor> GameColorFuxia() {
+    std::vector<GameColor> clrs{
+        {0, 0, 0}, 
+        {69, 54, 66}, 
+        {113, 43, 69}, 
+        {169, 12, 85}, 
+        {250, 0, 117}};
+    return GameColorGradient(clrs, {0, 78, 130, 180, 255});
+}
+
+std::vector<GameColor> GameColorHighContrast() {
+    std::vector<GameColor> clrs{
+        {0, 0, 0},
+        {85, 73, 128},
+        {121, 73, 128},
+        {123, 128, 73},
+        {228, 18, 255},
+        {61, 0, 255},
+        {234, 255, 18}};
+    return GameColorGradient(clrs, {0, 78, 90, 120, 150, 190, 255});
+}
+
+std::vector<GameColor> GameColorElf() {
+    std::vector<GameColor> clrs{
+        {0, 0, 0},
+        {40, 87, 87}, 
+        {23, 204, 204}, 
+        {154, 194, 224}, 
+        {167, 207, 237}, 
+        {233, 182, 210}, 
+        {245, 182, 210}, 
+        {255, 194, 214}};
+    return GameColorGradient(clrs, {0, 78, 90, 120, 150, 170, 220, 255});
+}
+
+
 std::vector<ColorElement> ALL_PALLETTES {
     { "Flame", GameColorFlame() },
     { "Necron", GameColorNecron() },
@@ -101,5 +167,11 @@ std::vector<ColorElement> ALL_PALLETTES {
     { "Water", GameColorWater() },
     { "Pink&Green", GameColorPinkGreen() },
     { "Paint", GameColorPaint() },
-    { "Sand", GameColorSand() }
+    { "Sand", GameColorSand() },
+    { "Aqua", GameColorAqua() },
+    { "Coral", GameColorCoral() },
+    { "Red", GameColorRed() },
+    { "Fuxia", GameColorFuxia() },
+    { "HC", GameColorHighContrast() },
+    { "Elf", GameColorElf() }
 };

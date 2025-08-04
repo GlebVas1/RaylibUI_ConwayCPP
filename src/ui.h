@@ -65,6 +65,7 @@ class UI : public UIColorTheme {
 
     std::shared_ptr<UIPanel> palette_panel_ = nullptr;
     std::shared_ptr<UIList> palette_list_ = nullptr;
+    std::shared_ptr<UILabel> palette_label_ = nullptr;
 
 
     void UpdateUIElements();
@@ -94,6 +95,8 @@ class UI : public UIColorTheme {
     void SetColorPallette(const std::vector<GameColor>& pallette);
 
     void SetColorCount(size_t color_count);
+
+    void InitPalette();
 
     void SetSelectedColor(uint8_t val);
 

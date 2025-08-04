@@ -7,7 +7,7 @@
 UIList::UIList() {}
 
 
-UIList::UIList(int x, int y, int width, int height, std::function<void(size_t)> call) : UIElement(x, y, 200, 200) {
+UIList::UIList(int x, int y, int width, int height, std::function<void(size_t)> call) : UIElement(x, y, width, height) {
     call_ = call;
 }
 
@@ -89,6 +89,19 @@ void UIList::Draw() {
         2,
         0.3f,
         ui.ui_accent_color_1,
+        ui.ui_line_color
+    );
+
+    DrawRectangleRoundedLinesEx(
+        Rectangle {
+            static_cast<float>(GetAbsoluteXPosition()),
+            static_cast<float>(GetAbsoluteYPosition()),
+            static_cast<float>(width_ - slider_box_x_space_),
+            static_cast<float>(height_)
+        },
+        0.1f,
+        0,
+        2,
         ui.ui_line_color
     );
 

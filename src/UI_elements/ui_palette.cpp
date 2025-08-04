@@ -40,20 +40,20 @@ void UIPalette::UIPaletteButton::Draw() {
         main_field_line,
         roundness_,
         0,
-        id_ == this_pallete->selected_button ? 4 : 2,
+        id_ == this_pallete->selected_button_ ? 4 : 2,
         BLACK);
 }
 
 void UIPalette::UIPaletteButton::SetXPosition(int x) {
     
     x_position_ = x;
-    std::cout << " x pos " << x_position_ << std::endl;
+    //std::cout << " x pos " << x_position_ << std::endl;
 }
 
 void UIPalette::UIPaletteButton::SetYPosition(int y) {
     
     y_position_ = y;
-    std::cout << " y pos " << y_position_ << std::endl;
+    //std::cout << " y pos " << y_position_ << std::endl;
 }
 
 void UIPalette::UIPaletteButton::SetDimensions(int x, int y) {
@@ -74,7 +74,7 @@ void UIPalette::UIPaletteButton::Update() {
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             state_ = MouseState::MOUSE_PRESSED;
             this_pallete->selected_val_ = this_pallete->color_pallete_val_[id_];
-            this_pallete->selected_button = id_;
+            this_pallete->selected_button_ = id_;
         } else {
             state_ = MouseState::MOUSE_HOVERED;
         }
@@ -127,12 +127,14 @@ void UIPalette::Init() {
     InitializeButtons();
     SetDimensions(button_width_ + 2 * button_width_spacing_,
                   button_height_spacing_ * (colors_count_ + 1) + button_height_ * colors_count_);
+    std::cout << "UIPalleteInit() wh " << width_ + 10 << " " << height_ + 10 << std::endl;
     shadow_ = std::make_shared<UIShadowEffect>(GetAbsoluteXPosition() - 5, GetAbsoluteYPosition() - 5, width_ + 10, height_ + 10, 0.5f, 3); 
 
 }
 
 void UIPalette::SetColorPallette(const std::vector<GameColor>& pallette) {
     color_pallete_ = pallette;
+    //colors_count_ = color_pallete_.size();
 }
 
 void UIPalette::SetColorCount(size_t color_count) {

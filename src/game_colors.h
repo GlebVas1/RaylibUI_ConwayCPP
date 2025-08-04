@@ -14,6 +14,12 @@ std::vector<GameColor> GameColorPinkGreen();
 std::vector<GameColor> GameColorBW();
 std::vector<GameColor> GameColorPaint();
 std::vector<GameColor> GameColorSand();
+std::vector<GameColor> GameColorAqua();
+std::vector<GameColor> GameColorCoral();
+std::vector<GameColor> GameColorRed();
+std::vector<GameColor> GameColorFuxia();
+std::vector<GameColor> GameColorHighContrast();
+std::vector<GameColor> GameColorElf();
 
 struct ColorElement {
   std::string name;
