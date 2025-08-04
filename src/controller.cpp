@@ -50,6 +50,11 @@ void Controller::SetFieldRule(size_t ind) {
     field->SetGameRule(&ALL_RULES[ind]);
 }
 
+void Controller::SetPalette(size_t ind) {
+    field->SetColorPallette(&(ALL_PALLETTES[ind].pallette));
+    ui->SetColorPallette(ALL_PALLETTES[ind].pallette);
+}
+
 void Controller::SetPause(float val) {
     field->SetPause(val);
 }

@@ -8,9 +8,9 @@
 #include "ui_mouse_state.h"
 #include "ui_shadow_effect.h"
 
-class UIPallete : public UIElement {
+class UIPalette : public UIElement {
     private:
-    class UIPalleteButton : public UIMouseState {
+    class UIPaletteButton : public UIMouseState {
         int width_ = 0;
         int height_ = 0;
         int x_position_ = 0;
@@ -20,7 +20,7 @@ class UIPallete : public UIElement {
         Color covered_c_;
         Color pressed_c_;
         size_t id_;
-        UIPallete* this_pallete;
+        UIPalette* this_pallete;
         public: 
         void SetDimensions(int x, int y);
         void SetPosition(int x, int y);
@@ -33,12 +33,12 @@ class UIPallete : public UIElement {
         
         void SetColors(GameColor c);
         void SetId(size_t id);
-        void SetPallete(UIPallete* pallette);
+        void SetPalette(UIPalette* pallette);
     };
 
-    friend UIPalleteButton;
+    friend UIPaletteButton;
     std::shared_ptr<UIShadowEffect> shadow_;
-    std::vector<UIPalleteButton> buttons_;
+    std::vector<UIPaletteButton> buttons_;
     size_t colors_count_ = 0;
     std::vector<GameColor> color_pallete_;
     std::vector<uint8_t> color_pallete_val_;

@@ -37,6 +37,7 @@ void UI::Start() {
     pallete_->Init();
     brush_settings_panel_->Init();
     game_rule_panel_->Init();
+    palette_panel_->Init();
     
     std::vector<std::string> game_rule_names;
     for (const auto& elem : ALL_RULES) {
@@ -44,6 +45,13 @@ void UI::Start() {
     }
     game_rule_list_->SetVector(game_rule_names);
     game_rule_list_->Init();
+
+    std::vector<std::string> palette_names;
+    for (const auto& elem : ALL_PALLETTES) {
+        game_rule_names.push_back(elem.name);
+    }
+    palette_list_->SetVector(palette_names);
+    palette_list_->Init();
 
     SetTargetFPS(100);
     
@@ -106,7 +114,7 @@ void UI::InitializeElements() {
     main_canvas_->SetParrent(main_canvas_panel_.get());
     main_canvas_->SetCanvasGridColor(ui_background_color);
 
-    pallete_ = std::make_shared<UIPallete>();
+    pallete_ = std::make_shared<UIPalette>();
     pallete_->SetXPosition(1400);
     pallete_->SetYPosition(20);
     pallete_->SetParrent(null_widget_.get());
@@ -137,11 +145,17 @@ void UI::InitializeElements() {
     brush_object_toogle_ = std::make_shared<UIToggle>(10, 130, &brush_object_mode_, "Object");
     brush_object_toogle_->SetParrent(brush_settings_panel_.get());
 
-    game_rule_panel_ = std::make_shared<UIPanel>(1100, 200, 145, 160, 0.1f);
+    game_rule_panel_ = std::make_shared<UIPanel>(1100, 800, 145, 160, 0.1f);
     game_rule_panel_->SetParrent(null_widget_.get());
 
-    game_rule_list_ = std::make_shared<UIList>(10, 10, 175, 180, &game_rule_selected_);
+    game_rule_list_ = std::make_shared<UIList>(10, 10, 175, 180, [this](size_t ind) { SetRule(ind); });
     game_rule_list_->SetParrent(game_rule_panel_.get());
+
+    palette_panel_ = std::make_shared<UIPanel>(1100, 220, 145, 160, 0.1f);
+    palette_panel_->SetParrent(null_widget_.get());
+
+    palette_list_ = std::make_shared<UIList>(10, 10, 145, 160, [this](size_t ind) { UpdatePalette(ind); });
+    palette_list_->SetParrent(palette_panel_.get());
     
 }
 
@@ -151,6 +165,7 @@ void UI::AddUIElement(UIElement* elem_ptr) {
 
 void UI::SetColorPallette(const std::vector<GameColor>& pallette) {
     pallete_->SetColorPallette(pallette);
+    pallete_->Init();
 }
 
 void UI::SetColorCount(size_t color_count) {
@@ -176,6 +191,10 @@ void UI::DrawBrush(size_t x, size_t y) {
     }
 }
 
-void UI::SetRule() {
-    controller_->SetFieldRule(game_rule_selected_);
+void UI::SetRule(size_t ind) {
+    controller_->SetFieldRule(ind);
+}
+
+void UI::UpdatePalette(size_t ind) {
+    controller_->SetPalette(ind);
 }

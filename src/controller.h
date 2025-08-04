@@ -19,7 +19,9 @@ class Controller {
     void Start();
     void ThreadsJoin();
 
-    void SetFieldRule(size_t);
+    void SetFieldRule(size_t ind);
+    void SetPalette(size_t ind);
+    
     void SetPause(float val);
 };
 

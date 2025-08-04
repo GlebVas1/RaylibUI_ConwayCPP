@@ -6,7 +6,7 @@ class UIList : public UIElement {
     private:
     std::vector<std::string> elements_;
     std::shared_ptr<RenderTexture2D> list_render_texture_;
-    size_t* selected_ = nullptr;
+
     int y_item_size_ = 22;
     
     int box_height = 200;
@@ -27,10 +27,14 @@ class UIList : public UIElement {
 
     float slider_position_ = 0.5f;
 
+    size_t selected_ind_ = 0;
+
+    std::function<void(size_t)> call_;
+
     public:
     void Init() override;
     UIList();
-    UIList(int x, int y, int width, int height, size_t* selected_ptr);
+    UIList(int x, int y, int width, int height, std::function<void(size_t)> call_);
     void SetVector(const std::vector<std::string>& original);
     void Draw() override;
     void Update() override;

@@ -6,7 +6,7 @@
 #include "UI_elements/ui_element_class.h"
 
 #include "UI_elements/ui_main_canvas.h"
-#include "UI_elements/ui_pallete.h"
+#include "UI_elements/ui_palette.h"
 #include "UI_elements/ui_panel.h"
 
 #include "UI_elements/ui_spinbox.h"
@@ -45,7 +45,7 @@ class UI : public UIColorTheme {
     std::shared_ptr<UIMainCanvas> main_canvas_ = nullptr;
 
 
-    std::shared_ptr<UIPallete> pallete_ = nullptr;
+    std::shared_ptr<UIPalette> pallete_ = nullptr;
 
     int brush_radius_ = 45;
     bool brush_round_ = false;
@@ -59,10 +59,13 @@ class UI : public UIColorTheme {
     std::shared_ptr<UILabel> brush_settings_label_ = nullptr;
     std::shared_ptr<UILabel> brush_settings_size_label_ = nullptr;
 
-    size_t game_rule_selected_ = 4;
     std::vector<std::string> game_rule_names_;
     std::shared_ptr<UIPanel> game_rule_panel_ = nullptr;
     std::shared_ptr<UIList> game_rule_list_ = nullptr;
+
+    std::shared_ptr<UIPanel> palette_panel_ = nullptr;
+    std::shared_ptr<UIList> palette_list_ = nullptr;
+
 
     void UpdateUIElements();
 
@@ -73,8 +76,6 @@ class UI : public UIColorTheme {
    
 
     public: 
-
-    float asd = 232.12354f;
 
     static UI& GetInstance();
 
@@ -98,5 +99,7 @@ class UI : public UIColorTheme {
 
     void DrawBrush(size_t x, size_t y);
 
-    void SetRule();
+    void SetRule(size_t ind);
+
+    void UpdatePalette(size_t ind);
 };

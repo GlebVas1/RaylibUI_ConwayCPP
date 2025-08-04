@@ -93,3 +93,13 @@ std::vector<GameColor> GameColorSand() {
         {148, 106, 56}};
     return GameColorGradient(clrs, {0, 78, 150, 255});
 }
+
+std::vector<ColorElement> ALL_PALLETTES {
+    { "Flame", GameColorFlame() },
+    { "Necron", GameColorNecron() },
+    { "BW", GameColorBW() },
+    { "Water", GameColorWater() },
+    { "Pink&Green", GameColorPinkGreen() },
+    { "Paint", GameColorPaint() },
+    { "Sand", GameColorSand() }
+};

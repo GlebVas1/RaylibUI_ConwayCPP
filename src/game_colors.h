@@ -14,3 +14,10 @@ std::vector<GameColor> GameColorPinkGreen();
 std::vector<GameColor> GameColorBW();
 std::vector<GameColor> GameColorPaint();
 std::vector<GameColor> GameColorSand();
+
+struct ColorElement {
+  std::string name;
+  std::vector<GameColor> pallette;
+};
+
+extern std::vector<ColorElement> ALL_PALLETTES;

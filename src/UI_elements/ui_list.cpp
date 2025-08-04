@@ -7,8 +7,8 @@
 UIList::UIList() {}
 
 
-UIList::UIList(int x, int y, int width, int height, size_t* selected_ptr) : UIElement(x, y, 200, 200) {
-    selected_ = selected_ptr;
+UIList::UIList(int x, int y, int width, int height, std::function<void(size_t)> call) : UIElement(x, y, 200, 200) {
+    call_ = call;
 }
 
 
@@ -45,8 +45,8 @@ void UIList::Draw() {
     int y_offset = static_cast<int>(slider_position_ * (full_list_height - height_));
     
     for (size_t i = 0; i < elements_.size();  ++i) {
-        Color item_color = (i == *selected_) ? ui.ui_accent_color_2 : ui.ui_accent_color_3;
-        Color text_color = (i == *selected_) ? ui.ui_text_dark : ui.ui_text_light;
+        Color item_color = (i == selected_ind_) ? ui.ui_accent_color_2 : ui.ui_accent_color_3;
+        Color text_color = (i == selected_ind_) ? ui.ui_text_dark : ui.ui_text_light;
 
         BeginBlendMode(BLEND_MULTIPLIED); 
         DrawRectangle(0, i * y_item_size_ - y_offset , width_ - slider_box_x_space_, y_item_size_ , item_color);
@@ -109,8 +109,8 @@ void UIList::Update() {
     if (mouse_on_list) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             size_t y = static_cast<size_t>(static_cast<float>(elements_.size()) * (GetMousePosition().y - GetAbsoluteYPosition() + y_offset) / full_list_height);
-            *selected_ = y;
-            ui.SetRule();
+            selected_ind_ = y;
+            call_(selected_ind_);
         }
         slider_position_ = std::max(0.0f, std::min(1.0f, slider_position_+ GetMouseWheelMove() * 0.16f));
     }

@@ -1,10 +1,10 @@
-#include "ui_pallete.h"
+#include "ui_palette.h"
 
-void UIPallete::UIPalleteButton::SetId(size_t id) {
+void UIPalette::UIPaletteButton::SetId(size_t id) {
     id_ = id;
 }
 
-void UIPallete::UIPalleteButton::Draw() {
+void UIPalette::UIPaletteButton::Draw() {
 
 
     Rectangle main_field{
@@ -44,24 +44,24 @@ void UIPallete::UIPalleteButton::Draw() {
         BLACK);
 }
 
-void UIPallete::UIPalleteButton::SetXPosition(int x) {
+void UIPalette::UIPaletteButton::SetXPosition(int x) {
     
     x_position_ = x;
     std::cout << " x pos " << x_position_ << std::endl;
 }
 
-void UIPallete::UIPalleteButton::SetYPosition(int y) {
+void UIPalette::UIPaletteButton::SetYPosition(int y) {
     
     y_position_ = y;
     std::cout << " y pos " << y_position_ << std::endl;
 }
 
-void UIPallete::UIPalleteButton::SetDimensions(int x, int y) {
+void UIPalette::UIPaletteButton::SetDimensions(int x, int y) {
     width_ = x;
     height_ = y;
 }
 
-void UIPallete::UIPalleteButton::Update() {
+void UIPalette::UIPaletteButton::Update() {
 
     bool mouse_on_button = CheckCollisionPointRec(GetMousePosition(), Rectangle{
         static_cast<float>(x_position_),
@@ -83,7 +83,7 @@ void UIPallete::UIPalleteButton::Update() {
     }
 }
 
-void UIPallete::UIPalleteButton::SetColors(GameColor c) {
+void UIPalette::UIPaletteButton::SetColors(GameColor c) {
     default_c_ = { c.r, c.g, c.b, 255 };
     /* covered_c_ = {
         std::max<uint8_t>(static_cast<int>(c.r - 10), 0),
@@ -103,19 +103,19 @@ void UIPallete::UIPalleteButton::SetColors(GameColor c) {
     pressed_c_ = ColorAlphaBlend(default_c_, black_high, WHITE);
 }
 
-void UIPallete::UIPalleteButton::SetPallete(UIPallete* pallette) {
+void UIPalette::UIPaletteButton::SetPalette(UIPalette* pallette) {
     this_pallete = pallette;
 }
 
-void UIPallete::InitializeButtons() {
-    buttons_ = std::vector<UIPalleteButton>(colors_count_, UIPalleteButton());
+void UIPalette::InitializeButtons() {
+    buttons_ = std::vector<UIPaletteButton>(colors_count_, UIPaletteButton());
     color_pallete_val_ = std::vector<uint8_t>(colors_count_, 0);
     const uint8_t FULL_ = 255;
     const uint8_t EMPTY_ = 0;
     unsigned char offset = (FULL_ - EMPTY_) / colors_count_;
     for (size_t i = 0; i < colors_count_; ++i) {
         buttons_[i].SetId(i);
-        buttons_[i].SetPallete(this);
+        buttons_[i].SetPalette(this);
         buttons_[i].SetDimensions(button_width_, button_height_);
         buttons_[i].SetXPosition(button_width_spacing_ + GetAbsoluteXPosition());
         buttons_[i].SetYPosition(button_height_spacing_ + GetAbsoluteYPosition() + (button_height_ + button_height_spacing_)  * i);
@@ -123,7 +123,7 @@ void UIPallete::InitializeButtons() {
         color_pallete_val_[i] = FULL_ - i * offset;
     }
 }
-void UIPallete::Init() {
+void UIPalette::Init() {
     InitializeButtons();
     SetDimensions(button_width_ + 2 * button_width_spacing_,
                   button_height_spacing_ * (colors_count_ + 1) + button_height_ * colors_count_);
@@ -131,29 +131,29 @@ void UIPallete::Init() {
 
 }
 
-void UIPallete::SetColorPallette(const std::vector<GameColor>& pallette) {
+void UIPalette::SetColorPallette(const std::vector<GameColor>& pallette) {
     color_pallete_ = pallette;
 }
 
-void UIPallete::SetColorCount(size_t color_count) {
+void UIPalette::SetColorCount(size_t color_count) {
     colors_count_ = color_count;
 }
 
-uint8_t UIPallete::GetSelectedVal() {
+uint8_t UIPalette::GetSelectedVal() {
     return selected_val_;
 }
 
-void UIPallete::SetSelectedVal(uint8_t val) {
+void UIPalette::SetSelectedVal(uint8_t val) {
     selected_val_ = val;
 }
 
-void UIPallete::Update() {
+void UIPalette::Update() {
     for (auto& button : buttons_) {
         button.Update();
     }
 }
 
-void UIPallete::Draw() {
+void UIPalette::Draw() {
     shadow_->Draw();
     Rectangle main_field{
         static_cast<float>(GetAbsoluteXPosition()),
@@ -179,6 +179,6 @@ void UIPallete::Draw() {
     }
 }
 
-uint8_t UIPallete::GetRandomVal() {
+uint8_t UIPalette::GetRandomVal() {
     return color_pallete_val_[rand() % colors_count_];
 }
