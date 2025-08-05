@@ -29,6 +29,18 @@ GameObject vertical3 {
     true
 };
 
+GameObject horizontal3 {
+    {
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+    },
+    "Vertical 3",
+    true
+};
+
 std::vector<GameObject> ALL_OBJECTS {
     vertical3
 };

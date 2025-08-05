@@ -106,7 +106,7 @@ class UI : public UIColorTheme {
 
     void SetColorCount(size_t color_count);
 
-
+    void InitializeWindow();
 
     void InitPalette();
 
@@ -118,5 +118,6 @@ class UI : public UIColorTheme {
 
     void UpdatePalette(size_t ind);
 
-    
+    void SetGameObject(const GameObject& gae_object);
+
 };

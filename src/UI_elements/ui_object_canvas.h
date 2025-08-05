@@ -6,8 +6,8 @@
 
 class UIObjectCanvas : public UICanvas {
     GameObject this_object_;
-    uint8_t* color_buffer_ = nullptr;
-
+    //uint8_t* color_buffer_ = nullptr;
+    size_t BufferIndex(size_t size, size_t x, size_t y);
     public:
     void Init() override;
     void Update() override;

@@ -3,8 +3,8 @@
 
 void UIMainCanvas::Update() {
     bool mouse_on_canvas = CheckCollisionPointRec(GetMousePosition(), Rectangle{
-        static_cast<float>(x_position_),
-        static_cast<float>(y_position_),
+        static_cast<float>(GetAbsoluteXPosition()),
+        static_cast<float>(GetAbsoluteYPosition()),
         static_cast<float>(width_),
         static_cast<float>(height_)
     });

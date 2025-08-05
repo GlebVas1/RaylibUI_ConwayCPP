@@ -55,7 +55,9 @@ void UICanvas::Draw() {
             0.0f,
             WHITE
         );
-    }
+    } 
+
+    //DrawRectangle(GetAbsoluteXPosition(), GetAbsoluteYPosition(), width_, height_, RED);
 }
 
 

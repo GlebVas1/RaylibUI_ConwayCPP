@@ -14,21 +14,21 @@ UI::~UI() {
     // CloseWindow();
 }
 
-void UI::Start() {
-
+void UI::InitializeWindow() {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
-    
     InitWindow(window_width, window_height, "Conway");
+}
 
+void UI::Start() {
     UITools::GetMainFont();
     
-    
     float pause = false;
+
     //Font font = LoadFontEx("../resources/fonts/jaipur.ttf", 32, 0, 250);
+
     SetTextLineSpacing(2); 
 
-    main_canvas_->SetPosition(10, 10);
-    main_canvas_->SetDimensions(1060, 1060);
+    
     main_canvas_->SetCanvasTextureDimensions(1060, 1060);
     // canvas_->SetShowGrid(true);
     
@@ -114,6 +114,8 @@ void UI::InitializeElements() {
     main_canvas_ = std::make_shared<UIMainCanvas>();
     main_canvas_->SetParrent(main_canvas_panel_.get());
     main_canvas_->SetCanvasGridColor(ui_background_color);
+    main_canvas_->SetPosition(10, 10);
+    main_canvas_->SetDimensions(1060, 1060);
 
     pallete_ = std::make_shared<UIPalette>();
     pallete_->SetXPosition(1465);
@@ -159,18 +161,25 @@ void UI::InitializeElements() {
     palette_label_ = std::make_shared<UILabel>(10, 10, "Palette");
     palette_label_->SetParrent(palette_panel_.get());
 
-    game_object_panel_ = std::make_shared<UIPanel>(1100, 140, 160, 160, 0.1f);
+    game_object_panel_ = std::make_shared<UIPanel>(1100, 150, 160, 160, 0.1f);
     game_object_panel_->SetParrent(null_widget_.get());
-    
+
+    game_object_canvas_ = std::make_shared<UIObjectCanvas>();
+    game_object_canvas_->SetParrent(game_object_panel_.get());
+    game_object_canvas_->SetCanvasGridColor(ui_accent_color_1);
+    game_object_canvas_->SetPosition(10, 10);
+    game_object_canvas_->SetDimensions(140, 140); 
 }
 
 void UI::AddUIElement(UIElement* elem_ptr) {
     elements_.push_back(elem_ptr);
 }
 
-void UI::SetColorPallette(const std::vector<GameColor>& pallette) {
-    pallete_->SetColorPallette(pallette);
-    current_palette_ = pallette;
+void UI::SetColorPallette(const std::vector<GameColor>& palette) {
+    pallete_->SetColorPallette(palette);
+    pallete_->Init();
+    current_palette_ = palette;
+    game_object_canvas_->UpdatePalette(palette);
     
 }
 
@@ -180,6 +189,7 @@ const std::vector<GameColor>& UI::GetCurrentPalette() {
 
 void UI::SetColorCount(size_t color_count) {
     pallete_->SetColorCount(color_count);
+    pallete_->Init();
     current_colors_count_ = color_count;
 }
 
@@ -192,15 +202,25 @@ void UI::SetSelectedColor(uint8_t val) {
 }
 
 void UI::DrawBrush(size_t x, size_t y) {
-    for (int x1 = -brush_radius_; x1 < brush_radius_; ++x1){
-        for (int y1 = -brush_radius_; y1 < brush_radius_; ++y1) {
-            uint8_t val_to_set = brush_random_ ? pallete_->GetRandomVal() : pallete_->GetSelectedVal();
-            if (brush_round_) {
-                if (x1 * x1 + y1 * y1 < brush_radius_ * brush_radius_) {
+    if (brush_object_mode_) {
+        const auto& array = game_object_canvas_->GetObject().array;
+        const size_t size = game_object_canvas_->GetObject().size;
+        for (int x1 = 0; x1 < size; ++x1) {
+            for (int y1 = 0; y1 < size; ++y1) {
+                controller_->SetFieldPixel(x1 + static_cast<int>(x) - size / 2, y1 + static_cast<int>(y) - size / 2, array[x1][y1] == 1 ? 255 : 0);
+            }
+        }
+    } else {
+        for (int x1 = -brush_radius_; x1 < brush_radius_; ++x1){
+            for (int y1 = -brush_radius_; y1 < brush_radius_; ++y1) {
+                uint8_t val_to_set = brush_random_ ? pallete_->GetRandomVal() : pallete_->GetSelectedVal();
+                if (brush_round_) {
+                    if (x1 * x1 + y1 * y1 < brush_radius_ * brush_radius_) {
+                        controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), val_to_set);
+                    }
+                } else {
                     controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), val_to_set);
                 }
-            } else {
-                controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), val_to_set);
             }
         }
     }
@@ -212,4 +232,8 @@ void UI::SetRule(size_t ind) {
 
 void UI::UpdatePalette(size_t ind) {
     controller_->SetPalette(ind);
+}
+
+void UI::SetGameObject(const GameObject& game_object) {
+    game_object_canvas_->SetObject(game_object);
 }
