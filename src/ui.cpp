@@ -38,6 +38,7 @@ void UI::Start() {
     brush_settings_panel_->Init();
     game_rule_panel_->Init();
     palette_panel_->Init();
+    game_object_panel_->Init();
     
     std::vector<std::string> game_rule_names;
     for (const auto& elem : ALL_RULES) {
@@ -115,15 +116,13 @@ void UI::InitializeElements() {
     main_canvas_->SetCanvasGridColor(ui_background_color);
 
     pallete_ = std::make_shared<UIPalette>();
-    pallete_->SetXPosition(1400);
-    pallete_->SetYPosition(20);
+    pallete_->SetXPosition(1465);
+    pallete_->SetYPosition(140);
     pallete_->SetParrent(null_widget_.get());
 
-    brush_settings_panel_ = std::make_shared<UIPanel>(1100, 40, 145, 160, 0.1f);
+    brush_settings_panel_ = std::make_shared<UIPanel>(1300, 140, 145, 160, 0.1f);
     brush_settings_panel_->SetParrent(null_widget_.get());
     
-
-
     brush_settings_label_ = std::make_shared<UILabel>(10, 10, "Brush settings");
     brush_settings_label_->SetParrent(brush_settings_panel_.get());
 
@@ -151,7 +150,7 @@ void UI::InitializeElements() {
     game_rule_list_ = std::make_shared<UIList>(10, 10, 175, 180, [this](size_t ind) { SetRule(ind); });
     game_rule_list_->SetParrent(game_rule_panel_.get());
 
-    palette_panel_ = std::make_shared<UIPanel>(1100, 220, 145, 180, 0.1f);
+    palette_panel_ = std::make_shared<UIPanel>(1300, 320, 145, 180, 0.1f);
     palette_panel_->SetParrent(null_widget_.get());
 
     palette_list_ = std::make_shared<UIList>(10, 40, 135, 130, [this](size_t ind) { UpdatePalette(ind); });
@@ -159,6 +158,9 @@ void UI::InitializeElements() {
 
     palette_label_ = std::make_shared<UILabel>(10, 10, "Palette");
     palette_label_->SetParrent(palette_panel_.get());
+
+    game_object_panel_ = std::make_shared<UIPanel>(1100, 140, 160, 160, 0.1f);
+    game_object_panel_->SetParrent(null_widget_.get());
     
 }
 
@@ -168,11 +170,17 @@ void UI::AddUIElement(UIElement* elem_ptr) {
 
 void UI::SetColorPallette(const std::vector<GameColor>& pallette) {
     pallete_->SetColorPallette(pallette);
+    current_palette_ = pallette;
     
+}
+
+const std::vector<GameColor>& UI::GetCurrentPalette() {
+    return current_palette_;
 }
 
 void UI::SetColorCount(size_t color_count) {
     pallete_->SetColorCount(color_count);
+    current_colors_count_ = color_count;
 }
 
 void UI::InitPalette() {

@@ -21,6 +21,9 @@
 
 #include "UI_elements/ui_text_fromat.h"
 #include "UI_elements/ui_list.h"
+#include "UI_elements/ui_object_canvas.h"
+
+#include "game_objects.h"
 
 class GameRule;
 
@@ -51,6 +54,7 @@ class UI : public UIColorTheme {
     bool brush_round_ = false;
     bool brush_random_ = false;
     bool brush_object_mode_ = false;
+
     std::shared_ptr<UISpinBox<int>> brush_size_spinbox_ = nullptr;
     std::shared_ptr<UICheckbox> brush_round_checkbox_ = nullptr;
     std::shared_ptr<UICheckbox> brush_random_checkbox_ = nullptr;
@@ -59,7 +63,6 @@ class UI : public UIColorTheme {
     std::shared_ptr<UILabel> brush_settings_label_ = nullptr;
     std::shared_ptr<UILabel> brush_settings_size_label_ = nullptr;
 
-    std::vector<std::string> game_rule_names_;
     std::shared_ptr<UIPanel> game_rule_panel_ = nullptr;
     std::shared_ptr<UIList> game_rule_list_ = nullptr;
 
@@ -67,6 +70,11 @@ class UI : public UIColorTheme {
     std::shared_ptr<UIList> palette_list_ = nullptr;
     std::shared_ptr<UILabel> palette_label_ = nullptr;
 
+    std::vector<GameColor> current_palette_;
+    size_t current_colors_count_ = 0;
+
+    std::shared_ptr<UIPanel> game_object_panel_ = nullptr;
+    std::shared_ptr<UIObjectCanvas> game_object_canvas_ = nullptr;
 
     void UpdateUIElements();
 
@@ -94,7 +102,11 @@ class UI : public UIColorTheme {
 
     void SetColorPallette(const std::vector<GameColor>& pallette);
 
+    const std::vector<GameColor>& GetCurrentPalette();
+
     void SetColorCount(size_t color_count);
+
+
 
     void InitPalette();
 
@@ -105,4 +117,6 @@ class UI : public UIColorTheme {
     void SetRule(size_t ind);
 
     void UpdatePalette(size_t ind);
+
+    
 };

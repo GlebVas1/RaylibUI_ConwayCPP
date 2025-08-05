@@ -14,6 +14,7 @@ class UICanvas : public UIElement {
 
     uint8_t* color_buffer_ = nullptr;
 
+    /* initializes textures w/o color buffer using */
     void InitializeMainTexture();
     void InitializeMainGridTexture();
 

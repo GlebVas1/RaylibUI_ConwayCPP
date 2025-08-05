@@ -1,63 +1,61 @@
 #include "ui_canvas.h"
 #include "ui.h"
 void UICanvas::Draw() {
-    uint8_t* data = static_cast<uint8_t*>(malloc(main_texture_width_ * main_texture_height_ * 4));
-    std::memcpy(data, color_buffer_, main_texture_width_ * main_texture_height_ * 4);
-    Image img = {
-        .data = data,
-        .width = main_texture_width_,
-        .height = main_texture_height_,
-        .mipmaps = 1,
-        .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8
-    };
+    if (color_buffer_ != nullptr) {
+        uint8_t* data = static_cast<uint8_t*>(malloc(main_texture_width_ * main_texture_height_ * 4));
+        std::memcpy(data, color_buffer_, main_texture_width_ * main_texture_height_ * 4);
+        Image img = {
+            .data = data,
+            .width = main_texture_width_,
+            .height = main_texture_height_,
+            .mipmaps = 1,
+            .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8
+        };
 
-    Color* pixels = LoadImageColors(img);
-    UpdateTexture(*main_texture_, pixels);
-    UnloadImage(img);
-    //DrawTexture(*main_texture_, x_position, y_position, WHITE);
-    
-    //return;
+        Color* pixels = LoadImageColors(img);
+        UpdateTexture(*main_texture_, pixels);
+        UnloadImage(img);
 
-    DrawTexturePro(
-        *main_texture_,
-        Rectangle{
-            0,
-            0,
-            static_cast<float>(main_texture_width_),
-            static_cast<float>(main_texture_height_)
-        },
-        Rectangle({
-            static_cast<float>(GetAbsoluteXPosition()),
-            static_cast<float>(GetAbsoluteYPosition()),
-            static_cast<float>(width_),
-            static_cast<float>(height_)
-        }),
-        Vector2{0.0f, 0.0f},
-        0.0f,
-        WHITE
-    );
+        DrawTexturePro(
+            *main_texture_,
+            Rectangle{
+                0,
+                0,
+                static_cast<float>(main_texture_width_),
+                static_cast<float>(main_texture_height_)
+            },
+            Rectangle({
+                static_cast<float>(GetAbsoluteXPosition()),
+                static_cast<float>(GetAbsoluteYPosition()),
+                static_cast<float>(width_),
+                static_cast<float>(height_)
+            }),
+            Vector2{0.0f, 0.0f},
+            0.0f,
+            WHITE
+        );
 
-    
-    DrawTexturePro(
-        *main_grid_texture_,
-        Rectangle{
-            0,
-            0,
-            static_cast<float>(width_),
-            static_cast<float>(height_)
-        },
-        Rectangle({
-            static_cast<float>(GetAbsoluteXPosition()),
-            static_cast<float>(GetAbsoluteYPosition()),
-            static_cast<float>(width_),
-            static_cast<float>(height_)
-        }),
-        Vector2{0.0f, 0.0f},
-        0.0f,
-        WHITE
-    );
-    
-    UnloadImageColors(pixels);
+        UnloadImageColors(pixels);
+        
+        DrawTexturePro(
+            *main_grid_texture_,
+            Rectangle{
+                0,
+                0,
+                static_cast<float>(width_),
+                static_cast<float>(height_)
+            },
+            Rectangle({
+                static_cast<float>(GetAbsoluteXPosition()),
+                static_cast<float>(GetAbsoluteYPosition()),
+                static_cast<float>(width_),
+                static_cast<float>(height_)
+            }),
+            Vector2{0.0f, 0.0f},
+            0.0f,
+            WHITE
+        );
+    }
 }
 
 

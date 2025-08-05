@@ -54,7 +54,7 @@ class UIPalette : public UIElement {
 
     float roundness_ = 0.1;
 
-    Color background_color_ = {120, 130, 130, 255 };
+    Color background_color_ = { 120, 130, 130, 255 };
 
     void InitializeButtons();
     public:
