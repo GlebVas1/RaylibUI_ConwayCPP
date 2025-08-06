@@ -61,12 +61,21 @@ GameRuleInterval::GameRuleInterval(
   }
 
 bool GameRuleInterval::is_arriving(size_t neigh_count) {
+  if (neigh_count >= neight_to_arrive.size()) {
+    return false;
+  }
   return neight_to_arrive[neigh_count];
 }
 bool GameRuleInterval::is_getting_older(size_t neigh_count) {
+  if (neigh_count >= neigh_to_getting_older.size()) {
+    return false;
+  }
   return neigh_to_getting_older[neigh_count];
 }
 bool GameRuleInterval::is_dying(size_t neigh_count) {
+  if (neigh_count >= neight_to_die.size()) {
+    return false;
+  }
   return neight_to_die[neigh_count];
 }
 
