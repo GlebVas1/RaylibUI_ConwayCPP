@@ -13,8 +13,8 @@ class Field {
 
     Controller* controller_;
 
-    size_t field_width_ = 1070;
-    size_t field_height_ = 1070;
+    size_t field_width_ = 512;
+    size_t field_height_ = 512;
     
     uint8_t read_buffer_ = 0;
     uint8_t* buffer_0_;

@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 project(speedrun)
 
 
-add_compile_options(-g -fsanitize=address)
-add_link_options(-g -fsanitize=address)
+# add_compile_options(-g -fsanitize=address)
+# add_link_options(-g -fsanitize=address)
 
 file(GLOB SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB SRC_UI_El ${PROJECT_SOURCE_DIR}/src/UI_elements/*.cpp)

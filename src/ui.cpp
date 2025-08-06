@@ -34,7 +34,7 @@ void UI::Start() {
     
 
     
-    main_canvas_->SetCanvasTextureDimensions(1070, 1070);
+    main_canvas_->SetCanvasTextureDimensions(512, 512);
     // canvas_->SetShowGrid(true);
     
     main_canvas_panel_->Init();
@@ -48,7 +48,7 @@ void UI::Start() {
     
     std::vector<std::string> game_rule_names;
     for (const auto& elem : ALL_RULES) {
-        game_rule_names.push_back(elem.name);
+        game_rule_names.push_back(elem->name);
     }
     game_rule_list_->SetVector(game_rule_names);
     game_rule_list_->Init();

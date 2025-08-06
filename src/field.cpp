@@ -68,6 +68,9 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
     for (size_t i = field_width_ - current_rule_->radius + x; i <= field_width_ + current_rule_->radius + x; ++i) {
         for (size_t j = field_height_ - current_rule_->radius + y; j <= field_height_ + current_rule_->radius + y; ++j) {
             if (i == field_width_ + x && j == y + field_height_) {
+                if (current_rule_->count_central && GetPixel(i % field_width_, j % field_height_, buffer_to_read) == FULL_) {
+                  ++neigh_count;
+                }
                 continue;
             }
             if (GetPixel(i % field_width_, j % field_height_, buffer_to_read) == FULL_) {

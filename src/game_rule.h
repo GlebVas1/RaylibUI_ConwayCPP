@@ -11,33 +11,43 @@ struct GameRule {
   size_t neigh_to_getting_older = 0b111110011;
   unsigned char maximum_age = 6;
   size_t radius = 1;
+  bool count_central = false;
   
 /* I've never thought that I'd code it like this */
-  bool is_dying(size_t neigh_count) { return neigh_to_die & (1ul << (neigh_count)); }
-  bool is_arriving(size_t neigh_count) { return neigh_to_arrive & (1ul << (neigh_count)); }
-  bool is_getting_older(size_t neigh_count) { return neigh_to_getting_older & (1ul << (neigh_count)); }
-  const std::string& GetName() { return name; } 
+  GameRule();
+  GameRule(
+    const std::string& name, 
+    size_t neight_to_die, 
+    size_t neight_to_arrive, 
+    size_t neigh_to_getting_older, 
+    uint8_t maximum_age = 6, 
+    size_t radius = 1,
+    bool count_central = false
+  );
+
+  virtual bool is_dying(size_t neigh_count);
+  virtual bool is_arriving(size_t neigh_count);
+  virtual bool is_getting_older(size_t neigh_count);
+  const std::string& GetName();
+};
+
+struct GameRuleInterval : public GameRule {
+  std::vector<bool> neight_to_die;
+  std::vector<bool> neight_to_arrive;
+  std::vector<bool> neigh_to_getting_older;
+  GameRuleInterval(
+    const std::string& name, 
+    std::vector<std::pair<size_t, size_t>> neight_to_die_v, 
+    std::vector<std::pair<size_t, size_t>> neight_to_arrive_v, 
+    std::vector<std::pair<size_t, size_t>> neigh_to_getting_older_v, 
+    uint8_t maximum_age = 6, 
+    size_t radius = 1,
+    bool count_central = false
+  );
+  bool is_arriving(size_t neigh_count) override;
+  bool is_getting_older(size_t neigh_count) override;
+  bool is_dying(size_t neight_count) override;
 };
 
 //https://habr.com/ru/articles/719324/
-extern GameRule GameRule_STATIC;
-extern GameRule GameRule_DEFAULT;
-extern GameRule GameRule_DEFAULT100GEN;
-
-extern GameRule GameRule_DIAMEB;
-extern GameRule GameRule_TREE;
-extern GameRule GameRule_TREEGENER;
-
-
-extern GameRule GameRule_FREESTAR;
-extern GameRule GameRule_STARWARS;
-
-extern GameRule GameRule_STICKS;
-extern GameRule GameRule_FADES;
-extern GameRule GameRule_SPIRALS;
-extern GameRule GameRule_REPLS;
-extern GameRule GameRule_TR_GR;
-extern GameRule GameRule_INF;
-extern GameRule GameRule_LINES;
-
-extern std::vector<GameRule> ALL_RULES;
+extern std::vector<GameRule*> ALL_RULES;
