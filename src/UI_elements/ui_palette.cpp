@@ -193,5 +193,5 @@ void UIPalette::Draw() {
 }
 
 uint8_t UIPalette::GetRandomVal() {
-    return color_pallete_val_[rand() % colors_count_];
+    return color_pallete_val_[rand() % (colors_count_ + 1)];
 }

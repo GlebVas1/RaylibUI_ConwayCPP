@@ -1,11 +1,10 @@
 #include "ui_button.h"
+#include "ui.h"
 
-UIButton::UIButton() {}
-UIButton::UIButton(int width, int height) : UIElement(width, height) {}
-UIButton::UIButton(int x_pos, int y_pos, int width, int height) : UIElement(x_pos, y_pos, width, height) {}
-UIButton::UIButton(int x_pos, int y_pos, int width, int height, const std::string& str) :
-    UIElement(x_pos, y_pos, width, height),
-    UITextComponent(str) {}
+UIButton::UIButton(int x_pos, int y_pos, int width, int height, float roundness, std::function<void()> func) : UIElement(x_pos, y_pos, width, height) {
+    roundness_ = roundness;
+    binding = func;
+}
 
 void UIButton::Draw() {
     Rectangle main_field{
@@ -26,18 +25,17 @@ void UIButton::Draw() {
     switch (state_)
     {
     case MouseState::MOUSE_CLEAR:
-        background_color = default_c_;
+        background_color = ui.ui_button_default;
         break;
     case MouseState::MOUSE_HOVERED:
-        background_color = covered_c_;
+        background_color = ui.ui_button_hovered;
         break;   
     case MouseState::MOUSE_PRESSED:
-        background_color = pressed_c_;
+        background_color = ui.ui_button_pressed;
         break;
     }
 
     DrawRectangleRounded(main_field, roundness_, 0, Fade(background_color, 0.9f));
-    DrawText(text_.c_str(), x_position_ + 15, y_position_ + 5, 20, BLACK);
     DrawRectangleRoundedLinesEx(main_field_line, roundness_, 0, 2, Fade(BLACK, 1.0f));
 }
 

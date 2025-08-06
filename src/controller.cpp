@@ -63,6 +63,10 @@ void Controller::SetPalette(size_t ind) {
     ui->SetColorPallette(ALL_PALLETTES[ind].pallette);
 }
 
+void Controller::SetObject(size_t ind) {
+    ui->SetGameObject(ALL_OBJECTS[ind]);
+}
+
 void Controller::SetPause(float val) {
     field->SetPause(val);
 }

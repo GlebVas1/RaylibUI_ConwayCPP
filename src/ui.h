@@ -74,6 +74,8 @@ class UI : public UIColorTheme {
     size_t current_colors_count_ = 0;
 
     std::shared_ptr<UIPanel> game_object_panel_ = nullptr;
+    std::shared_ptr<UIList> game_object_list_ = nullptr;
+    std::shared_ptr<UILabel> game_object_label_ = nullptr;
     std::shared_ptr<UIObjectCanvas> game_object_canvas_ = nullptr;
 
     void UpdateUIElements();
@@ -119,5 +121,7 @@ class UI : public UIColorTheme {
     void UpdatePalette(size_t ind);
 
     void SetGameObject(const GameObject& gae_object);
+
+    void SetGameObject(size_t ind);
 
 };

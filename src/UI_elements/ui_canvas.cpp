@@ -122,7 +122,7 @@ void UICanvas::InitializeMainGridTexture() {
                 static_cast<float>(width_) - 1.1f,
                 static_cast<float>(height_) -1.1f
             },
-            0.005f, 
+            static_cast<float>(10) / width_, 
             0,
             Color({
                 0,
