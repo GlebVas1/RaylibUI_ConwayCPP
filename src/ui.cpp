@@ -77,9 +77,9 @@ void UI::Start() {
             game_control_play_button_->SetState(pause);
             controller_->SetPause(pause);
         }
-        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        /* if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             std::cout << "Mouse x " << GetMousePosition().x << " y " << GetMousePosition().y << std::endl;
-        } 
+        }  */
         BeginDrawing();
         
         ClearBackground(ui_background_color);

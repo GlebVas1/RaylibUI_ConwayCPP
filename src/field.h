@@ -36,7 +36,7 @@ class Field {
     bool processing_ = true;
 
     bool paused_ = false;
-    size_t threads_count = 55;
+    size_t threads_count = 56;
     std::atomic<size_t> current_threads_finished;
 
     std::mutex thread_creation_mutex;

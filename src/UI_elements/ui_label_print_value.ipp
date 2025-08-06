@@ -9,7 +9,6 @@ UILabelPrintValue<T>::UILabelPrintValue(int x, int y, const std::string& text_fo
 
 template<typename T>
 void UILabelPrintValue<T>::Draw() {
-    std::cout << get_value_() << std::endl;
     UITools::DrawTextDefault(
         GetAbsoluteXPosition(), 
         GetAbsoluteYPosition(), 
