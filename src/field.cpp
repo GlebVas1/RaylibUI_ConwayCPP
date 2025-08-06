@@ -62,8 +62,9 @@ uint8_t Field::GetPixel(size_t x, size_t y, uint8_t* buffer) {
 
 
 void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* buffer_to_write) {
-
-    size_t neigh_count = 0;
+  size_t neigh_count = 0;
+  if (!paused_) {
+    
     for (size_t i = field_width_ - current_rule_->radius + x; i <= field_width_ + current_rule_->radius + x; ++i) {
         for (size_t j = field_height_ - current_rule_->radius + y; j <= field_height_ + current_rule_->radius + y; ++j) {
             if (i == field_width_ + x && j == y + field_height_) {
@@ -74,7 +75,7 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
             }
         }
     }
-
+  }
   uint8_t current_cell = GetPixel(x, y, buffer_to_read);
   SetPixel(x, y, current_cell, buffer_to_write);
   

@@ -19,6 +19,7 @@ struct GameRule {
   const std::string& GetName() { return name; } 
 };
 
+//https://habr.com/ru/articles/719324/
 extern GameRule GameRule_STATIC;
 extern GameRule GameRule_DEFAULT;
 extern GameRule GameRule_DEFAULT100GEN;

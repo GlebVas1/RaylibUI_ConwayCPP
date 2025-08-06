@@ -273,10 +273,10 @@ void UI::InitializeElements() {
         "invert");
     game_object_invert_button_->SetParrent(game_object_panel_.get());
 
-    game_rule_panel_ = std::make_shared<UIPanel>(1100, 800, 145, 160, 0.1f);
+    game_rule_panel_ = std::make_shared<UIPanel>(1120, 630, 385, 200, 0.08f);
     game_rule_panel_->SetParrent(null_widget_.get());
 
-    game_rule_list_ = std::make_shared<UIList>(10, 10, 175, 180, [this](size_t ind) { SetRule(ind); });
+    game_rule_list_ = std::make_shared<UIList>(10, 10, 365, 180, [this](size_t ind) { SetRule(ind); });
     game_rule_list_->SetParrent(game_rule_panel_.get());
 }
 

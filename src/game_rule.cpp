@@ -1,5 +1,7 @@
 #include "game_rule.h"
 
+
+//https://habr.com/ru/articles/719324/
 GameRule GameRule_STATIC = GameRule {.name = "Static", .neigh_to_die = 0, .neigh_to_arrive = 0, .neigh_to_getting_older = 0, .maximum_age = 1};
 GameRule GameRule_DEFAULT = GameRule {.name = "Default", .neigh_to_die = 0, .neigh_to_arrive = 0b000001000, .neigh_to_getting_older = 0b111110011, .maximum_age = 1};
 GameRule GameRule_DEFAULT100GEN = GameRule {.name = "Default 100 gen", .neigh_to_die = 0, .neigh_to_arrive = 0b000001000, .neigh_to_getting_older = 0b111110011, .maximum_age = 100};
@@ -15,9 +17,24 @@ GameRule GameRule_STICKS = GameRule {.name = "Sticks", .neigh_to_die = 0, .neigh
 GameRule GameRule_FADES = GameRule {.name = "Fades", .neigh_to_die = 0, .neigh_to_arrive = 0b000000100, .neigh_to_getting_older = 0b111111011, .maximum_age = 24};
 GameRule GameRule_SPIRALS = GameRule {.name = "Spirals", .neigh_to_die = 0, .neigh_to_arrive = 0b001111100, .neigh_to_getting_older = 0b110001101, .maximum_age = 15};
 GameRule GameRule_REPLS = GameRule {.name = "Replicators", .neigh_to_die = 0, .neigh_to_arrive = 0b010001000, .neigh_to_getting_older = 0b111000111, .maximum_age = 3};
-GameRule GameRule_TR_GR = GameRule {.name = "Static", .neigh_to_die = 0, .neigh_to_arrive = 0b000011000, .neigh_to_getting_older = 0b111000001, .maximum_age = 47};
+GameRule GameRule_TR_GR = GameRule {.name = "Thrill Grill", .neigh_to_die = 0, .neigh_to_arrive = 0b000011000, .neigh_to_getting_older = 0b111000001, .maximum_age = 47};
 GameRule GameRule_INF = GameRule {.name = "Inf", .neigh_to_die = 0, .neigh_to_arrive = 0b000001000, .neigh_to_getting_older = 0b111000001, .maximum_age = 1};
 GameRule GameRule_LINES = GameRule {.name = "Lines", .neigh_to_die = 0, .neigh_to_arrive = 0b100110000, .neigh_to_getting_older = 0b111000000, .maximum_age = 2};
+
+GameRule GameRule_TRANSERSI = GameRule {.name = "transers I", .neigh_to_die = 0, .neigh_to_arrive = 0b001000100, .neigh_to_getting_older = 0b111000110, .maximum_age = 5};
+GameRule GameRule_TRANSERSII = GameRule {.name = "transers II", .neigh_to_die = 0, .neigh_to_arrive = 0b001000100, .neigh_to_getting_older = 0b111000111, .maximum_age = 4};
+
+
+GameRule GameRule_MODERNART = GameRule {.name = "Modern art", .neigh_to_die = 0, .neigh_to_arrive = 0000001000, .neigh_to_getting_older = 0b111111001, .maximum_age = 255, .radius = 10};
+GameRule GameRule_MODERNART1 = GameRule {.name = "Modern art 2", .neigh_to_die = 0, .neigh_to_arrive = 0000000100, .neigh_to_getting_older = 0b111111001, .maximum_age = 255, .radius = 10};
+GameRule GameRule_MODERNART2 = GameRule {.name = "Modern art 3", .neigh_to_die = 0, .neigh_to_arrive = 000001000, .neigh_to_getting_older = 0b111111001, .maximum_age = 9, .radius = 10};
+
+GameRule GameRule_BOSCO = GameRule {.name = "Bosco default", .neigh_to_die = 0, .neigh_to_arrive = 0x3FFC00000000ull, .neigh_to_getting_older = ~0x3FF'FFFE'0000'0000ull, .maximum_age = 1, .radius = 5 };
+GameRule GameRule_BOSCO2 = GameRule {.name = "Bosco 2", .neigh_to_die = 0, .neigh_to_arrive = 0x3FFC00000000ull, .neigh_to_getting_older = ~0x3FF'FFFE'0000'0000ull, .maximum_age = 2, .radius = 6 };
+GameRule GameRule_BOSCO3 = GameRule {.name = "Bosco 3", .neigh_to_die = 0, .neigh_to_arrive = 0x3FFFC0000000ull, .neigh_to_getting_older = ~0x3FF'FFF0'0000'0000ull, .maximum_age = 5, .radius = 7 };
+GameRule GameRule_BOSCO4 = GameRule {.name = "Bosco 4", .neigh_to_die = 0, .neigh_to_arrive = 0x4FFFA0000000ull, .neigh_to_getting_older = ~0x6FF'FFF'E0000'0000ull, .maximum_age = 7, .radius = 7 };
+GameRule GameRule_TEST1 = GameRule {.name = "Test", .neigh_to_die = 0, .neigh_to_arrive = 0b010101010, .neigh_to_getting_older = 0b100110011, .maximum_age = 8};
+
 
 std::vector<GameRule> ALL_RULES = std::vector<GameRule>({
   GameRule_STATIC,
@@ -37,5 +54,17 @@ std::vector<GameRule> ALL_RULES = std::vector<GameRule>({
   GameRule_REPLS,
   GameRule_TR_GR,
   GameRule_INF,
-  GameRule_LINES
+  GameRule_LINES,
+  GameRule_TRANSERSI,
+  GameRule_TRANSERSII,
+
+  GameRule_MODERNART,
+  GameRule_MODERNART1,
+  GameRule_MODERNART2,
+
+  GameRule_BOSCO,
+  GameRule_BOSCO2,
+  GameRule_BOSCO3,
+  GameRule_BOSCO4,
+  GameRule_TEST1
 });
