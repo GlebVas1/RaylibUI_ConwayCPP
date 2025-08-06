@@ -160,7 +160,6 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
   thread_creation_mutex.unlock();
 
   while (processing_) {
-
     {
       std::unique_lock<std::mutex> lk(compute_start_mutex);
       compute_start_cv.wait(lk, [&](){ return thread_should_start[thread_id].load(std::memory_order_acq_rel); });
@@ -190,6 +189,8 @@ void Field::MultiThreadUpdating() {
   size_t frame_counter = 0;
 
   while (true) {
+    float fps_count = 0;
+    std::chrono::steady_clock::time_point fps_begin = std::chrono::steady_clock::now();
     std::this_thread::sleep_for(std::chrono::milliseconds(frame_milliseconds_delay_));
     
     {
@@ -208,7 +209,9 @@ void Field::MultiThreadUpdating() {
     compute_end_cv.wait(lk, [&](){ return current_threads_finished.load(std::memory_order_acquire) == threads_count; });
 
     SwitchBuffer();
-  
+    std::chrono::steady_clock::time_point fps_end = std::chrono::steady_clock::now();
+    auto fps_result = std::chrono::duration_cast<std::chrono::milliseconds>(fps_end - fps_begin).count();
+    current_fps_ = 1.0 / static_cast<float>(fps_result) * 1000.0f;
     current_threads_finished.store(0, std::memory_order_release);
   }
 
@@ -231,4 +234,13 @@ void Field::SetController(Controller* controller) {
 
 void Field::SetPause(float val) {
   paused_ = val;
+}
+
+void Field::SetFPS(size_t val)  {
+  frame_milliseconds_delay_ = val;
+}
+
+float Field::GetFPS() {
+  //std::cout << current_fps_ << std::endl;
+  return current_fps_;
 }

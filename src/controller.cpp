@@ -67,6 +67,14 @@ void Controller::SetObject(size_t ind) {
     ui->SetGameObject(ALL_OBJECTS[ind]);
 }
 
+void Controller::SetFPS(size_t val) {
+    field->SetFPS(val);
+}
+
+float Controller::GetFPS() {
+    return field->GetFPS();
+}
+
 void Controller::SetPause(float val) {
     field->SetPause(val);
 }

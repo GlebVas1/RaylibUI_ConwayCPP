@@ -24,6 +24,10 @@
 #include "UI_elements/ui_object_canvas.h"
 
 #include "UI_elements/ui_texture_button.h"
+#include "UI_elements/ui_dual_textured_button.h"
+
+#include "UI_elements/ui_slider.h"
+#include "UI_elements/ui_label_print_value.h"
 
 
 
@@ -61,6 +65,11 @@ class UI : public UIColorTheme {
     bool brush_random_ = false;
     bool brush_object_mode_ = false;
 
+    std::shared_ptr<UIPanel> game_control_panel_ = nullptr;
+    std::shared_ptr<UIDualTextureButton> game_control_play_button_ = nullptr;
+    std::shared_ptr<UIHorizontalSlider<size_t>> game_control_slider_ = nullptr;
+    std::shared_ptr<UILabelPrintValue<float>> game_control_panel_fps_label_ = nullptr;
+    
     std::shared_ptr<UISpinBox<int>> brush_size_spinbox_ = nullptr;
     std::shared_ptr<UICheckbox> brush_round_checkbox_ = nullptr;
     std::shared_ptr<UICheckbox> brush_random_checkbox_ = nullptr;
@@ -138,5 +147,9 @@ class UI : public UIColorTheme {
     void GameObjectRotateClockwise();
 
     void GameObjectRotateCounterClockwise();
+
+    void SetFPS(size_t val);
+
+    float GetFPS();
 
 };

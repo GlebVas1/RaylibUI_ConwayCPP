@@ -25,4 +25,6 @@ void UITextureLoader::LoadAllTextures() {
     LoadTextureFromFile("mirror_v", "../resources/textures/mirror_vertical.png");
     LoadTextureFromFile("mirror_h", "../resources/textures/mirror_horizontal.png");
     LoadTextureFromFile("invert", "../resources/textures/color_invert.png");
+    LoadTextureFromFile("play", "../resources/textures/continue.png");
+    LoadTextureFromFile("pause", "../resources/textures/pause.png");
 }

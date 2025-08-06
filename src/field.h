@@ -53,7 +53,9 @@ class Field {
     //average bool can be ovverding due to cache
     std::vector<std::atomic_bool> thread_should_start;
 
-    size_t frame_milliseconds_delay_ = 4;
+    size_t frame_milliseconds_delay_ = 0;
+
+    float current_fps_ = 0;
 
     inline size_t BufferIndex(size_t x, size_t y);
 
@@ -121,4 +123,8 @@ class Field {
     uint8_t* GetColorBuffer();
 
     void SetController(Controller* controller);
+
+    void SetFPS(size_t val);
+
+    float GetFPS();
 };
