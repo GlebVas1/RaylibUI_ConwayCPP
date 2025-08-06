@@ -62,11 +62,15 @@ uint8_t Field::GetPixel(size_t x, size_t y, uint8_t* buffer) {
 
 
 void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* buffer_to_write) {
-
-    size_t neigh_count = 0;
+  size_t neigh_count = 0;
+  if (!paused_) {
+    
     for (size_t i = field_width_ - current_rule_->radius + x; i <= field_width_ + current_rule_->radius + x; ++i) {
         for (size_t j = field_height_ - current_rule_->radius + y; j <= field_height_ + current_rule_->radius + y; ++j) {
             if (i == field_width_ + x && j == y + field_height_) {
+                if (current_rule_->count_central && GetPixel(i % field_width_, j % field_height_, buffer_to_read) == FULL_) {
+                  ++neigh_count;
+                }
                 continue;
             }
             if (GetPixel(i % field_width_, j % field_height_, buffer_to_read) == FULL_) {
@@ -74,7 +78,7 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
             }
         }
     }
-
+  }
   uint8_t current_cell = GetPixel(x, y, buffer_to_read);
   SetPixel(x, y, current_cell, buffer_to_write);
   
@@ -160,7 +164,6 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
   thread_creation_mutex.unlock();
 
   while (processing_) {
-
     {
       std::unique_lock<std::mutex> lk(compute_start_mutex);
       compute_start_cv.wait(lk, [&](){ return thread_should_start[thread_id].load(std::memory_order_acq_rel); });
@@ -190,6 +193,8 @@ void Field::MultiThreadUpdating() {
   size_t frame_counter = 0;
 
   while (true) {
+    float fps_count = 0;
+    std::chrono::steady_clock::time_point fps_begin = std::chrono::steady_clock::now();
     std::this_thread::sleep_for(std::chrono::milliseconds(frame_milliseconds_delay_));
     
     {
@@ -208,7 +213,9 @@ void Field::MultiThreadUpdating() {
     compute_end_cv.wait(lk, [&](){ return current_threads_finished.load(std::memory_order_acquire) == threads_count; });
 
     SwitchBuffer();
-  
+    std::chrono::steady_clock::time_point fps_end = std::chrono::steady_clock::now();
+    auto fps_result = std::chrono::duration_cast<std::chrono::milliseconds>(fps_end - fps_begin).count();
+    current_fps_ = 1.0 / static_cast<float>(fps_result) * 1000.0f;
     current_threads_finished.store(0, std::memory_order_release);
   }
 
@@ -231,4 +238,13 @@ void Field::SetController(Controller* controller) {
 
 void Field::SetPause(float val) {
   paused_ = val;
+}
+
+void Field::SetFPS(size_t val)  {
+  frame_milliseconds_delay_ = val;
+}
+
+float Field::GetFPS() {
+  //std::cout << current_fps_ << std::endl;
+  return current_fps_;
 }

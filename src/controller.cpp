@@ -23,10 +23,10 @@ void Controller::StartUI() {
 
 
     auto gcp = GameColorBW();
-    auto gr = GameRule_FREESTAR;
+    auto gr = ALL_RULES[0];
 
     ui->SetColorPallette(gcp);
-    ui->SetColorCount(gr.maximum_age);
+    ui->SetColorCount(gr->maximum_age);
 
     ui->SetGameObject(ALL_OBJECTS[0]);
     // ui->InitPalette();
@@ -41,9 +41,9 @@ void Controller::SetFieldPixel(int x, int y, uint8_t val) {
 void Controller::Start() {
 
     auto gcp = GameColorBW();
-    auto gr = GameRule_FREESTAR;
+    auto gr = ALL_RULES[0];
     field->SetColorPallette(&gcp);
-    field->SetGameRule(&gr);
+    field->SetGameRule(gr);
 
     field->CreateUpdateThreads();
 
@@ -54,8 +54,8 @@ void Controller::Start() {
 }
 
 void Controller::SetFieldRule(size_t ind) {
-    field->SetGameRule(&ALL_RULES[ind]);
-    ui->SetColorCount(ALL_RULES[ind].maximum_age);
+    field->SetGameRule(ALL_RULES[ind]);
+    ui->SetColorCount(ALL_RULES[ind]->maximum_age);
 }
 
 void Controller::SetPalette(size_t ind) {
@@ -65,6 +65,14 @@ void Controller::SetPalette(size_t ind) {
 
 void Controller::SetObject(size_t ind) {
     ui->SetGameObject(ALL_OBJECTS[ind]);
+}
+
+void Controller::SetFPS(size_t val) {
+    field->SetFPS(val);
+}
+
+float Controller::GetFPS() {
+    return field->GetFPS();
 }
 
 void Controller::SetPause(float val) {

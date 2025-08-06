@@ -23,6 +23,8 @@ class Controller {
     void SetPalette(size_t ind);
     void SetObject(size_t ind);
 
+    void SetFPS(size_t val);
+    float GetFPS();
     void SetPause(float val);
 };
 

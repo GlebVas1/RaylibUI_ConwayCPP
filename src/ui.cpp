@@ -20,19 +20,21 @@ void UI::InitializeWindow() {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(window_width, window_height, "Conway");
     UITextureLoader::GetInstance().LoadAllTextures();
+    UITools::GetMainFont();
+    SetTextLineSpacing(2); 
 }
 
 void UI::Start() {
-    UITools::GetMainFont();
+    
     
     float pause = false;
 
     //Font font = LoadFontEx("../resources/fonts/jaipur.ttf", 32, 0, 250);
 
-    SetTextLineSpacing(2); 
+    
 
     
-    main_canvas_->SetCanvasTextureDimensions(1070, 1070);
+    main_canvas_->SetCanvasTextureDimensions(512, 512);
     // canvas_->SetShowGrid(true);
     
     main_canvas_panel_->Init();
@@ -42,10 +44,11 @@ void UI::Start() {
     game_rule_panel_->Init();
     palette_panel_->Init();
     game_object_panel_->Init();
+    game_control_panel_->Init();
     
     std::vector<std::string> game_rule_names;
     for (const auto& elem : ALL_RULES) {
-        game_rule_names.push_back(elem.name);
+        game_rule_names.push_back(elem->name);
     }
     game_rule_list_->SetVector(game_rule_names);
     game_rule_list_->Init();
@@ -69,9 +72,14 @@ void UI::Start() {
     while (!WindowShouldClose()) {
         UpdateUIElements();
         if (IsKeyPressed(KEY_SPACE)) {
+            pause = game_control_play_button_->GetState();
             pause = !pause;
+            game_control_play_button_->SetState(pause);
             controller_->SetPause(pause);
         }
+        /* if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            std::cout << "Mouse x " << GetMousePosition().x << " y " << GetMousePosition().y << std::endl;
+        }  */
         BeginDrawing();
         
         ClearBackground(ui_background_color);
@@ -127,6 +135,40 @@ void UI::InitializeElements() {
     main_canvas_->SetPosition(5, 5);
     main_canvas_->SetDimensions(1070, 1070);
 
+    game_control_panel_ = std::make_shared<UIPanel>(1120, 40, 385, 50, 0.2f);
+    game_control_panel_->SetParrent(null_widget_.get());
+
+    game_control_play_button_ = std::make_shared<UIDualTextureButton>(
+        5, 
+        5, 
+        40, 
+        40, 
+        0.1f,
+        [this](bool val) { controller_->SetPause(val); },
+        "pause",
+        "play",
+        false
+    );
+    game_control_play_button_->SetParrent(game_control_panel_.get());
+
+    game_control_slider_ = std::make_shared<UIHorizontalSlider<size_t>>(
+        60, 
+        10, 
+        200, 
+        30, 
+        [this](size_t val) {
+            SetFPS(val);
+    });
+    game_control_slider_->SetParrent(game_control_panel_.get());
+    
+    game_control_panel_fps_label_ = std::make_shared<UILabelPrintValue<float>>(
+        275,
+        16,
+        "FPS: %3.02f",
+        [this]() -> float { return GetFPS(); }
+    );
+    game_control_panel_fps_label_->SetParrent(game_control_panel_.get());
+
     pallete_ = std::make_shared<UIPalette>();
     pallete_->SetXPosition(1465);
     pallete_->SetYPosition(140);
@@ -166,7 +208,7 @@ void UI::InitializeElements() {
     palette_label_ = std::make_shared<UILabel>(10, 10, "Palette");
     palette_label_->SetParrent(palette_panel_.get());
 
-    game_object_panel_ = std::make_shared<UIPanel>(1100, 140, 160, 470, 0.1f);
+    game_object_panel_ = std::make_shared<UIPanel>(1120, 140, 160, 470, 0.1f);
     game_object_panel_->SetParrent(null_widget_.get());
 
     game_object_label_ = std::make_shared<UILabel>(10, 10, "Game objects");
@@ -231,10 +273,10 @@ void UI::InitializeElements() {
         "invert");
     game_object_invert_button_->SetParrent(game_object_panel_.get());
 
-    game_rule_panel_ = std::make_shared<UIPanel>(1100, 800, 145, 160, 0.1f);
+    game_rule_panel_ = std::make_shared<UIPanel>(1120, 630, 385, 200, 0.08f);
     game_rule_panel_->SetParrent(null_widget_.get());
 
-    game_rule_list_ = std::make_shared<UIList>(10, 10, 175, 180, [this](size_t ind) { SetRule(ind); });
+    game_rule_list_ = std::make_shared<UIList>(10, 10, 365, 180, [this](size_t ind) { SetRule(ind); });
     game_rule_list_->SetParrent(game_rule_panel_.get());
 }
 
@@ -315,4 +357,12 @@ void UI::GameObjectRotateClockwise() {
 
 void UI::GameObjectRotateCounterClockwise() {
 
+}
+
+void UI::SetFPS(size_t val) {
+    controller_->SetFPS(val);
+}
+
+float UI::GetFPS() {
+    return controller_->GetFPS();
 }

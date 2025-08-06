@@ -13,8 +13,8 @@ class Field {
 
     Controller* controller_;
 
-    size_t field_width_ = 1070;
-    size_t field_height_ = 1070;
+    size_t field_width_ = 512;
+    size_t field_height_ = 512;
     
     uint8_t read_buffer_ = 0;
     uint8_t* buffer_0_;
@@ -36,7 +36,7 @@ class Field {
     bool processing_ = true;
 
     bool paused_ = false;
-    size_t threads_count = 55;
+    size_t threads_count = 56;
     std::atomic<size_t> current_threads_finished;
 
     std::mutex thread_creation_mutex;
@@ -53,7 +53,9 @@ class Field {
     //average bool can be ovverding due to cache
     std::vector<std::atomic_bool> thread_should_start;
 
-    size_t frame_milliseconds_delay_ = 4;
+    size_t frame_milliseconds_delay_ = 0;
+
+    float current_fps_ = 0;
 
     inline size_t BufferIndex(size_t x, size_t y);
 
@@ -121,4 +123,8 @@ class Field {
     uint8_t* GetColorBuffer();
 
     void SetController(Controller* controller);
+
+    void SetFPS(size_t val);
+
+    float GetFPS();
 };

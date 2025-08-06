@@ -5,7 +5,7 @@
 #include "ui_mouse_state.h"
 
 class UIButton : public UIElement, public UIMouseState {
-    private:
+    protected:
         float roundness_;
         std::function<void()> binding;
 
