@@ -2,6 +2,8 @@
 #include "controller.h"
 #include "game_rule.h"
 #include "UI_Tools/ui_tools.h"
+#include "UI_Tools/ui_textures_loader.h"
+
 //cause of UI elemnts structure elemnts arent crated there
 UI::UI() { };
 
@@ -17,6 +19,7 @@ UI::~UI() {
 void UI::InitializeWindow() {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(window_width, window_height, "Conway");
+    UITextureLoader::GetInstance().LoadAllTextures();
 }
 
 void UI::Start() {
@@ -154,16 +157,16 @@ void UI::InitializeElements() {
     brush_object_toogle_->SetParrent(brush_settings_panel_.get());
 
 
-    palette_panel_ = std::make_shared<UIPanel>(1300, 320, 145, 260, 0.1f);
+    palette_panel_ = std::make_shared<UIPanel>(1300, 320, 145, 290, 0.1f);
     palette_panel_->SetParrent(null_widget_.get());
 
-    palette_list_ = std::make_shared<UIList>(10, 40, 135, 210, [this](size_t ind) { UpdatePalette(ind); });
+    palette_list_ = std::make_shared<UIList>(10, 40, 135, 240, [this](size_t ind) { UpdatePalette(ind); });
     palette_list_->SetParrent(palette_panel_.get());
 
     palette_label_ = std::make_shared<UILabel>(10, 10, "Palette");
     palette_label_->SetParrent(palette_panel_.get());
 
-    game_object_panel_ = std::make_shared<UIPanel>(1100, 140, 160, 440, 0.1f);
+    game_object_panel_ = std::make_shared<UIPanel>(1100, 140, 160, 470, 0.1f);
     game_object_panel_->SetParrent(null_widget_.get());
 
     game_object_label_ = std::make_shared<UILabel>(10, 10, "Game objects");
@@ -175,8 +178,58 @@ void UI::InitializeElements() {
     game_object_canvas_ = std::make_shared<UIObjectCanvas>();
     game_object_canvas_->SetParrent(game_object_panel_.get());
     game_object_canvas_->SetCanvasGridColor(ui_accent_color_1);
-    game_object_canvas_->SetPosition(5, 285);
+    game_object_canvas_->SetPosition(5, 315);
     game_object_canvas_->SetDimensions(150, 150); 
+
+    game_object_clockwise_button_ = std::make_shared<UITextureButton>(
+        10, 
+        250, 
+        25, 
+        25, 
+        0.1f, 
+        [this](){ game_object_canvas_->GameObjectRotateClockwise(); }, 
+        "clock_wise");
+    game_object_clockwise_button_->SetParrent(game_object_panel_.get());
+
+    game_object_counter_clockwise_button_ = std::make_shared<UITextureButton>(
+        40, 
+        250, 
+        25, 
+        25, 
+        0.1f, 
+        [this](){ game_object_canvas_->GameObjectRotateCounterClockwise(); }, 
+        "counter_clock_wise");
+    game_object_counter_clockwise_button_->SetParrent(game_object_panel_.get());
+
+    game_object_mirror_v_button_ = std::make_shared<UITextureButton>(
+        10, 
+        280, 
+        25, 
+        25, 
+        0.1f, 
+        [this](){ game_object_canvas_->GameObjectMirrorVertical(); }, 
+        "mirror_v");
+    game_object_mirror_v_button_->SetParrent(game_object_panel_.get());
+
+    game_object_mirror_h_button_ = std::make_shared<UITextureButton>(
+        40, 
+        280, 
+        25, 
+        25, 
+        0.1f, 
+        [this](){ game_object_canvas_->GameObjectMirrorHorizontal(); }, 
+        "mirror_h");
+    game_object_mirror_h_button_->SetParrent(game_object_panel_.get());
+
+    game_object_invert_button_ = std::make_shared<UITextureButton>(
+        70, 
+        250, 
+        55, 
+        55, 
+        0.1f, 
+        [this](){ game_object_canvas_->GameObjectInvert(); }, 
+        "invert");
+    game_object_invert_button_->SetParrent(game_object_panel_.get());
 
     game_rule_panel_ = std::make_shared<UIPanel>(1100, 800, 145, 160, 0.1f);
     game_rule_panel_->SetParrent(null_widget_.get());
@@ -254,4 +307,12 @@ void UI::SetGameObject(const GameObject& game_object) {
 
 void UI::SetGameObject(size_t ind) {
     controller_->SetObject(ind);
+}
+
+void UI::GameObjectRotateClockwise() {
+
+}
+
+void UI::GameObjectRotateCounterClockwise() {
+
 }

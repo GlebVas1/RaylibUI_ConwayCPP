@@ -26,44 +26,7 @@ size_t UIObjectCanvas::BufferIndex(size_t size, size_t x, size_t y) {
     return (x * size + y) * 4;
 }
 
-void UIObjectCanvas::SetObject(const GameObject& object) {
-    this_object_ = object;
-    if (color_buffer_ != nullptr) {
-        free(color_buffer_);
-    }
-
-    if (object.size == 0) {
-        std::cerr << "Empty object in UIObjectCanvas::SetObject" << std::endl;
-    }
-
-    color_buffer_ = static_cast<uint8_t*>(malloc(object.size * object.size * 4));
-    // std::cout << "AAVBAVA" << (void*)color_buffer_ <<  std::endl;
-    for (size_t x = 0; x < object.size; ++x) {
-        for (size_t y = 0; y < object.size; ++y) {
-            GameColor this_color;
-            if (object.array[x][y] == 1) {
-                this_color = ui.GetCurrentPalette()[255];
-            } else {
-                this_color = ui.GetCurrentPalette()[0];
-            }
-            size_t this_ind = BufferIndex(object.size, x, y);
-            color_buffer_[this_ind] = this_color.r;
-            color_buffer_[this_ind + 1] = this_color.g;
-            color_buffer_[this_ind + 2] = this_color.b;
-            color_buffer_[this_ind + 3] = 255;
-        }    
-    }
-
-    SetShowGrid(object.should_grid_show);
-    SetCanvasTextureDimensions(object.size, object.size);
-    
-}
-
-void UIObjectCanvas::UpdatePalette(const std::vector<GameColor>& palette) {
-
-    if (color_buffer_ == nullptr) {
-        std::cerr << "Empty buffer in UIObjectCanvas::UpdatePalette" << std::endl;
-    }
+void UIObjectCanvas::DrawObject() {
 
     for (size_t x = 0; x < this_object_.size; ++x) {
         for (size_t y = 0; y < this_object_.size; ++y) {
@@ -80,6 +43,34 @@ void UIObjectCanvas::UpdatePalette(const std::vector<GameColor>& palette) {
             color_buffer_[this_ind + 3] = 255;
         }    
     }
+}
+
+void UIObjectCanvas::SetObject(const GameObject& object) {
+    this_object_ = object;
+    if (color_buffer_ != nullptr) {
+        free(color_buffer_);
+    }
+
+    if (object.size == 0) {
+        std::cerr << "Empty object in UIObjectCanvas::SetObject" << std::endl;
+    }
+
+    color_buffer_ = static_cast<uint8_t*>(malloc(object.size * object.size * 4));
+
+    DrawObject();
+
+    SetShowGrid(object.should_grid_show);
+    SetCanvasTextureDimensions(object.size, object.size);
+    
+}
+
+void UIObjectCanvas::UpdatePalette(const std::vector<GameColor>& palette) {
+
+    if (color_buffer_ == nullptr) {
+        std::cerr << "Empty buffer in UIObjectCanvas::UpdatePalette" << std::endl;
+    }
+
+    DrawObject();
 }
 
 void UIObjectCanvas::SetPixel(size_t x, size_t y, uint8_t val) {
@@ -99,4 +90,59 @@ uint8_t UIObjectCanvas::GetPixel(size_t x, size_t y) {
 
 const GameObject& UIObjectCanvas::GetObject() {
     return this_object_;
+}
+
+void UIObjectCanvas::GameObjectRotateClockwise() {
+    std::vector<std::vector<uint8_t>> new_array = this_object_.array;
+    for (int x = 0; x < this_object_.size; ++x) {
+        for (int y = 0; y < this_object_.size; ++y) {
+            new_array[x][y] = this_object_.array[this_object_.size - 1 - y][x];
+        }
+    }
+    this_object_.array = new_array;
+    DrawObject();
+}
+
+void UIObjectCanvas::GameObjectRotateCounterClockwise() {
+    std::vector<std::vector<uint8_t>> new_array = this_object_.array;
+    for (int x = 0; x < this_object_.size; ++x) {
+        for (int y = 0; y < this_object_.size; ++y) {
+            new_array[x][y] = this_object_.array[y][this_object_.size - 1 - x];
+        }
+    }
+    this_object_.array = new_array;
+    DrawObject();
+}
+
+void UIObjectCanvas::GameObjectMirrorVertical() {
+    std::vector<std::vector<uint8_t>> new_array = this_object_.array;
+    for (int x = 0; x < this_object_.size; ++x) {
+        for (int y = 0; y < this_object_.size; ++y) {
+            new_array[x][y] = this_object_.array[x][this_object_.size - 1 - y];
+        }
+    }
+    this_object_.array = new_array;
+    DrawObject();
+}
+
+void UIObjectCanvas::GameObjectMirrorHorizontal() {
+    std::vector<std::vector<uint8_t>> new_array = this_object_.array;
+    for (int x = 0; x < this_object_.size; ++x) {
+        for (int y = 0; y < this_object_.size; ++y) {
+            new_array[x][y] = this_object_.array[this_object_.size - 1 - x][y];
+        }
+    }
+    this_object_.array = new_array;
+    DrawObject();
+}
+
+void UIObjectCanvas::GameObjectInvert() {
+    std::vector<std::vector<uint8_t>> new_array = this_object_.array;
+    for (int x = 0; x < this_object_.size; ++x) {
+        for (int y = 0; y < this_object_.size; ++y) {
+            new_array[x][y] = 1 - new_array[x][y];
+        }
+    }
+    this_object_.array = new_array;
+    DrawObject();
 }

@@ -8,15 +8,15 @@ UIButton::UIButton(int x_pos, int y_pos, int width, int height, float roundness,
 
 void UIButton::Draw() {
     Rectangle main_field{
-        static_cast<float>(x_position_),
-        static_cast<float>(y_position_),
+        static_cast<float>(GetAbsoluteXPosition()),
+        static_cast<float>(GetAbsoluteYPosition()),
         static_cast<float>(width_),
         static_cast<float> (height_)
     };
 
     Rectangle main_field_line{
-        static_cast<float>(x_position_ + 1),
-        static_cast<float>(y_position_ + 1),
+        static_cast<float>(GetAbsoluteXPosition() + 1),
+        static_cast<float>(GetAbsoluteYPosition() + 1),
         static_cast<float>(width_ - 1),
         static_cast<float> (height_ - 1)
     };
@@ -41,8 +41,8 @@ void UIButton::Draw() {
 
 void UIButton::Update() {
     bool mouse_on_button = CheckCollisionPointRec(GetMousePosition(), Rectangle{
-        static_cast<float>(x_position_),
-        static_cast<float>(y_position_),
+        static_cast<float>(GetAbsoluteXPosition()),
+        static_cast<float>(GetAbsoluteYPosition()),
         static_cast<float>(width_),
         static_cast<float>(height_)
     });

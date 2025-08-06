@@ -23,6 +23,12 @@
 #include "UI_elements/ui_list.h"
 #include "UI_elements/ui_object_canvas.h"
 
+#include "UI_elements/ui_texture_button.h"
+
+
+
+
+
 #include "game_objects.h"
 
 class GameRule;
@@ -77,6 +83,11 @@ class UI : public UIColorTheme {
     std::shared_ptr<UIList> game_object_list_ = nullptr;
     std::shared_ptr<UILabel> game_object_label_ = nullptr;
     std::shared_ptr<UIObjectCanvas> game_object_canvas_ = nullptr;
+    std::shared_ptr<UITextureButton> game_object_clockwise_button_ = nullptr;
+    std::shared_ptr<UITextureButton> game_object_counter_clockwise_button_ = nullptr;
+    std::shared_ptr<UITextureButton> game_object_mirror_v_button_ = nullptr;
+    std::shared_ptr<UITextureButton> game_object_mirror_h_button_ = nullptr;
+    std::shared_ptr<UITextureButton> game_object_invert_button_ = nullptr;
 
     void UpdateUIElements();
 
@@ -123,5 +134,9 @@ class UI : public UIColorTheme {
     void SetGameObject(const GameObject& gae_object);
 
     void SetGameObject(size_t ind);
+
+    void GameObjectRotateClockwise();
+
+    void GameObjectRotateCounterClockwise();
 
 };
