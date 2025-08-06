@@ -1,4 +1,7 @@
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wall"
+#pragma GCC diagnostic ignored "-Wextra"
 
 template<typename T>
 void UISpinBox<T>::SetValuePtr(T* ptr) {
@@ -188,3 +191,4 @@ UISpinBox<T>::UISpinBox(int x, int y, T* val, T step) {
     SetStep(step);
 }
 
+#pragma GCC diagnostic pop

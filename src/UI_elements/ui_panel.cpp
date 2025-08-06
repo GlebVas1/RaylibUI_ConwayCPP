@@ -33,7 +33,9 @@ void UIPanel::SetRoundness(float val) {
 
 UIPanel::UIPanel() {}
 
-UIPanel::UIPanel(int x_pos, int y_pos, int width, int height, float roundness) : UIElement(x_pos, y_pos, width, height) {
+UIPanel::UIPanel(int x_pos, int y_pos, int width, int height, float roundness) : 
+    UIElement(x_pos, y_pos, width, height) 
+{
     roundness_ = roundness;
 }
 

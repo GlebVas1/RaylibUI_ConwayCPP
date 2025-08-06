@@ -21,7 +21,8 @@ class Controller {
 
     void SetFieldRule(size_t ind);
     void SetPalette(size_t ind);
-    
+    void SetObject(size_t ind);
+
     void SetPause(float val);
 };
 
