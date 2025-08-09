@@ -1,28 +1,17 @@
+#include "../UI_Tools/ui_tools.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wall"
 #pragma GCC diagnostic ignored "-Wextra"
 
-template<typename T>
-void UISpinBox<T>::SetValuePtr(T* ptr) {
-    value_ = ptr;
-}
 
 template<typename T>
 void UISpinBox<T>::NormalizeValue() {
-    if (value_ == nullptr) {
-        return;
-    }
-    *value_ = std::min(max_value, std::max(min_value, *value_));
+    value_ = std::min(max_value, std::max(min_value, value_));
 }
 
 template<typename T>
 void UISpinBox<T>::Draw() {
-    if (value_ == nullptr) {
-        return;
-    }
-    std::string str = std::to_string(*value_);
-
     Rectangle main_field{
         static_cast<float>(GetAbsoluteXPosition()),
         static_cast<float>(GetAbsoluteYPosition()),
@@ -102,26 +91,20 @@ void UISpinBox<T>::Draw() {
     DrawRectangleRounded(main_field_right, roundness_, 0, right_color);
     DrawRectangleRoundedLinesEx(main_field_right_line, roundness_, 0, 2, ui.ui_line_color);
 
-    UITools::DrawTextDefault(GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 8, TextFormat(UITextFormat<T>::format_, *value_), 18, ui.ui_text_light);
+    UITools::DrawTextDefault(GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 8, TextFormat(UITextFormat<T>::format_, value_), 18, ui.ui_text_light);
     //DrawText(TextFormat(UITextFormat<T>::format_, *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 6, 14, WHITE);
 }
 
 
 template<typename T>
 void UISpinBox<T>::IncreaseValue() {
-    if (value_ == nullptr) {
-        return;
-    }
-    *value_ += step_;
+    value_ += step_;
     NormalizeValue();
 }
 
 template<typename T>
 void UISpinBox<T>::DecreaseValue() {
-    if (value_ == nullptr) {
-        return;
-    }
-    *value_ -= step_;
+    value_ -= step_;
     NormalizeValue();
 }
 
@@ -145,6 +128,7 @@ void UISpinBox<T>::Update() {
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             left_state_ = MouseState::MOUSE_PRESSED;
             DecreaseValue();
+            binding_(value_);
         } else {
             left_state_ = MouseState::MOUSE_HOVERED;
         }
@@ -156,6 +140,7 @@ void UISpinBox<T>::Update() {
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             right_state_ = MouseState::MOUSE_PRESSED;
             IncreaseValue();
+            binding_(value_);
         } else {
             right_state_ = MouseState::MOUSE_HOVERED;
         }
@@ -184,10 +169,10 @@ template<typename T>
 UISpinBox<T>::UISpinBox() {}
 
 template<typename T>
-UISpinBox<T>::UISpinBox(int x, int y, T* val, T step) {
+UISpinBox<T>::UISpinBox(int x, int y, std::function<void(T)> func, T step) {
+    binding_ = func;
     SetPosition(x, y);
     SetDimensions(60, 20);
-    SetValuePtr(val);
     SetStep(step);
 }
 

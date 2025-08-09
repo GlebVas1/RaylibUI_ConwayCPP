@@ -17,11 +17,13 @@ UI::~UI() {
 }
 
 void UI::InitializeWindow() {
+    std::cout << "Start window initializing" << std::endl;
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(window_width, window_height, "Conway");
     UITextureLoader::GetInstance().LoadAllTextures();
     UITools::GetMainFont();
     SetTextLineSpacing(2); 
+    std::cout << "Window initialized" << std::endl;
 }
 
 void UI::Start() {
@@ -40,7 +42,7 @@ void UI::Start() {
     main_canvas_panel_->Init();
     main_canvas_->Init();
     pallete_->Init();
-    brush_settings_panel_->Init();
+    
     game_rule_panel_->Init();
     palette_panel_->Init();
     game_object_panel_->Init();
@@ -127,7 +129,30 @@ void UI::InitializeElements() {
     main_canvas_panel_ = std::make_shared<UIPanel>(0, 0, 1080, 1080, 0.015f);
     main_canvas_panel_->SetParrent(null_widget_.get());
     
+    brush_settings_panel_ = std::make_shared<UIPanel>(1300, 140, 145, 160, 0.1f);
+    brush_settings_panel_->SetParrent(null_widget_.get());
+    brush_settings_panel_->Init();
 
+    brush_settings_label_ = std::make_shared<UILabel>(10, 10, "Brush settings");
+    brush_settings_label_->SetParrent(brush_settings_panel_.get());
+
+    brush_size_spinbox_ = std::make_shared<UISpinBox<int>>(10, 40, [this](int value){ brush_radius_ = value; }, 1.0f);
+    brush_size_spinbox_->SetMaxValue(100);
+    brush_size_spinbox_->SetMinValue(1);
+    brush_size_spinbox_->SetParrent(brush_settings_panel_.get());
+
+
+    brush_settings_size_label_ = std::make_shared<UILabel>(80, 43, "Size");
+    brush_settings_size_label_->SetParrent(brush_settings_panel_.get());
+
+    brush_round_checkbox_ = std::make_shared<UICheckbox>(10, 70, &brush_round_, "Round");
+    brush_round_checkbox_->SetParrent(brush_settings_panel_.get());
+
+    brush_random_checkbox_ = std::make_shared<UICheckbox>(10, 100, &brush_random_, "Random");
+    brush_random_checkbox_->SetParrent(brush_settings_panel_.get());
+
+    brush_object_toogle_ = std::make_shared<UIToggle>(10, 130, &brush_object_mode_, "Object");
+    brush_object_toogle_->SetParrent(brush_settings_panel_.get());
 
     main_canvas_ = std::make_shared<UIMainCanvas>();
     main_canvas_->SetParrent(main_canvas_panel_.get());
@@ -174,30 +199,6 @@ void UI::InitializeElements() {
     pallete_->SetYPosition(140);
     pallete_->SetParrent(null_widget_.get());
 
-    brush_settings_panel_ = std::make_shared<UIPanel>(1300, 140, 145, 160, 0.1f);
-    brush_settings_panel_->SetParrent(null_widget_.get());
-    
-    brush_settings_label_ = std::make_shared<UILabel>(10, 10, "Brush settings");
-    brush_settings_label_->SetParrent(brush_settings_panel_.get());
-
-    brush_size_spinbox_ = std::make_shared<UISpinBox<int>>(10, 40, &brush_radius_, 1.0f);
-    brush_size_spinbox_->SetMaxValue(100);
-    brush_size_spinbox_->SetMinValue(1);
-    brush_size_spinbox_->SetParrent(brush_settings_panel_.get());
-
-
-    brush_settings_size_label_ = std::make_shared<UILabel>(80, 43, "Size");
-    brush_settings_size_label_->SetParrent(brush_settings_panel_.get());
-
-    brush_round_checkbox_ = std::make_shared<UICheckbox>(10, 70, &brush_round_, "Round");
-    brush_round_checkbox_->SetParrent(brush_settings_panel_.get());
-
-    brush_random_checkbox_ = std::make_shared<UICheckbox>(10, 100, &brush_random_, "Random");
-    brush_random_checkbox_->SetParrent(brush_settings_panel_.get());
-
-    brush_object_toogle_ = std::make_shared<UIToggle>(10, 130, &brush_object_mode_, "Object");
-    brush_object_toogle_->SetParrent(brush_settings_panel_.get());
-
 
     palette_panel_ = std::make_shared<UIPanel>(1300, 320, 145, 290, 0.1f);
     palette_panel_->SetParrent(null_widget_.get());
@@ -219,7 +220,7 @@ void UI::InitializeElements() {
 
     game_object_canvas_ = std::make_shared<UIObjectCanvas>();
     game_object_canvas_->SetParrent(game_object_panel_.get());
-    game_object_canvas_->SetCanvasGridColor(ui_accent_color_1);
+    game_object_canvas_->SetCanvasGridColor(BLACK);
     game_object_canvas_->SetPosition(5, 315);
     game_object_canvas_->SetDimensions(150, 150); 
 
@@ -343,12 +344,12 @@ void UI::UpdatePalette(size_t ind) {
     controller_->SetPalette(ind);
 }
 
-void UI::SetGameObject(const GameObject& game_object) {
-    game_object_canvas_->SetObject(game_object);
-}
-
 void UI::SetGameObject(size_t ind) {
     controller_->SetObject(ind);
+}
+
+void UI::SetGameObject(const GameObject& game_object) {
+    game_object_canvas_->SetObject(game_object);
 }
 
 void UI::GameObjectRotateClockwise() {

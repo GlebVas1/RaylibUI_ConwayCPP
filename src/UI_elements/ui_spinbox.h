@@ -5,14 +5,16 @@
 #include "ui_mouse_state.h" 
 #include "ui_element_class.h"
 #include "ui_text_fromat.h"
-#include "../UI_Tools/ui_tools.h"
+
 template <typename T>
 class UISpinBox : public UIElement, UIMouseState, UITextFormat<T> {
     private:
-    T* value_;
+    T value_ = 0;
     T step_ = 0;
     T min_value = 0;
     T max_value = 1;
+
+    std::function<void(T)> binding_;
 
     float roundness_ = 0.1;
 
@@ -24,12 +26,11 @@ class UISpinBox : public UIElement, UIMouseState, UITextFormat<T> {
     public:
 
     UISpinBox();
-    UISpinBox(int x, int y, T* ptr, T step = 0.1f);
+    UISpinBox(int x, int y, std::function<void(T)> func, T step = 0.1f);
 
     void Update();
     void Draw() override;
     
-    void SetValuePtr(T* ptr);
     void NormalizeValue();
 
     void DecreaseValue();
