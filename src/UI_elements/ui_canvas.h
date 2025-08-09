@@ -8,7 +8,7 @@ class UICanvas : public UIElement {
     protected:
     std::shared_ptr<Texture2D> main_texture_ = nullptr;
     std::shared_ptr<Texture2D> main_grid_texture_ = nullptr;
-
+    std::shared_ptr<Texture2D> main_grid_empty_texture_ = nullptr;
     int main_texture_width_ = 500;
     int main_texture_height_ = 500;
 

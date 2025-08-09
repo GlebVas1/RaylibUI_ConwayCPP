@@ -1,7 +1,7 @@
 #include "ui_game_object_settings.h"
 
 void UIGameObjectSettings::InitializeGameObjectsSettingsPanel(UIElement* null_widget) {
-    game_object_panel_ = std::make_shared<UIPanel>(1120, 140, 160, 470, 0.1f);
+   /*  game_object_panel_ = std::make_shared<UIPanel>(1120, 140, 160, 470, 0.1f);
     game_object_panel_->SetParrent(null_widget);
 
     game_object_label_ = std::make_shared<UILabel>(10, 10, "Game objects");
@@ -64,7 +64,7 @@ void UIGameObjectSettings::InitializeGameObjectsSettingsPanel(UIElement* null_wi
         0.1f, 
         [this](){ game_object_canvas_->GameObjectInvert(); }, 
         "invert");
-    game_object_invert_button_->SetParrent(game_object_panel_.get());
+    game_object_invert_button_->SetParrent(game_object_panel_.get()); */
 }
 
 void UIGameObjectSettings::SetGameObject(const GameObject& game_object) {

@@ -176,4 +176,14 @@ UISpinBox<T>::UISpinBox(int x, int y, std::function<void(T)> func, T step) {
     SetStep(step);
 }
 
+template<typename T>
+T UISpinBox<T>::GetValue() {
+    return value_;
+}
+
+template<typename T>
+void UISpinBox<T>::SetValue(T val) {
+    value_ = val;
+}
+
 #pragma GCC diagnostic pop

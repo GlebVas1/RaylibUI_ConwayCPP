@@ -5,19 +5,12 @@ UICheckbox::UICheckbox() {
 
 }
 
-UICheckbox::UICheckbox(int x, int y, bool* val_ptr, const std::string& text) : UIElement(x, y, 60, 20) {
+UICheckbox::UICheckbox(int x, int y, std::function<void(bool)> func, const std::string& text) : UIElement(x, y, 60, 20) {
     text_ = text;
-    value_ = val_ptr;
-}
-
-void UICheckbox::SetBoolPtr(bool* ptr) {
-    value_ = ptr;
+    binding_ = func;
 }
 
 void UICheckbox::Draw() {
-    if (value_ == nullptr) {
-        return;
-    }
     Color background_color;
 
     switch (state_)
@@ -44,7 +37,7 @@ void UICheckbox::Draw() {
         ui.ui_line_color
     );
 
-    if (*value_) {
+    if (value_) {
         int offset = (box_size_ - check_size_) / 2;
         UITools::DrawRectangle(
             GetAbsoluteXPosition() + x_pos_ + offset,
@@ -74,9 +67,6 @@ void UICheckbox::Draw() {
 }
 
 void UICheckbox::Update() {
-    if (value_ == nullptr) {
-        return;
-    }
 
     bool mouse_on_button = CheckCollisionPointRec(GetMousePosition(), Rectangle{
         static_cast<float>(GetAbsoluteXPosition() + x_pos_),
@@ -88,13 +78,19 @@ void UICheckbox::Update() {
     if (mouse_on_button) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             state_ = MouseState::MOUSE_PRESSED;
-            *value_ = !*value_;
+            value_ = !value_;
+            binding_(value_);
         } else {
             state_ = MouseState::MOUSE_HOVERED;
         }
     } else {
         state_ = MouseState::MOUSE_CLEAR;
     }
+}
 
-
+bool UICheckbox::GetValue() {
+    return value_;
+}
+void UICheckbox::SetValue(bool val) {
+    value_ = val;
 }

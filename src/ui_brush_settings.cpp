@@ -1,7 +1,7 @@
 #include "ui_brush_settings.h"
 
 void UIBrushSettings::InitializeBrushSettingsPanel(UIElement* null_widget) {
-    
+   /*  
     brush_settings_panel_ = std::make_shared<UIPanel>(1300, 140, 145, 160, 0.1f);
     brush_settings_panel_->SetParrent(null_widget);
     brush_settings_panel_->Init();
@@ -25,5 +25,5 @@ void UIBrushSettings::InitializeBrushSettingsPanel(UIElement* null_widget) {
     brush_random_checkbox_->SetParrent(brush_settings_panel_.get());
 
     brush_object_toogle_ = std::make_shared<UIToggle>(10, 130, &brush_object_mode_, "Object");
-    brush_object_toogle_->SetParrent(brush_settings_panel_.get());
+    brush_object_toogle_->SetParrent(brush_settings_panel_.get()); */
 }

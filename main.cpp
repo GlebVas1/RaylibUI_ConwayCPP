@@ -6,26 +6,7 @@
 #include "controller.h"
 
 #include "UI_Tools/ui_tools.h"
-/* class A {
-    public:
-    A() {}
-    A(int ) {}
-    virtual void f() {}
-};
 
-class B : public A {
-    public:
-    virtual void f() {
-        std::cout << "f2" << std::endl;
-    }
-};
-
-class C : public B {
-    public:
-    void f() {
-        std::cout << "f3" << std::endl;
-    }
-}; */
 
 int main() {
 

@@ -138,6 +138,10 @@ void Field::SetGameRule(GameRule* rule) {
     current_rule_ = rule;
 }
 
+GameRule* Field::GetGameRule() {
+  return current_rule_;
+}
+
 void Field::SetColorPallette(std::vector<GameColor>* pallette) {
     current_pallete_ = pallette;
 }
@@ -213,6 +217,17 @@ void Field::MultiThreadUpdating() {
     compute_end_cv.wait(lk, [&](){ return current_threads_finished.load(std::memory_order_acquire) == threads_count; });
 
     SwitchBuffer();
+
+    if (should_reinitialize_.load()) {
+      field_width_ = reinitialize_width_;
+      field_height_ = reinitialize_height_;
+      ReinitializeBuffer();
+      ReinitializeColorBuffer();
+      controller_->SetNewColorBuffer(color_buffer_);
+      should_reinitialize_.store(false);
+    }
+
+    
     std::chrono::steady_clock::time_point fps_end = std::chrono::steady_clock::now();
     auto fps_result = std::chrono::duration_cast<std::chrono::milliseconds>(fps_end - fps_begin).count();
     current_fps_ = 1.0 / static_cast<float>(fps_result) * 1000.0f;
@@ -245,6 +260,11 @@ void Field::SetFPS(size_t val)  {
 }
 
 float Field::GetFPS() {
-  //std::cout << current_fps_ << std::endl;
   return current_fps_;
+}
+
+void Field::SetNewDimensions(size_t x, size_t y) {
+  reinitialize_width_ = x;
+  reinitialize_height_ = y;
+  should_reinitialize_.store(true, std::memory_order::release);
 }

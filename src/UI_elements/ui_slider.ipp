@@ -52,8 +52,8 @@ void UIHorizontalSlider<T>::Update() {
 
     if (mouse_on_slider) {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            int mouse_x_position_on_line = std::max<int>(GetAbsoluteXPosition() + x_offset_, std::min<int>(GetAbsoluteXPosition() + width_ - 2 * x_offset_, GetMousePosition().x));
-            value_ =static_cast<int>((static_cast<float>(mouse_x_position_on_line - (GetAbsoluteXPosition() + x_offset_)) / (width_ - 2 * x_offset_)) * (max_value_ - min_value_));
+            int mouse_x_position_on_line = std::max<int>(GetAbsoluteXPosition() + x_offset_, std::min<int>(GetAbsoluteXPosition() + width_ - x_offset_, GetMousePosition().x));
+            value_= static_cast<int>((static_cast<float>(mouse_x_position_on_line - (GetAbsoluteXPosition() + x_offset_)) / (width_ - 2 * x_offset_)) * (max_value_ - min_value_));
             binding_(value_);
         }
     }

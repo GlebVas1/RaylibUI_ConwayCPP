@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "game_rule.h"
 
 class UI;
 class Field;
@@ -20,11 +21,17 @@ class Controller {
     void ThreadsJoin();
 
     void SetFieldRule(size_t ind);
+    GameRule* GetFieldRule();
+
     void SetPalette(size_t ind);
     void SetObject(size_t ind);
 
+    void SetFieldSize(size_t x, size_t y);
+    
     void SetFPS(size_t val);
     float GetFPS();
     void SetPause(float val);
+
+    void SetNewColorBuffer(uint8_t* buffer);
 };
 

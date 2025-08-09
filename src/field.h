@@ -36,6 +36,11 @@ class Field {
     bool processing_ = true;
 
     bool paused_ = false;
+
+    std::atomic_bool should_reinitialize_ = false;
+    size_t reinitialize_width_ =  0;
+    size_t reinitialize_height_ = 0;
+
     size_t threads_count = 56;
     std::atomic<size_t> current_threads_finished;
 
@@ -72,9 +77,9 @@ class Field {
     
     void ThreadUpdateFunction(size_t thread_id, size_t start_x);
 
-    
-
     public:
+
+    void SetNewDimensions(size_t x, size_t y);
 
     void CreateUpdateThreads();
 
@@ -99,6 +104,8 @@ class Field {
     }
     
     void SetGameRule(GameRule* rule);
+
+    GameRule* GetGameRule();
 
     void SetColorPallette(std::vector<GameColor>* pallette);
     

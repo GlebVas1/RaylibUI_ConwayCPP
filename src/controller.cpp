@@ -58,6 +58,10 @@ void Controller::SetFieldRule(size_t ind) {
     ui->SetColorCount(ALL_RULES[ind]->maximum_age);
 }
 
+GameRule* Controller::GetFieldRule() {
+
+}
+
 void Controller::SetPalette(size_t ind) {
     field->SetColorPallette(&(ALL_PALLETTES[ind].pallette));
     ui->SetColorPallette(ALL_PALLETTES[ind].pallette);
@@ -65,6 +69,10 @@ void Controller::SetPalette(size_t ind) {
 
 void Controller::SetObject(size_t ind) {
     ui->SetGameObject(ALL_OBJECTS[ind]);
+}
+
+void Controller::SetFieldSize(size_t x, size_t y) {
+    field->SetNewDimensions(x, y);
 }
 
 void Controller::SetFPS(size_t val) {
@@ -77,4 +85,9 @@ float Controller::GetFPS() {
 
 void Controller::SetPause(float val) {
     field->SetPause(val);
+}
+
+
+void Controller::SetNewColorBuffer(uint8_t* buffer) {
+    ui->SetColorBuffer(buffer);
 }

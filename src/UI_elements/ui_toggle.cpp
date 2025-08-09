@@ -7,15 +7,12 @@ UIToggle::UIToggle() {
 
 }
 
-UIToggle::UIToggle(int x, int y, bool* val_ptr, const std::string& text) : UIElement(x, y, 60, 20) {
+UIToggle::UIToggle(int x, int y, std::function<void(bool)> func, const std::string& text) : UIElement(x, y, 60, 20) {
     text_ = text;
-    value_ = val_ptr;
+    binding_ = func;
 }
 
 void UIToggle::Draw() {
-    if (value_ == nullptr) {
-        return;
-    }
     Color background_color;
 
     switch (state_)
@@ -40,11 +37,11 @@ void UIToggle::Draw() {
         height_,
         2,
         0.1,
-        *value_ ? ui.ui_accent_color_2 : ui.ui_accent_color_3,
+        value_ ? ui.ui_accent_color_2 : ui.ui_accent_color_3,
         ui.ui_line_color
     );
 
-    int x_position_of_slider = *value_ ? GetAbsoluteXPosition() + x_pos_ :  GetAbsoluteXPosition() + x_pos_ + box_width_ - slider_width_;
+    int x_position_of_slider = value_ ? GetAbsoluteXPosition() + x_pos_ :  GetAbsoluteXPosition() + x_pos_ + box_width_ - slider_width_;
     UITools::DrawRectangle(
         x_position_of_slider,
         GetAbsoluteYPosition(),
@@ -73,10 +70,6 @@ void UIToggle::Draw() {
 }
 
 void UIToggle::Update() {
-    if (value_ == nullptr) {
-        return;
-    }
-
     bool mouse_on_button = CheckCollisionPointRec(GetMousePosition(), Rectangle{
         static_cast<float>(GetAbsoluteXPosition() + x_pos_),
         static_cast<float>(GetAbsoluteYPosition()),
@@ -87,11 +80,19 @@ void UIToggle::Update() {
     if (mouse_on_button) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             state_ = MouseState::MOUSE_PRESSED;
-            *value_ = !*value_;
+            value_ = !value_;
+            binding_(value_);
         } else {
             state_ = MouseState::MOUSE_HOVERED;
         }
     } else {
         state_ = MouseState::MOUSE_CLEAR;
     }
+}
+
+bool UIToggle::GetValue() {
+    return value_;
+}
+void UIToggle::SetValue(bool val) {
+    value_ = val;
 }

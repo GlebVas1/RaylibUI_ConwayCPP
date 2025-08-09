@@ -40,6 +40,9 @@ class UISpinBox : public UIElement, UIMouseState, UITextFormat<T> {
     void SetMinValue(T val);
 
     void SetStep(T val);
+
+    T GetValue();
+    void SetValue(T val);
 };
 
 

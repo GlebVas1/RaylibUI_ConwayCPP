@@ -35,11 +35,11 @@ void UIPalette::UIPaletteButton::Draw() {
         break;
     }
 
-    DrawRectangleRounded(main_field, roundness_, 0, background_color);
+    DrawRectangleRounded(main_field, roundness_, 4, background_color);
     DrawRectangleRoundedLinesEx(
         main_field_line,
         roundness_,
-        0,
+        4,
         id_ == this_pallete->selected_button_ ? 4 : 2,
         BLACK);
 }
@@ -182,8 +182,8 @@ void UIPalette::Draw() {
         static_cast<float> (height_ - 1)
     };
 
-    DrawRectangleRounded(main_field, roundness_, 0, background_color_);
-    DrawRectangleRoundedLinesEx(main_field_line, roundness_, 0, 2, BLACK);
+    DrawRectangleRounded(main_field, roundness_, 4, background_color_);
+    DrawRectangleRoundedLinesEx(main_field_line, roundness_, 4, 2, BLACK);
 
 
 
@@ -194,4 +194,8 @@ void UIPalette::Draw() {
 
 uint8_t UIPalette::GetRandomVal() {
     return color_pallete_val_[rand() % (colors_count_ + 1)];
+}
+
+const std::vector<GameColor>& UIPalette::GetColorPalette() {
+    return color_pallete_;
 }
