@@ -15,7 +15,11 @@ class UIElement {
     std::unordered_set<UIElement*> children_;
 
     public:
-    // Don't want make it = 0, to not mandatory implement them
+    UIElement();
+    UIElement(int width, int height);
+    UIElement(int x_pos, int y_pos, int width, int height);
+    
+    // Don't want make it = 0, to not mandatory implement them after
     virtual void Init();
     virtual void Draw();
     virtual void Update();
@@ -41,12 +45,6 @@ class UIElement {
     UIElement* GetParrent();
 
     std::unordered_set<UIElement*> GetChildren();
-
-    UIElement();
-    UIElement(int width, int height);
-    UIElement(int x_pos, int y_pos, int width, int height);
-
-    
 
     // virtual ~UIElement() {}; 
     // isn't used because there no such cases

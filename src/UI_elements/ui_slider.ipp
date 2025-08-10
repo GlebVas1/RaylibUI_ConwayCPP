@@ -1,10 +1,10 @@
 #include "ui.h"
 
 template <typename T>
-UIHorizontalSlider<T>::UIHorizontalSlider(int x, int y, int width, int height, std::function<void(T)> func):
+UIHorizontalSlider<T>::UIHorizontalSlider(int x, int y, int width, int height, std::function<void(T)> on_value_change):
     UIElement(x, y, width, height)
 {
-    binding_ = func;
+    on_value_change_ = on_value_change;
 }
 
 
@@ -16,7 +16,7 @@ void UIHorizontalSlider<T>::Draw() {
     float slider_relevant_pos = static_cast<float>(value_) / (max_value_ - min_value_);
     int slider_x_pos = x_offset_ + static_cast<int>(slider_relevant_pos * (line_width - slider_width_));
     int slider_y_pos = height_ / 2 - slider_height_ / 2;
-
+    
     UITools::DrawRectangle(
         GetAbsoluteXPosition() + x_offset_,
         GetAbsoluteYPosition() + line_y_pos,
@@ -54,7 +54,7 @@ void UIHorizontalSlider<T>::Update() {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             int mouse_x_position_on_line = std::max<int>(GetAbsoluteXPosition() + x_offset_, std::min<int>(GetAbsoluteXPosition() + width_ - x_offset_, GetMousePosition().x));
             value_= static_cast<int>((static_cast<float>(mouse_x_position_on_line - (GetAbsoluteXPosition() + x_offset_)) / (width_ - 2 * x_offset_)) * (max_value_ - min_value_));
-            binding_(value_);
+            on_value_change_(value_);
         }
     }
 }
@@ -67,4 +67,15 @@ void UIHorizontalSlider<T>::SetMinValue(T val) {
 template<typename T>
 void UIHorizontalSlider<T>::SetMaxValue(T val) {
     max_value_ = val;
+}
+
+template<typename T>
+void UIHorizontalSlider<T>::SetValue(T val) {
+    value_ = val;
+    NormalizeValue();
+}
+
+template<typename T>
+T UIHorizontalSlider<T>::GetValue() {
+    return value_;
 }

@@ -11,14 +11,14 @@ class UISpinBox : public UIElement, UIMouseState, UITextFormat<T> {
     private:
     T value_ = 0;
     T step_ = 0;
-    T min_value = 0;
-    T max_value = 1;
+    T min_value_ = 0;
+    T max_value_ = 1;
 
     std::function<void(T)> binding_;
 
-    float roundness_ = 0.1;
+    static const float roundness_;
 
-    int buttons_width_ = 12;
+    static const int buttons_width_ = 12;
 
     MouseState left_state_;
     MouseState right_state_;

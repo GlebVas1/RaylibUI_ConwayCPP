@@ -7,8 +7,11 @@
 
 template<typename T>
 void UISpinBox<T>::NormalizeValue() {
-    value_ = std::min(max_value, std::max(min_value, value_));
+    value_ = std::min(max_value_, std::max(min_value_, value_));
 }
+
+template<typename T>
+const float UISpinBox<T>::roundness_ = 0.1f;
 
 template<typename T>
 void UISpinBox<T>::Draw() {
@@ -91,7 +94,17 @@ void UISpinBox<T>::Draw() {
     DrawRectangleRounded(main_field_right, roundness_, 0, right_color);
     DrawRectangleRoundedLinesEx(main_field_right_line, roundness_, 0, 2, ui.ui_line_color);
 
-    UITools::DrawTextDefault(GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 8, TextFormat(UITextFormat<T>::format_, value_), 18, ui.ui_text_light);
+    const auto text_size = UITools::MeasureTextDefault(TextFormat(UITextFormat<T>::format_, value_), 18);
+
+    UITools::DrawTextDefault(
+        GetAbsoluteXPosition() + width_ / 2 - text_size.first / 2,
+        GetAbsoluteYPosition() + height_ / 2 - text_size.second / 2, 
+        TextFormat(UITextFormat<T>::format_, value_), 
+        18, 
+        ui.ui_text_light
+    );
+
+    
     //DrawText(TextFormat(UITextFormat<T>::format_, *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 6, 14, WHITE);
 }
 
@@ -152,12 +165,12 @@ void UISpinBox<T>::Update() {
 
 template<typename T>
 void UISpinBox<T>::SetMaxValue(T val) {
-    max_value = val;
+    max_value_ = val;
 }
 
 template<typename T>
 void UISpinBox<T>::SetMinValue(T val) {
-    min_value = val;
+    min_value_ = val;
 }
 
 template<typename T>

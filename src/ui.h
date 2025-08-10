@@ -67,10 +67,13 @@ class UI : public UIColorTheme {
     std::shared_ptr<UIPanel> field_control_panel_ = nullptr;
     std::shared_ptr<UILabel> field_control_label_ = nullptr;
 
+    std::shared_ptr<UILabel> field_control_size_H_label_ = nullptr;
+    std::shared_ptr<UILabel> field_control_size_W_label_ = nullptr;
+
     std::shared_ptr<UISpinBox<size_t>> field_width_spinbox_ = nullptr;
     std::shared_ptr<UISpinBox<size_t>> field_height_spinbox_ = nullptr;
     std::shared_ptr<UIToggle> field_grid_toogle_ = nullptr;
-    std::shared_ptr<UIToggle> field_dim_lock_toogle_ = nullptr;
+    std::shared_ptr<UIDualTextureButton> field_dim_lock_button_ = nullptr;
 
     std::shared_ptr<UITextButton> field_set_button_ = nullptr;
 

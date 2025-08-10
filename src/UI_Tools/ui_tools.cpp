@@ -37,4 +37,9 @@ namespace UITools {
             0.8f, 
             col);
     }
+
+    std::pair<int, int> MeasureTextDefault(const std::string& str, int font_size) {
+        const auto size = MeasureTextEx(GetMainFont(), str.c_str(), font_size, 0.8f);
+        return { static_cast<int>(size.x), static_cast<int>(size.y)};
+    }
 }

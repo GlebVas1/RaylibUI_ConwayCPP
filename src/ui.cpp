@@ -149,19 +149,24 @@ void UI::InitializeElements() {
     );
     field_grid_toogle_->SetParrent(field_control_panel_.get());
 
-    field_dim_lock_toogle_ = std::make_shared<UIToggle>(
-        100, 
-        40, 
+    field_dim_lock_button_ = std::make_shared<UIDualTextureButton>(
+        265, 
+        25, 
+        20,
+        20,
+        0.1f,
         [this](bool val){}, 
-        "Dim lock"
+        "lock",
+        "unlock",
+        true
     );
-    field_dim_lock_toogle_->SetParrent(field_control_panel_.get());
+    field_dim_lock_button_->SetParrent(field_control_panel_.get());
 
     field_width_spinbox_ = std::make_shared<UISpinBox<size_t>>(
         315, 
         10, 
         [this](size_t val) {
-            if (field_dim_lock_toogle_->GetValue()) {
+            if (field_dim_lock_button_->GetState()) {
                 field_height_spinbox_->SetValue(field_width_spinbox_->GetValue());
             }
         }, 
@@ -173,11 +178,14 @@ void UI::InitializeElements() {
     field_width_spinbox_->SetValue(default_field_width_);
     field_width_spinbox_->SetParrent(field_control_panel_.get());
 
+    field_control_size_H_label_ = std::make_shared<UILabel>(295, 12, "H:");
+    field_control_size_H_label_->SetParrent(field_control_panel_.get());
+
     field_height_spinbox_ = std::make_shared<UISpinBox<size_t>>(
         315, 
         40, 
         [this](size_t val) {
-            if (field_dim_lock_toogle_->GetValue()) {
+            if (field_dim_lock_button_->GetState()) {
                 field_width_spinbox_->SetValue(field_height_spinbox_->GetValue());
             }
         }, 
@@ -189,10 +197,13 @@ void UI::InitializeElements() {
     field_height_spinbox_->SetValue(default_field_height_);
     field_height_spinbox_->SetParrent(field_control_panel_.get());
 
+    field_control_size_W_label_ = std::make_shared<UILabel>(295, 42, "W:");
+    field_control_size_W_label_->SetParrent(field_control_panel_.get());
+
     field_set_button_ = std::make_shared<UITextButton>(
-        100, 
+        180, 
         10, 
-        40, 
+        80, 
         20, 
         0.1f, 
         [this](){ SetFieldSize(); }, 
@@ -217,6 +228,7 @@ void UI::InitializeElements() {
 
     brush_size_spinbox_->SetMaxValue(100);
     brush_size_spinbox_->SetMinValue(1);
+    brush_size_spinbox_->SetValue(1);
     brush_size_spinbox_->SetParrent(brush_settings_panel_.get());
 
     brush_settings_size_label_ = std::make_shared<UILabel>(80, 43, "Size");
@@ -301,11 +313,7 @@ void UI::InitializeElements() {
     );
 
     game_object_list_->SetParrent(game_object_panel_.get());
-    std::vector<std::string> game_objects_names;
-    for (const auto& elem : ALL_OBJECTS) {
-        game_objects_names.push_back(elem.name);
-    }
-    game_object_list_->SetVector(game_objects_names);
+    game_object_list_->SetVector(controller_->GetAllObjectsNames());
     game_object_list_->Init();
 
     game_object_canvas_ = std::make_shared<UIObjectCanvas>();

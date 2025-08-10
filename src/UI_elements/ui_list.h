@@ -9,20 +9,22 @@ class UIList : public UIElement {
 
     int y_item_size_ = 22;
     
-    int box_height = 200;
-    int text_x_offset_ = 5;
-    int text_y_offset_ = 2;
+    static const int box_height = 200;
+    static const int text_x_offset_ = 5;
+    static const int text_y_offset_ = 2;
 
     void UpdateTexture();
 
-    int vertical_offset = 0;
+    static const int vertical_offset = 0;
 
+    // can change later
     int slider_height_= 10;
-    int slider_width_= 15;
+    
+    static const int slider_width_= 15;
 
-    int slider_box_x_space_ = 30;
-    int slider_line_y_offset_ = 10;
-    int slider_line_width_ = 5;
+    static const int slider_box_x_space_ = 30;
+    static const int slider_line_y_offset_ = 10;
+    static const int slider_line_width_ = 5;
 
 
     float slider_position_ = 0.5f;
