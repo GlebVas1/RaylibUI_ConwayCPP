@@ -112,32 +112,49 @@ void UIPalette::InitializeButtons() {
         return;
     }
 
-    buttons_ = std::vector<UIPaletteButton>(colors_count_ + 1, UIPaletteButton());
-    color_pallete_val_ = std::vector<uint8_t>(colors_count_ + 1, 0);
+    const size_t buttons_count = std::min<size_t>(colors_count_ + 1, max_height_buttons_count);
+
+    buttons_ = std::vector<UIPaletteButton>(buttons_count, UIPaletteButton());
+    color_pallete_val_ = std::vector<uint8_t>(buttons_count, 0);
+
     const uint8_t FULL_ = 255;
     const uint8_t EMPTY_ = 0;
+
     unsigned char offset = (FULL_ - EMPTY_) / colors_count_;
-    for (size_t i = 0; i < colors_count_; ++i) {
+    size_t offset_mult = ((256 - 2) / offset) / (buttons_count - 1);
+
+    buttons_.front().SetId(0);
+    buttons_.front().SetPalette(this);
+    buttons_.front().SetDimensions(button_width_, button_height_);
+    buttons_.front().SetXPosition(button_width_spacing_ + GetAbsoluteXPosition());
+    buttons_.front().SetYPosition(button_height_spacing_ + GetAbsoluteYPosition());
+    buttons_.front().SetColors(color_pallete_[FULL_]);
+    color_pallete_val_.front() = FULL_;
+
+    for (size_t i = 1; i < buttons_count - 1; ++i) {
         buttons_[i].SetId(i);
         buttons_[i].SetPalette(this);
         buttons_[i].SetDimensions(button_width_, button_height_);
         buttons_[i].SetXPosition(button_width_spacing_ + GetAbsoluteXPosition());
-        buttons_[i].SetYPosition(button_height_spacing_ + GetAbsoluteYPosition() + (button_height_ + button_height_spacing_)  * i);
-        buttons_[i].SetColors(color_pallete_[FULL_ - i * offset]);
-        color_pallete_val_[i] = FULL_ - i * offset;
+        buttons_[i].SetYPosition(button_height_spacing_ + GetAbsoluteYPosition() + (button_height_ + button_height_spacing_) * i);
+        buttons_[i].SetColors(color_pallete_[FULL_ - i * offset * offset_mult]);
+        color_pallete_val_[i] = FULL_ - i * offset * offset_mult;
     }
-    buttons_.back().SetId(colors_count_);
+
+    buttons_.back().SetId(buttons_count - 1);
     buttons_.back().SetPalette(this);
     buttons_.back().SetDimensions(button_width_, button_height_);
     buttons_.back().SetXPosition(button_width_spacing_ + GetAbsoluteXPosition());
-    buttons_.back().SetYPosition(button_height_spacing_ + GetAbsoluteYPosition() + (button_height_ + button_height_spacing_)  * colors_count_);
+    buttons_.back().SetYPosition(button_height_spacing_ + GetAbsoluteYPosition() + (button_height_ + button_height_spacing_) * (buttons_count - 1));
     buttons_.back().SetColors(color_pallete_[EMPTY_]);
+
     color_pallete_val_.back() = EMPTY_;
 }
 void UIPalette::Init() {
     InitializeButtons();
+    const size_t buttons_count = std::min<size_t>(colors_count_ + 1, max_height_buttons_count);
     SetDimensions(button_width_ + 2 * button_width_spacing_,
-                  button_height_spacing_ * (colors_count_ + 2) + button_height_ * (colors_count_ + 1));
+                  button_height_spacing_ * (buttons_count + 1) + button_height_ * (buttons_count));
     std::cout << "UIPalleteInit() wh " << width_ + 10 << " " << height_ + 10 << std::endl;
     shadow_ = std::make_shared<UIShadowEffect>(GetAbsoluteXPosition() - 5, GetAbsoluteYPosition() - 5, width_ + 10, height_ + 10, 0.5f, 3); 
 

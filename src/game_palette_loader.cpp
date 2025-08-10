@@ -46,13 +46,16 @@ void GamePaletteLoader::AddPaletteObject(const ColorElement& obj) {
 void GamePaletteLoader::LoadAllPalettes(const std::string& path) {
 
     std::ifstream all_objects_file(path);
-    std::string object_name;
-    std::string object_path;
+    std::string palette_name;
+    std::string palette_path;
     
     while (!all_objects_file.eof()){
-        all_objects_file >> object_name >> object_path;
-        LoadPalette(object_name, object_path); 
+        all_objects_file >> palette_name >> palette_path;
+        LoadPalette(palette_name, palette_path); 
     }
+
+    palettes_.push_back(GameColorPinkGreen());
+    names_.push_back("SHO");
     
 }
 
