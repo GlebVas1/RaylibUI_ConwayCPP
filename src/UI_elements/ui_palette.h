@@ -37,9 +37,11 @@ class UIPalette : public UIElement {
     };
 
     friend UIPaletteButton;
+
     std::shared_ptr<UIShadowEffect> shadow_;
     std::vector<UIPaletteButton> buttons_;
     size_t colors_count_ = 0;
+
     std::vector<GameColor> color_pallete_;
     std::vector<uint8_t> color_pallete_val_;
     size_t selected_val_ = 255;
@@ -63,6 +65,8 @@ class UIPalette : public UIElement {
     void Init() override;
 
     void SetColorPallette(const std::vector<GameColor>& pallette);
+    const std::vector<GameColor>& GetColorPalette();
+    
     void SetColorCount(size_t color_count);
     void SetSelectedVal(uint8_t val);
 

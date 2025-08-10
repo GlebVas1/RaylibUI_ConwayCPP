@@ -1,5 +1,8 @@
 #pragma once
 #include "stdafx.h"
+#include "game_rule.h"
+#include "game_objects.h"
+
 
 class UI;
 class Field;
@@ -12,19 +15,33 @@ class Controller {
     Controller();
     ~Controller();
     std::thread* field_multi_thread_ = nullptr;
+
     public:
     static Controller& GetInstance();
-    void SetFieldPixel(int x, int y, uint8_t val);
-    void StartUI();
-    void Start();
-    void ThreadsJoin();
 
-    void SetFieldRule(size_t ind);
-    void SetPalette(size_t ind);
+    const std::vector<std::string>& GetAllObjectsNames();
     void SetObject(size_t ind);
 
+    void SetFieldPixel(int x, int y, uint8_t val);
+
+    void SetFieldRule(size_t ind);
+    GameRule* GetFieldRule();
+
+    const std::vector<std::string>& GetAllPalettesNames();
+    void SetPalette(size_t ind);
+    
+    void SetFieldSize(size_t x, size_t y);
+    
     void SetFPS(size_t val);
     float GetFPS();
     void SetPause(float val);
+
+    void SetNewColorBuffer(uint8_t* buffer);
+
+
+    void ThreadsJoin();
+
+    void StartUI();
+    void Start();
 };
 

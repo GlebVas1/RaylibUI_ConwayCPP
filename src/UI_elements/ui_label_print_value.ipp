@@ -1,10 +1,10 @@
 #include "../UI_Tools/ui_tools.h"
 
 template<typename T>
-UILabelPrintValue<T>::UILabelPrintValue(int x, int y, const std::string& text_format, std::function<T()> func) :
+UILabelPrintValue<T>::UILabelPrintValue(int x, int y, const std::string& text_format, std::function<T()> get_value_function) :
     UIElement(x, y, 10, 10) {
     text_format_ = text_format;
-    get_value_ = func;
+    get_value_ = get_value_function;
 }
 
 template<typename T>

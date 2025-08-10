@@ -37,8 +37,8 @@ void UIList::Draw() {
             static_cast<float>(width_ - slider_box_x_space_),
             static_cast<float>(height_)
         },
-        0.1f,
-        0,
+        static_cast<float>(10) / std::min(width_ - slider_box_x_space_, height_),
+        5,
         WHITE
     );
     int full_list_height = elements_.size() * y_item_size_;
@@ -125,7 +125,7 @@ void UIList::Update() {
             selected_ind_ = y;
             call_(selected_ind_);
         }
-        slider_position_ = std::max(0.0f, std::min(1.0f, slider_position_+ GetMouseWheelMove() * 0.16f));
+        slider_position_ = std::max(0.0f, std::min(1.0f, slider_position_- GetMouseWheelMove() * 0.16f));
     }
 
     bool mouse_on_slider = CheckCollisionPointRec(GetMousePosition(), Rectangle{
@@ -137,7 +137,7 @@ void UIList::Update() {
 
     if (mouse_on_slider) {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            int mouse_y_position_on_line = std::max<int>(GetAbsoluteYPosition() + slider_line_y_offset_, std::min<int>(GetAbsoluteYPosition() + height_ - 2 * slider_line_y_offset_, GetMousePosition().y));
+            int mouse_y_position_on_line = std::max<int>(GetAbsoluteYPosition() + slider_line_y_offset_, std::min<int>(GetAbsoluteYPosition() + height_ - slider_line_y_offset_, GetMousePosition().y));
             slider_position_ = static_cast<float>(mouse_y_position_on_line - (GetAbsoluteYPosition() + slider_line_y_offset_)) / (height_ - 2 * slider_line_y_offset_);
         }
     }

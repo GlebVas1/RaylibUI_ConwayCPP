@@ -3,7 +3,8 @@
 #include "ui.h"
 
 void UIPanel::Init() {
-    shadow_ = std::make_shared<UIShadowEffect>(
+    roundness_ = static_cast<float>(10) / std::min(width_, height_);
+    shadow_ = std::make_unique<UIShadowEffect>(
         x_position_ - 5,
         y_position_ - 5,
         width_ + 10,

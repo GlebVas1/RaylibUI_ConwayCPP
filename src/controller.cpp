@@ -1,6 +1,8 @@
 #include "controller.h"
 #include "ui.h"
 #include "field.h"
+#include "game_objects_loader.h"
+#include "game_palette_loader.h"
 
 Controller::Controller() {
     ui = &UI::GetInstance();
@@ -16,41 +18,17 @@ Controller& Controller::GetInstance() {
     return obj;
 }
 
-void Controller::StartUI() {
-    ui->InitializeWindow();
-    ui->InitializeElements();
-    ui->SetColorBuffer(field->GetColorBuffer());
+const std::vector<std::string>& Controller::GetAllObjectsNames() {
+   return GameObjectLoader::GetInstance().GetAllNames();
+}
 
 
-    auto gcp = GameColorBW();
-    auto gr = ALL_RULES[0];
-
-    ui->SetColorPallette(gcp);
-    ui->SetColorCount(gr->maximum_age);
-
-    ui->SetGameObject(ALL_OBJECTS[0]);
-    // ui->InitPalette();
-    
-    ui->Start();
+void Controller::SetObject(size_t ind) {
+    ui->SetGameObject(GameObjectLoader::GetInstance().GetObjectById(ind));
 }
 
 void Controller::SetFieldPixel(int x, int y, uint8_t val) {
     field->SetPixelAt(x, y, val);
-}
-
-void Controller::Start() {
-
-    auto gcp = GameColorBW();
-    auto gr = ALL_RULES[0];
-    field->SetColorPallette(&gcp);
-    field->SetGameRule(gr);
-
-    field->CreateUpdateThreads();
-
-    std::thread t(&Field::MultiThreadUpdating, field);
-   
-    StartUI();
-    t.join();
 }
 
 void Controller::SetFieldRule(size_t ind) {
@@ -58,13 +36,39 @@ void Controller::SetFieldRule(size_t ind) {
     ui->SetColorCount(ALL_RULES[ind]->maximum_age);
 }
 
-void Controller::SetPalette(size_t ind) {
-    field->SetColorPallette(&(ALL_PALLETTES[ind].pallette));
-    ui->SetColorPallette(ALL_PALLETTES[ind].pallette);
+GameRule* Controller::GetFieldRule() {
+    return field->GetGameRule();
 }
 
-void Controller::SetObject(size_t ind) {
-    ui->SetGameObject(ALL_OBJECTS[ind]);
+const std::vector<std::string>& Controller::GetAllPalettesNames() {
+   return GamePaletteLoader::GetInstance().GetAllNames();
+}
+
+void Controller::SetPalette(size_t ind) {
+    field->SetColorPallette(&GamePaletteLoader::GetInstance().GetPaleteeById(ind));
+    ui->SetColorPallette(GamePaletteLoader::GetInstance().GetPaleteeById(ind));
+}
+
+void Controller::SetFieldSize(size_t x, size_t y) {
+    field->SetNewDimensions(x, y);
+}
+
+void Controller::StartUI() {
+    
+    ui->InitializeElements();
+    ui->SetColorBuffer(field->GetColorBuffer());
+
+
+    auto gcp = GamePaletteLoader::GetInstance().GetPaleteeById(0);
+    auto gr = ALL_RULES[0];
+
+    ui->SetColorPallette(gcp);
+    ui->SetColorCount(gr->maximum_age);
+
+    ui->SetGameObject(GameObjectLoader::GetInstance().GetObjectById(0));
+    // ui->InitPalette();
+    
+    ui->Start();
 }
 
 void Controller::SetFPS(size_t val) {
@@ -77,4 +81,31 @@ float Controller::GetFPS() {
 
 void Controller::SetPause(float val) {
     field->SetPause(val);
+}
+
+
+void Controller::Start() {
+
+    ui->InitializeWindow();
+    //GameObjectLoader::GetInstance();
+    GameObjectLoader::GetInstance().LoadAllObjects("../GameObjects/all_objects.txt");
+    GamePaletteLoader::GetInstance().LoadAllPalettes("../Palettes/all_palettes.txt");
+
+    auto gcp = GamePaletteLoader::GetInstance().GetPaleteeById(0);
+    auto gr = ALL_RULES[0];
+    field->SetColorPallette(&gcp);
+    field->SetGameRule(gr);
+
+    field->CreateUpdateThreads();
+
+    /* To allow loading textures cause of raylib subtles*/
+    
+    std::thread t(&Field::MultiThreadUpdating, field);
+   
+    StartUI();
+    t.join();
+}
+
+void Controller::SetNewColorBuffer(uint8_t* buffer) {
+    ui->SetColorBuffer(buffer);
 }

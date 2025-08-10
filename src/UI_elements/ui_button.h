@@ -7,7 +7,7 @@
 class UIButton : public UIElement, public UIMouseState {
     protected:
         float roundness_;
-        std::function<void()> binding;
+        std::function<void()> binding_;
 
     public: 
         UIButton(int x_pos, int y_pos, int width, int height, float roundness, std::function<void()> func);

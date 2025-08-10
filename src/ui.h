@@ -3,6 +3,9 @@
 #include "stdafx.h"
 #include "raylib.h"
 
+#include "ui_brush_settings.h"
+#include "ui_game_object_settings.h"
+
 #include "UI_elements/ui_element_class.h"
 
 #include "UI_elements/ui_main_canvas.h"
@@ -15,7 +18,7 @@
 
 #include "UI_elements/ui_check_box.h"
 #include "UI_elements/ui_toogle.h"
-
+#include "UI_elements/ui_text_button.h"
 
 #include "ui_color_theme.h"
 
@@ -29,19 +32,17 @@
 #include "UI_elements/ui_slider.h"
 #include "UI_elements/ui_label_print_value.h"
 
-
-
-
-
 #include "game_objects.h"
 
 class GameRule;
 
 class Controller;
 
-
 class UI : public UIColorTheme {
     private:
+
+    const size_t default_field_width_ = 512;
+    const size_t default_field_height_ = 512;
 
     UI();
     ~UI();
@@ -58,18 +59,24 @@ class UI : public UIColorTheme {
     std::shared_ptr<UIMainCanvas> main_canvas_ = nullptr;
 
 
-    std::shared_ptr<UIPalette> pallete_ = nullptr;
-
-    int brush_radius_ = 45;
-    bool brush_round_ = false;
-    bool brush_random_ = false;
-    bool brush_object_mode_ = false;
-
     std::shared_ptr<UIPanel> game_control_panel_ = nullptr;
     std::shared_ptr<UIDualTextureButton> game_control_play_button_ = nullptr;
     std::shared_ptr<UIHorizontalSlider<size_t>> game_control_slider_ = nullptr;
     std::shared_ptr<UILabelPrintValue<float>> game_control_panel_fps_label_ = nullptr;
-    
+
+    std::shared_ptr<UIPanel> field_control_panel_ = nullptr;
+    std::shared_ptr<UILabel> field_control_label_ = nullptr;
+
+    std::shared_ptr<UILabel> field_control_size_H_label_ = nullptr;
+    std::shared_ptr<UILabel> field_control_size_W_label_ = nullptr;
+
+    std::shared_ptr<UISpinBox<size_t>> field_width_spinbox_ = nullptr;
+    std::shared_ptr<UISpinBox<size_t>> field_height_spinbox_ = nullptr;
+    std::shared_ptr<UIToggle> field_grid_toogle_ = nullptr;
+    std::shared_ptr<UIDualTextureButton> field_dim_lock_button_ = nullptr;
+
+    std::shared_ptr<UITextButton> field_set_button_ = nullptr;
+
     std::shared_ptr<UISpinBox<int>> brush_size_spinbox_ = nullptr;
     std::shared_ptr<UICheckbox> brush_round_checkbox_ = nullptr;
     std::shared_ptr<UICheckbox> brush_random_checkbox_ = nullptr;
@@ -78,15 +85,6 @@ class UI : public UIColorTheme {
     std::shared_ptr<UILabel> brush_settings_label_ = nullptr;
     std::shared_ptr<UILabel> brush_settings_size_label_ = nullptr;
 
-    std::shared_ptr<UIPanel> game_rule_panel_ = nullptr;
-    std::shared_ptr<UIList> game_rule_list_ = nullptr;
-
-    std::shared_ptr<UIPanel> palette_panel_ = nullptr;
-    std::shared_ptr<UIList> palette_list_ = nullptr;
-    std::shared_ptr<UILabel> palette_label_ = nullptr;
-
-    std::vector<GameColor> current_palette_;
-    size_t current_colors_count_ = 0;
 
     std::shared_ptr<UIPanel> game_object_panel_ = nullptr;
     std::shared_ptr<UIList> game_object_list_ = nullptr;
@@ -97,6 +95,19 @@ class UI : public UIColorTheme {
     std::shared_ptr<UITextureButton> game_object_mirror_v_button_ = nullptr;
     std::shared_ptr<UITextureButton> game_object_mirror_h_button_ = nullptr;
     std::shared_ptr<UITextureButton> game_object_invert_button_ = nullptr;
+
+
+    std::shared_ptr<UIPanel> game_rule_panel_ = nullptr;
+    std::shared_ptr<UIList> game_rule_list_ = nullptr;
+
+
+    std::shared_ptr<UIPalette> pallete_ = nullptr;
+
+
+    std::shared_ptr<UIPanel> palette_panel_ = nullptr;
+    std::shared_ptr<UIList> palette_list_ = nullptr;
+    std::shared_ptr<UILabel> palette_label_ = nullptr;
+
 
     void UpdateUIElements();
 
@@ -140,9 +151,11 @@ class UI : public UIColorTheme {
 
     void UpdatePalette(size_t ind);
 
-    void SetGameObject(const GameObject& gae_object);
+    
 
     void SetGameObject(size_t ind);
+
+    void SetGameObject(const GameObject& game_object);
 
     void GameObjectRotateClockwise();
 
@@ -151,5 +164,7 @@ class UI : public UIColorTheme {
     void SetFPS(size_t val);
 
     float GetFPS();
+
+    void SetFieldSize();
 
 };

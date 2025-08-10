@@ -22,7 +22,7 @@ UIDualTextureButton::UIDualTextureButton(
     [](){}) 
 {
     current_state_ = initial_state;
-    UIButton::binding = [this, func]() {
+    UIButton::binding_ = [this, func]() {
         current_state_ = !current_state_;
         func(current_state_);
     };
@@ -32,45 +32,25 @@ UIDualTextureButton::UIDualTextureButton(
 
 void UIDualTextureButton::Draw() {
     UIButton::Draw();
-    if (current_state_) {
-        DrawTexturePro(
-            *true_state_,
-            Rectangle{
-                0.0f,
-                0.0f,
-                static_cast<float>(true_state_->width),
-                static_cast<float>(true_state_->height)
-            },
-            Rectangle{
-                static_cast<float>(GetAbsoluteXPosition() + 2),
-                static_cast<float>(GetAbsoluteYPosition() + 2),
-                static_cast<float>(width_ - 4),
-                static_cast<float>(height_ - 4)
-            },
-            Vector2{0.0f, 0.0f},
+    const Texture2D* this_texture = current_state_ ? true_state_ : false_state_;
+    DrawTexturePro(
+        *this_texture,
+        Rectangle{
             0.0f,
-            WHITE
-        );
-    } else {
-        DrawTexturePro(
-            *false_state_,
-            Rectangle{
-                0.0f,
-                0.0f,
-                static_cast<float>(false_state_->width),
-                static_cast<float>(false_state_->height)
-            },
-            Rectangle{
-                static_cast<float>(GetAbsoluteXPosition() + 2),
-                static_cast<float>(GetAbsoluteYPosition() + 2),
-                static_cast<float>(width_ - 4),
-                static_cast<float>(height_ - 4)
-            },
-            Vector2{0.0f, 0.0f},
             0.0f,
-            WHITE
-        );
-    }
+            static_cast<float>(this_texture->width),
+            static_cast<float>(this_texture->height)
+        },
+        Rectangle{
+            static_cast<float>(GetAbsoluteXPosition() + 2),
+            static_cast<float>(GetAbsoluteYPosition() + 2),
+            static_cast<float>(width_ - 4),
+            static_cast<float>(height_ - 4)
+        },
+        Vector2{0.0f, 0.0f},
+        0.0f,
+        ui.ui_accent_color_3
+    );
 }
 
 void UIDualTextureButton::SetState(bool val) {

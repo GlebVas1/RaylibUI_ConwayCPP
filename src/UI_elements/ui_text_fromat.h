@@ -18,3 +18,9 @@ class UITextFormat<int> {
     protected:
     const char* format_ = "%d";
 };
+
+template <>
+class UITextFormat<size_t> {
+    protected:
+    const char* format_ = "%zu";
+};

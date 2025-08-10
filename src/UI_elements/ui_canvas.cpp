@@ -38,7 +38,7 @@ void UICanvas::Draw() {
         UnloadImageColors(pixels);
         
         DrawTexturePro(
-            *main_grid_texture_,
+            show_grid_ ? *main_grid_texture_ : *main_grid_empty_texture_,
             Rectangle{
                 0,
                 0,
@@ -77,8 +77,8 @@ void UICanvas::InitializeMainTexture() {
 }
 
 void UICanvas::InitializeMainGridTexture() {
-    uint8_t* data = static_cast<uint8_t*>(malloc(width_ * height_ * 4));
-    memset(data, 0, 4 * width_ * height_);
+    uint8_t* data_grid_full = static_cast<uint8_t*>(malloc(width_ * height_ * 4));
+    memset(data_grid_full, 0, 4 * width_ * height_);
 
     RenderTexture2D grid_render_texture = LoadRenderTexture(width_, height_);
     SetTextureFilter(grid_render_texture.texture, TEXTURE_FILTER_TRILINEAR);
@@ -93,51 +93,73 @@ void UICanvas::InitializeMainGridTexture() {
 
     BeginBlendMode(BLEND_SUBTRACT_COLORS);
 
-    if (show_grid_) {
-        for (size_t x = 0; x < main_texture_width_; ++x) {
-            for (size_t y = 0; y < main_texture_height_; ++y) {
-                DrawRectangleRounded(
-                Rectangle{
-                        static_cast<float>(x * cell_width + 1.1f),
-                        static_cast<float>(y * cell_height + 1.1f),
-                        static_cast<float>(cell_width - 1.1f),
-                        static_cast<float>(cell_height - 1.1f)
-                    },
-                    0.4f, 
+    for (size_t x = 0; x < main_texture_width_; ++x) {
+        for (size_t y = 0; y < main_texture_height_; ++y) {
+            DrawRectangleRounded(
+            Rectangle{
+                    static_cast<float>(x * cell_width + 1.1f),
+                    static_cast<float>(y * cell_height + 1.1f),
+                    static_cast<float>(cell_width - 1.1f),
+                    static_cast<float>(cell_height - 1.1f)
+                },
+                0.4f, 
+                4,
+                Color({
                     0,
-                    Color({
-                        0,
-                        0,
-                        0,
-                        255
-                    })
-                );
-            }
+                    0,
+                    0,
+                    255
+                })
+            );
         }
-    } else {
-        DrawRectangleRounded(
-        Rectangle{
-                1.1f,
-                1.1f,
-                static_cast<float>(width_) - 1.1f,
-                static_cast<float>(height_) -1.1f
-            },
-            static_cast<float>(10) / width_, 
-            0,
-            Color({
-                0,
-                0,
-                0,
-                255
-            })
-        );
     }
+
+
+    
     EndBlendMode();
 
     EndTextureMode();
 
     main_grid_texture_ = std::make_shared<Texture2D>(grid_render_texture.texture);
     SetTextureFilter(*main_grid_texture_, TEXTURE_FILTER_BILINEAR);
+
+    uint8_t* data_grid_empty = static_cast<uint8_t*>(malloc(width_ * height_ * 4));
+    memset(data_grid_empty, 0, 4 * width_ * height_);
+
+    RenderTexture2D grid_empty_render_texture = LoadRenderTexture(width_, height_);
+    SetTextureFilter(grid_empty_render_texture.texture, TEXTURE_FILTER_TRILINEAR);
+
+    BeginTextureMode(grid_empty_render_texture);
+
+    ClearBackground(Color{0, 0, 0, 0});
+    
+    DrawRectangle(0, 0, width_, height_, grid_color_);
+
+    BeginBlendMode(BLEND_SUBTRACT_COLORS);
+
+    DrawRectangleRounded(
+    Rectangle{
+            1.1f,
+            1.1f,
+            static_cast<float>(width_) - 1.1f,
+            static_cast<float>(height_) -1.1f
+        },
+        static_cast<float>(10) / width_, 
+        4,
+        Color({
+            0,
+            0,
+            0,
+            255
+        })
+    );
+
+    EndBlendMode();
+
+    EndTextureMode();
+
+    main_grid_empty_texture_ = std::make_shared<Texture2D>(grid_empty_render_texture.texture);
+    SetTextureFilter(*main_grid_empty_texture_, TEXTURE_FILTER_BILINEAR);
 }
 
 

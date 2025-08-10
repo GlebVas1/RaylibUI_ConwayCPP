@@ -1,5 +1,7 @@
 #include "ui_texture_button.h"
 #include "../UI_Tools/ui_textures_loader.h"
+#include "ui.h"
+
 UITextureButton::UITextureButton(
     int x_pos, 
     int y_pos, 
@@ -30,6 +32,6 @@ void UITextureButton::Draw() {
         },
         Vector2{0.0f, 0.0f},
         0.0f,
-        WHITE
+        ui.ui_accent_color_3
     );
 }

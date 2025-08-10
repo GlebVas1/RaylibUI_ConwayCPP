@@ -7,7 +7,7 @@
 class UIPanel : public UIElement {
   private:
     float roundness_;
-    std::shared_ptr<UIShadowEffect> shadow_ = nullptr;
+    std::unique_ptr<UIShadowEffect> shadow_ = nullptr;
   public:
     void SetRoundness(float val);
     void Draw() override;

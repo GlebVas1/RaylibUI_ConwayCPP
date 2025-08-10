@@ -8,7 +8,8 @@ class UIDualTextureButton : public UIButton {
     Texture2D* true_state_;
     Texture2D* false_state_;
     bool current_state_ = false;
-    std::function<void(bool)> binding;
+    std::function<void(bool)> on_state_change_function_;
+
     public:
     UIDualTextureButton(
         int x, 

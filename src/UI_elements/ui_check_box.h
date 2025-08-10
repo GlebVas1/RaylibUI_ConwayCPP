@@ -8,7 +8,8 @@
 
 class UICheckbox : public UIElement, UIMouseState {
     private:
-    bool* value_;
+    bool value_ = false;
+    std::function<void(bool)> binding_;
     int x_pos_ = 0;
     int y_pos_ = 0;
     int box_size_ = 20;
@@ -22,7 +23,8 @@ class UICheckbox : public UIElement, UIMouseState {
     void Draw() override;
     void Update() override;
     UICheckbox();
-    UICheckbox(int x, int y, bool* val_ptr, const std::string& text);
-    void SetBoolPtr(bool* ptr);
+    UICheckbox(int x, int y, std::function<void(bool)> func, const std::string& text);
 
+    bool GetValue();
+    void SetValue(bool val);
 };

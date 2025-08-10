@@ -13,7 +13,3 @@ class GameObject {
     GameObject(const std::vector<std::vector<uint8_t>>& array, const std::string& name, bool should_grid_show);
 
 };
-
-extern GameObject vertical3;
-
-extern std::vector<GameObject> ALL_OBJECTS;

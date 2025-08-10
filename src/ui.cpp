@@ -17,55 +17,25 @@ UI::~UI() {
 }
 
 void UI::InitializeWindow() {
+    std::cout << "Start window initializing" << std::endl;
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(window_width, window_height, "Conway");
     UITextureLoader::GetInstance().LoadAllTextures();
     UITools::GetMainFont();
     SetTextLineSpacing(2); 
+    std::cout << "Window initialized" << std::endl;
 }
 
 void UI::Start() {
     
-    
     float pause = false;
 
-    //Font font = LoadFontEx("../resources/fonts/jaipur.ttf", 32, 0, 250);
 
+    main_canvas_->SetCanvasTextureDimensions(default_field_width_, default_field_height_);
     
-
     
-    main_canvas_->SetCanvasTextureDimensions(512, 512);
-    // canvas_->SetShowGrid(true);
-    
-    main_canvas_panel_->Init();
     main_canvas_->Init();
     pallete_->Init();
-    brush_settings_panel_->Init();
-    game_rule_panel_->Init();
-    palette_panel_->Init();
-    game_object_panel_->Init();
-    game_control_panel_->Init();
-    
-    std::vector<std::string> game_rule_names;
-    for (const auto& elem : ALL_RULES) {
-        game_rule_names.push_back(elem->name);
-    }
-    game_rule_list_->SetVector(game_rule_names);
-    game_rule_list_->Init();
-
-    std::vector<std::string> palette_names;
-    for (const auto& elem : ALL_PALLETTES) {
-        palette_names.push_back(elem.name);
-    }
-    palette_list_->SetVector(palette_names);
-    palette_list_->Init();
-
-    std::vector<std::string> game_objects_names;
-    for (const auto& elem : ALL_OBJECTS) {
-        game_objects_names.push_back(elem.name);
-    }
-    game_object_list_->SetVector(game_objects_names);
-    game_object_list_->Init();
 
     SetTargetFPS(100);
     
@@ -126,17 +96,12 @@ void UI::InitializeElements() {
 
     main_canvas_panel_ = std::make_shared<UIPanel>(0, 0, 1080, 1080, 0.015f);
     main_canvas_panel_->SetParrent(null_widget_.get());
-    
-
-
-    main_canvas_ = std::make_shared<UIMainCanvas>();
-    main_canvas_->SetParrent(main_canvas_panel_.get());
-    main_canvas_->SetCanvasGridColor(ui_background_color);
-    main_canvas_->SetPosition(5, 5);
-    main_canvas_->SetDimensions(1070, 1070);
+    main_canvas_panel_->Init();
 
     game_control_panel_ = std::make_shared<UIPanel>(1120, 40, 385, 50, 0.2f);
     game_control_panel_->SetParrent(null_widget_.get());
+    game_control_panel_->Init();
+    
 
     game_control_play_button_ = std::make_shared<UIDualTextureButton>(
         5, 
@@ -169,53 +134,182 @@ void UI::InitializeElements() {
     );
     game_control_panel_fps_label_->SetParrent(game_control_panel_.get());
 
-    pallete_ = std::make_shared<UIPalette>();
-    pallete_->SetXPosition(1465);
-    pallete_->SetYPosition(140);
-    pallete_->SetParrent(null_widget_.get());
+    field_control_panel_ = std::make_shared<UIPanel>(1120, 110, 385, 70, 0.2f);
+    field_control_panel_->SetParrent(null_widget_.get());
+    field_control_panel_->Init();
 
-    brush_settings_panel_ = std::make_shared<UIPanel>(1300, 140, 145, 160, 0.1f);
+    field_control_label_ = std::make_shared<UILabel>(10, 8, "Field settings");
+    field_control_label_->SetParrent(field_control_panel_.get());
+
+    field_grid_toogle_ = std::make_shared<UIToggle>(
+        10, 
+        30, 
+        [this](bool val){ main_canvas_->SetShowGrid(val); }, 
+        "Grid"
+    );
+    field_grid_toogle_->SetParrent(field_control_panel_.get());
+
+    field_dim_lock_button_ = std::make_shared<UIDualTextureButton>(
+        265, 
+        25, 
+        20,
+        20,
+        0.1f,
+        [this](bool val){}, 
+        "lock",
+        "unlock",
+        true
+    );
+    field_dim_lock_button_->SetParrent(field_control_panel_.get());
+
+    field_width_spinbox_ = std::make_shared<UISpinBox<size_t>>(
+        315, 
+        10, 
+        [this](size_t val) {
+            if (field_dim_lock_button_->GetState()) {
+                field_height_spinbox_->SetValue(field_width_spinbox_->GetValue());
+            }
+        }, 
+        10
+    );
+
+    field_width_spinbox_->SetMinValue(60);
+    field_width_spinbox_->SetMaxValue(1060);
+    field_width_spinbox_->SetValue(default_field_width_);
+    field_width_spinbox_->SetParrent(field_control_panel_.get());
+
+    field_control_size_H_label_ = std::make_shared<UILabel>(295, 12, "H:");
+    field_control_size_H_label_->SetParrent(field_control_panel_.get());
+
+    field_height_spinbox_ = std::make_shared<UISpinBox<size_t>>(
+        315, 
+        40, 
+        [this](size_t val) {
+            if (field_dim_lock_button_->GetState()) {
+                field_width_spinbox_->SetValue(field_height_spinbox_->GetValue());
+            }
+        }, 
+        10
+    );
+
+    field_height_spinbox_->SetMinValue(60);
+    field_height_spinbox_->SetMaxValue(1060);
+    field_height_spinbox_->SetValue(default_field_height_);
+    field_height_spinbox_->SetParrent(field_control_panel_.get());
+
+    field_control_size_W_label_ = std::make_shared<UILabel>(295, 42, "W:");
+    field_control_size_W_label_->SetParrent(field_control_panel_.get());
+
+    field_set_button_ = std::make_shared<UITextButton>(
+        180, 
+        10, 
+        80, 
+        20, 
+        0.1f, 
+        [this](){ SetFieldSize(); }, 
+        "Resize"
+    );
+    field_set_button_->SetParrent(field_control_panel_.get());
+
+
+    brush_settings_panel_ = std::make_shared<UIPanel>(1300, 200, 145, 160, 0.1f);
     brush_settings_panel_->SetParrent(null_widget_.get());
-    
+    brush_settings_panel_->Init();
+
     brush_settings_label_ = std::make_shared<UILabel>(10, 10, "Brush settings");
     brush_settings_label_->SetParrent(brush_settings_panel_.get());
 
-    brush_size_spinbox_ = std::make_shared<UISpinBox<int>>(10, 40, &brush_radius_, 1.0f);
+    brush_size_spinbox_ = std::make_shared<UISpinBox<int>>(
+        10, 
+        40, 
+        [this](int value){ }, 
+        1.0f
+    );
+
     brush_size_spinbox_->SetMaxValue(100);
     brush_size_spinbox_->SetMinValue(1);
+    brush_size_spinbox_->SetValue(1);
     brush_size_spinbox_->SetParrent(brush_settings_panel_.get());
-
 
     brush_settings_size_label_ = std::make_shared<UILabel>(80, 43, "Size");
     brush_settings_size_label_->SetParrent(brush_settings_panel_.get());
 
-    brush_round_checkbox_ = std::make_shared<UICheckbox>(10, 70, &brush_round_, "Round");
+    brush_round_checkbox_ = std::make_shared<UICheckbox>(
+        10, 
+        70, 
+        [this](bool val) {  }, 
+        "Round"
+    );
     brush_round_checkbox_->SetParrent(brush_settings_panel_.get());
 
-    brush_random_checkbox_ = std::make_shared<UICheckbox>(10, 100, &brush_random_, "Random");
+    brush_random_checkbox_ = std::make_shared<UICheckbox>(
+        10, 
+        100, 
+        [this](bool val) {  }, 
+        "Random"
+    );
     brush_random_checkbox_->SetParrent(brush_settings_panel_.get());
 
-    brush_object_toogle_ = std::make_shared<UIToggle>(10, 130, &brush_object_mode_, "Object");
+    brush_object_toogle_ = std::make_shared<UIToggle>(
+        10, 
+        130, 
+        [this](bool val) {  }, 
+        "Object"
+    
+    );
     brush_object_toogle_->SetParrent(brush_settings_panel_.get());
 
+    main_canvas_ = std::make_shared<UIMainCanvas>();
+    main_canvas_->SetParrent(main_canvas_panel_.get());
+    main_canvas_->SetCanvasGridColor(ui_accent_color_1);
+    main_canvas_->SetPosition(5, 5);
+    main_canvas_->SetDimensions(1070, 1070);
 
-    palette_panel_ = std::make_shared<UIPanel>(1300, 320, 145, 290, 0.1f);
+    
+
+    pallete_ = std::make_shared<UIPalette>();
+    pallete_->SetXPosition(1465);
+    pallete_->SetYPosition(200);
+    pallete_->SetParrent(null_widget_.get());
+
+
+    palette_panel_ = std::make_shared<UIPanel>(1300, 380, 145, 290, 0.1f);
     palette_panel_->SetParrent(null_widget_.get());
+    palette_panel_->Init();
 
-    palette_list_ = std::make_shared<UIList>(10, 40, 135, 240, [this](size_t ind) { UpdatePalette(ind); });
+    palette_list_ = std::make_shared<UIList>(
+        10, 
+        40, 
+        135, 
+        240, 
+        [this](size_t ind) { UpdatePalette(ind); }
+    );
+
     palette_list_->SetParrent(palette_panel_.get());
+    palette_list_->SetVector(controller_->GetAllPalettesNames());
+    palette_list_->Init();
 
     palette_label_ = std::make_shared<UILabel>(10, 10, "Palette");
     palette_label_->SetParrent(palette_panel_.get());
 
-    game_object_panel_ = std::make_shared<UIPanel>(1120, 140, 160, 470, 0.1f);
+    game_object_panel_ = std::make_shared<UIPanel>(1120, 200, 160, 470, 0.1f);
     game_object_panel_->SetParrent(null_widget_.get());
+    game_object_panel_->Init();
 
     game_object_label_ = std::make_shared<UILabel>(10, 10, "Game objects");
     game_object_label_->SetParrent(game_object_panel_.get());
 
-    game_object_list_ = std::make_shared<UIList>(10, 40, 150, 200, [this](size_t ind){ SetGameObject(ind); });
+    game_object_list_ = std::make_shared<UIList>(
+        10, 
+        40, 
+        150, 
+        200, 
+        [this](size_t ind){ SetGameObject(ind); }
+    );
+
     game_object_list_->SetParrent(game_object_panel_.get());
+    game_object_list_->SetVector(controller_->GetAllObjectsNames());
+    game_object_list_->Init();
 
     game_object_canvas_ = std::make_shared<UIObjectCanvas>();
     game_object_canvas_->SetParrent(game_object_panel_.get());
@@ -273,11 +367,20 @@ void UI::InitializeElements() {
         "invert");
     game_object_invert_button_->SetParrent(game_object_panel_.get());
 
-    game_rule_panel_ = std::make_shared<UIPanel>(1120, 630, 385, 200, 0.08f);
+    game_rule_panel_ = std::make_shared<UIPanel>(1120, 690, 385, 200, 0.08f);
     game_rule_panel_->SetParrent(null_widget_.get());
+    game_rule_panel_->Init();
 
     game_rule_list_ = std::make_shared<UIList>(10, 10, 365, 180, [this](size_t ind) { SetRule(ind); });
     game_rule_list_->SetParrent(game_rule_panel_.get());
+
+    std::vector<std::string> game_rule_names;
+    for (const auto& elem : ALL_RULES) {
+        game_rule_names.push_back(elem->name);
+    }
+    game_rule_list_->SetVector(game_rule_names);
+    game_rule_list_->Init();
+
 }
 
 void UI::AddUIElement(UIElement* elem_ptr) {
@@ -287,19 +390,16 @@ void UI::AddUIElement(UIElement* elem_ptr) {
 void UI::SetColorPallette(const std::vector<GameColor>& palette) {
     pallete_->SetColorPallette(palette);
     pallete_->Init();
-    current_palette_ = palette;
     game_object_canvas_->UpdatePalette(palette);
-    
 }
 
 const std::vector<GameColor>& UI::GetCurrentPalette() {
-    return current_palette_;
+    return pallete_->GetColorPalette();
 }
 
 void UI::SetColorCount(size_t color_count) {
     pallete_->SetColorCount(color_count);
     pallete_->Init();
-    current_colors_count_ = color_count;
 }
 
 void UI::InitPalette() {
@@ -311,7 +411,7 @@ void UI::SetSelectedColor(uint8_t val) {
 }
 
 void UI::DrawBrush(size_t x, size_t y) {
-    if (brush_object_mode_) {
+    if (brush_object_toogle_->GetValue()) {
         const auto& array = game_object_canvas_->GetObject().array;
         const size_t size = game_object_canvas_->GetObject().size;
         for (int x1 = 0; x1 < size; ++x1) {
@@ -320,11 +420,12 @@ void UI::DrawBrush(size_t x, size_t y) {
             }
         }
     } else {
-        for (int x1 = -brush_radius_; x1 < brush_radius_; ++x1){
-            for (int y1 = -brush_radius_; y1 < brush_radius_; ++y1) {
-                uint8_t val_to_set = brush_random_ ? pallete_->GetRandomVal() : pallete_->GetSelectedVal();
-                if (brush_round_) {
-                    if (x1 * x1 + y1 * y1 < brush_radius_ * brush_radius_) {
+        int brush_radius = brush_size_spinbox_->GetValue();
+        for (int x1 = -brush_radius; x1 < brush_radius; ++x1){
+            for (int y1 = -brush_radius; y1 < brush_radius; ++y1) {
+                uint8_t val_to_set = brush_random_checkbox_->GetValue() ? pallete_->GetRandomVal() : pallete_->GetSelectedVal();
+                if (brush_round_checkbox_->GetValue()) {
+                    if (x1 * x1 + y1 * y1 < brush_radius * brush_radius) {
                         controller_->SetFieldPixel(x1 + static_cast<int>(x), y1 + static_cast<int>(y), val_to_set);
                     }
                 } else {
@@ -343,12 +444,12 @@ void UI::UpdatePalette(size_t ind) {
     controller_->SetPalette(ind);
 }
 
-void UI::SetGameObject(const GameObject& game_object) {
-    game_object_canvas_->SetObject(game_object);
-}
-
 void UI::SetGameObject(size_t ind) {
     controller_->SetObject(ind);
+}
+
+void UI::SetGameObject(const GameObject& game_object) {
+    game_object_canvas_->SetObject(game_object);
 }
 
 void UI::GameObjectRotateClockwise() {
@@ -365,4 +466,10 @@ void UI::SetFPS(size_t val) {
 
 float UI::GetFPS() {
     return controller_->GetFPS();
+}
+
+void UI::SetFieldSize() {
+    main_canvas_->SetColorBuffer(nullptr);
+    main_canvas_->SetCanvasTextureDimensions(field_height_spinbox_->GetValue(), field_width_spinbox_->GetValue());
+    controller_->SetFieldSize(field_height_spinbox_->GetValue(), field_width_spinbox_->GetValue());
 }

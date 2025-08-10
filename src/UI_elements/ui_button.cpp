@@ -3,7 +3,7 @@
 
 UIButton::UIButton(int x_pos, int y_pos, int width, int height, float roundness, std::function<void()> func) : UIElement(x_pos, y_pos, width, height) {
     roundness_ = roundness;
-    binding = func;
+    binding_ = func;
 }
 
 void UIButton::Draw() {
@@ -50,7 +50,7 @@ void UIButton::Update() {
     if (mouse_on_button) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             state_ = MouseState::MOUSE_PRESSED;
-            binding();
+            binding_();
         } else {
             state_ = MouseState::MOUSE_HOVERED;
         }
