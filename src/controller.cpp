@@ -2,6 +2,7 @@
 #include "ui.h"
 #include "field.h"
 #include "game_objects_loader.h"
+#include "game_palette_loader.h"
 
 Controller::Controller() {
     ui = &UI::GetInstance();
@@ -21,6 +22,7 @@ const std::vector<std::string>& Controller::GetAllObjectsNames() {
    return GameObjectLoader::GetInstance().GetAllNames();
 }
 
+
 void Controller::SetObject(size_t ind) {
     ui->SetGameObject(GameObjectLoader::GetInstance().GetObjectById(ind));
 }
@@ -38,9 +40,13 @@ GameRule* Controller::GetFieldRule() {
     return field->GetGameRule();
 }
 
+const std::vector<std::string>& Controller::GetAllPalettesNames() {
+   return GamePaletteLoader::GetInstance().GetAllNames();
+}
+
 void Controller::SetPalette(size_t ind) {
-    field->SetColorPallette(&(ALL_PALLETTES[ind].pallette));
-    ui->SetColorPallette(ALL_PALLETTES[ind].pallette);
+    field->SetColorPallette(&GamePaletteLoader::GetInstance().GetPaleteeById(ind));
+    ui->SetColorPallette(GamePaletteLoader::GetInstance().GetPaleteeById(ind));
 }
 
 void Controller::SetFieldSize(size_t x, size_t y) {
@@ -53,13 +59,13 @@ void Controller::StartUI() {
     ui->SetColorBuffer(field->GetColorBuffer());
 
 
-    auto gcp = GameColorBW();
+    auto gcp = GamePaletteLoader::GetInstance().GetPaleteeById(0);
     auto gr = ALL_RULES[0];
 
     ui->SetColorPallette(gcp);
     ui->SetColorCount(gr->maximum_age);
 
-    ui->SetGameObject(ALL_OBJECTS[0]);
+    ui->SetGameObject(GameObjectLoader::GetInstance().GetObjectById(0));
     // ui->InitPalette();
     
     ui->Start();
@@ -80,7 +86,12 @@ void Controller::SetPause(float val) {
 
 void Controller::Start() {
 
-    auto gcp = GameColorBW();
+    ui->InitializeWindow();
+    //GameObjectLoader::GetInstance();
+    GameObjectLoader::GetInstance().LoadAllObjects("../GameObjects/all_objects.txt");
+    GamePaletteLoader::GetInstance().LoadAllPalettes("../Palettes/all_palettes.txt");
+
+    auto gcp = GamePaletteLoader::GetInstance().GetPaleteeById(0);
     auto gr = ALL_RULES[0];
     field->SetColorPallette(&gcp);
     field->SetGameRule(gr);
@@ -88,10 +99,7 @@ void Controller::Start() {
     field->CreateUpdateThreads();
 
     /* To allow loading textures cause of raylib subtles*/
-    ui->InitializeWindow();
-    //GameObjectLoader::GetInstance();
-    GameObjectLoader::GetInstance().LoadAllObjects("../GameObjects/all_objects.txt");
-
+    
     std::thread t(&Field::MultiThreadUpdating, field);
    
     StartUI();

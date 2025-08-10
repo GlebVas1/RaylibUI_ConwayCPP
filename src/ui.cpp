@@ -261,7 +261,7 @@ void UI::InitializeElements() {
 
     main_canvas_ = std::make_shared<UIMainCanvas>();
     main_canvas_->SetParrent(main_canvas_panel_.get());
-    main_canvas_->SetCanvasGridColor(ui_background_color);
+    main_canvas_->SetCanvasGridColor(ui_accent_color_1);
     main_canvas_->SetPosition(5, 5);
     main_canvas_->SetDimensions(1070, 1070);
 
@@ -286,12 +286,7 @@ void UI::InitializeElements() {
     );
 
     palette_list_->SetParrent(palette_panel_.get());
-
-    std::vector<std::string> palette_names;
-    for (const auto& elem : ALL_PALLETTES) {
-        palette_names.push_back(elem.name);
-    }
-    palette_list_->SetVector(palette_names);
+    palette_list_->SetVector(controller_->GetAllPalettesNames());
     palette_list_->Init();
 
     palette_label_ = std::make_shared<UILabel>(10, 10, "Palette");

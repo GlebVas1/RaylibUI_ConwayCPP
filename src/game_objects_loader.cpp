@@ -4,16 +4,19 @@
 GameObjectLoader::GameObjectLoader() {}
 
 void GameObjectLoader::LoadObject(const std::string& name, const std::string& path) {
+    std::cout << "GameObjectLoader start load " << name << " on path " << path << std::endl;
     Texture2D texture = LoadTexture(path.c_str());
     
     if (texture.width != texture.height) {
         return;
+        std::cerr << "GameObjectLoader bad texture" << std::endl;
     }
-    
+
     size_t size = texture.width;
     Image object_image = LoadImageFromTexture(texture);
     Color* pixels = LoadImageColors(object_image);
 
+    std::cout << "GameObjectLoader start fill" << std::endl;
     GameObject obj;
     obj.array = std::vector<std::vector<uint8_t>>(size, std::vector<uint8_t>(size, 0));
     for (size_t x = 0; x < size; ++x) {
@@ -35,6 +38,8 @@ void GameObjectLoader::LoadObject(const std::string& name, const std::string& pa
 
     names_.push_back(obj.name);
     objects_.push_back(obj);
+
+    std::cout << "GameObjectLoader success " << name << " on path " << path << std::endl;
 }
 
 GameObjectLoader& GameObjectLoader::GetInstance() {
@@ -49,19 +54,15 @@ void GameObjectLoader::AddGameObject(const GameObject& obj) {
 
 void GameObjectLoader::LoadAllObjects(const std::string& path) {
 
-    for (const auto& obj : ALL_OBJECTS) {
-        objects_.push_back(obj);
-        names_.push_back(obj.name);
-    }
-
     std::ifstream all_objects_file(path);
     std::string object_name;
     std::string object_path;
     
     while (!all_objects_file.eof()){
         all_objects_file >> object_name >> object_path;
+        LoadObject(object_name, object_path); 
     }
-    LoadObject(object_name, object_path); 
+    
 }
 
 const GameObject& GameObjectLoader::GetObjectById(size_t id) {

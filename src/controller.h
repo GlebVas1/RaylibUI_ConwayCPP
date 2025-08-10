@@ -27,6 +27,7 @@ class Controller {
     void SetFieldRule(size_t ind);
     GameRule* GetFieldRule();
 
+    const std::vector<std::string>& GetAllPalettesNames();
     void SetPalette(size_t ind);
     
     void SetFieldSize(size_t x, size_t y);
