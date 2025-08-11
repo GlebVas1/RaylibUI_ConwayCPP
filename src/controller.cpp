@@ -73,7 +73,7 @@ void Controller::StartUI() {
 }
 
 void Controller::SetFPS(size_t val) {
-    field->SetFPS(val);
+    field->SetFrameDelayMilliseconds(val);
 }
 
 float Controller::GetFPS() {
@@ -105,6 +105,7 @@ void Controller::Start() {
     std::thread t(&Field::MultiThreadUpdating, field);
    
     StartUI();
+    field->StopThreads();
     t.join();
 }
 

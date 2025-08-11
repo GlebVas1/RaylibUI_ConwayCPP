@@ -5,7 +5,7 @@ class GameObject {
     public:
     std::string name;
     bool should_grid_show = true;
-    size_t size;
+    size_t size = 0;
     std::vector<std::vector<uint8_t>> array;
     GameObject();
     GameObject(const std::string& name);

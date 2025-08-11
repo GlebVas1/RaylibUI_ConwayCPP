@@ -1,6 +1,20 @@
 #include "ui_object_canvas.h"
 #include "ui.h"
 
+UIObjectCanvas::UIObjectCanvas() {
+
+} 
+
+UIObjectCanvas::~UIObjectCanvas() {
+    if (color_buffer_ != nullptr) {
+        free(color_buffer_);
+    }
+}
+
+size_t UIObjectCanvas::BufferIndex(size_t size, size_t x, size_t y) {
+    return (x * size + y) * 4;
+}
+
 void UIObjectCanvas::Init() {
     InitializeMainTexture();
     InitializeMainGridTexture();
@@ -23,12 +37,7 @@ void UIObjectCanvas::Update() {
     }
 }
 
-size_t UIObjectCanvas::BufferIndex(size_t size, size_t x, size_t y) {
-    return (x * size + y) * 4;
-}
-
 void UIObjectCanvas::DrawObject() {
-
     for (size_t x = 0; x < this_object_.size; ++x) {
         for (size_t y = 0; y < this_object_.size; ++y) {
             GameColor this_color;
@@ -62,7 +71,10 @@ void UIObjectCanvas::SetObject(const GameObject& object) {
 
     SetShowGrid(object.should_grid_show);
     SetCanvasTextureDimensions(object.size, object.size);
-    
+}
+
+const GameObject& UIObjectCanvas::GetObject() {
+    return this_object_;
 }
 
 void UIObjectCanvas::UpdatePalette(const std::vector<GameColor>& palette) {
@@ -89,9 +101,6 @@ uint8_t UIObjectCanvas::GetPixel(size_t x, size_t y) {
     return this_object_.array[x][y];
 }
 
-const GameObject& UIObjectCanvas::GetObject() {
-    return this_object_;
-}
 
 void UIObjectCanvas::GameObjectRotateClockwise() {
     std::vector<std::vector<uint8_t>> new_array = this_object_.array;

@@ -1,6 +1,10 @@
 #include "field.h"
 #include "controller.h"
 
+//////////////
+// Private: //
+//////////////
+
 Field::Field() :
     buffer_0_(static_cast<uint8_t*>(malloc(field_width_ * field_height_))),
     buffer_1_(static_cast<uint8_t*>(malloc(field_width_ * field_height_))),
@@ -24,12 +28,9 @@ uint8_t* Field::GetWriteBuffer() {
 void Field::SwitchBuffer() {
   read_buffer_ = 1 - read_buffer_;
 }
+
 size_t Field::BufferIndex(size_t x, size_t y) {
     return x * field_width_ + y;
-}
-
-uint8_t* Field::GetColorBuffer() {
-    return color_buffer_;
 }
 
 void Field::ReinitializeBuffer() {
@@ -59,7 +60,6 @@ void Field::SetPixelColor(size_t x, size_t y,  uint8_t r, uint8_t g, uint8_t b, 
 uint8_t Field::GetPixel(size_t x, size_t y, uint8_t* buffer) {
     return buffer[BufferIndex(x, y)];
 }
-
 
 void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* buffer_to_write) {
   size_t neigh_count = 0;
@@ -130,40 +130,6 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
   }
 }
 
-Field& Field::GetInstance() {
-    static Field obj;
-    return obj;
-}
-
-void Field::SetGameRule(GameRule* rule) {
-    current_rule_ = rule;
-}
-
-GameRule* Field::GetGameRule() {
-  return current_rule_;
-}
-
-void Field::SetColorPallette(std::vector<GameColor>* pallette) {
-    current_pallete_ = pallette;
-}
-
-void Field::SetFrameDelayMilliseconds(size_t val) {
-  frame_milliseconds_delay_ = std::max<size_t>(5, std::min<size_t>(val, 4'000));
-
-}
-
-void Field::CreateUpdateThreads() {
-  thread_creation_mutex.lock();
-  thread_should_start = std::vector<std::atomic_bool>(threads_count);
-
-  for (size_t t = 0; t < threads_count; ++t) {
-    thread_should_start[t].store(false);
-    computing_threads_.emplace_back(&Field::ThreadUpdateFunction, this, t, t);
-    
-  };
-  thread_creation_mutex.unlock();
-}
-
 void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
   thread_creation_mutex.lock();
   thread_creation_mutex.unlock();
@@ -171,7 +137,17 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
   while (processing_) {
     {
       std::unique_lock<std::mutex> lk(compute_start_mutex);
-      compute_start_cv.wait(lk, [&](){ return thread_should_start[thread_id].load(std::memory_order_acq_rel); });
+      compute_start_cv.wait(
+        lk, 
+        [&](){
+          return (thread_should_start[thread_id].load(std::memory_order_acq_rel)) || !processing_;
+        }
+      );
+    }
+
+    if (!processing_) {
+      compute_end_cv.notify_one();
+      return;
     }
 
     thread_should_start[thread_id].store(false, std::memory_order_acq_rel);
@@ -190,32 +166,65 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
       compute_end_cv.notify_one();
     }
   }
-  
+}
+
+//////////////
+// Public:  //
+//////////////
+
+Field& Field::GetInstance() {
+    static Field obj;
+    return obj;
+}
+
+void Field::SetController(Controller* controller) {
+  controller_ = controller;
+}
+
+void Field::CreateUpdateThreads() {
+  thread_creation_mutex.lock();
+  thread_should_start = std::vector<std::atomic_bool>(threads_count);
+
+  for (size_t t = 0; t < threads_count; ++t) {
+    thread_should_start[t].store(false);
+    computing_threads_.emplace_back(&Field::ThreadUpdateFunction, this, t, t);
+    computing_threads_.back().detach();
+  };
+
+  thread_creation_mutex.unlock();
 }
 
 void Field::MultiThreadUpdating() {
-
   size_t frame_counter = 0;
 
-  while (true) {
+  while (processing_) {
     float fps_count = 0;
     std::chrono::steady_clock::time_point fps_begin = std::chrono::steady_clock::now();
     std::this_thread::sleep_for(std::chrono::milliseconds(frame_milliseconds_delay_));
     
     {
       std::lock_guard<std::mutex> l(debug_m);
-      //std::cout << "Update start frame "  << ++frame_counter << std::endl;
+      std::cout << "Update start frame "  << ++frame_counter << std::endl;
     }
 
-    // ranged for will not work
-    for (size_t i = 0; i < threads_count; ++i) {
-      thread_should_start[i].store(true, std::memory_order_acq_rel);
+    for (auto& state : thread_should_start) {
+      state.store(true, std::memory_order_acq_rel);
+    }
+
+    if (!processing_) {
+      compute_start_cv.notify_all();
+      return;
     }
 
     compute_start_cv.notify_all();
 
     std::unique_lock<std::mutex> lk(compute_end_mutex);
-    compute_end_cv.wait(lk, [&](){ return current_threads_finished.load(std::memory_order_acquire) == threads_count; });
+    compute_end_cv.wait(
+      lk, 
+      [&](){ 
+        return (current_threads_finished.load(std::memory_order_acquire) == threads_count) || !processing_; 
+      }
+    );
 
     SwitchBuffer();
 
@@ -228,17 +237,53 @@ void Field::MultiThreadUpdating() {
       should_reinitialize_.store(false);
     }
 
-    
+
     std::chrono::steady_clock::time_point fps_end = std::chrono::steady_clock::now();
     auto fps_result = std::chrono::duration_cast<std::chrono::milliseconds>(fps_end - fps_begin).count();
     current_fps_ = 1.0 / static_cast<float>(fps_result) * 1000.0f;
     current_threads_finished.store(0, std::memory_order_release);
   }
 
-  for (size_t i = 0; i < threads_count; ++i) {
-    computing_threads_[i].join();
-  }
-  
+  compute_start_cv.notify_all();
+  return;
+}
+
+uint8_t* Field::GetColorBuffer() {
+    return color_buffer_;
+}
+
+void Field::SetNewDimensions(size_t x, size_t y) {
+  reinitialize_width_ = x;
+  reinitialize_height_ = y;
+  should_reinitialize_.store(true, std::memory_order::release);
+}
+
+void Field::SetGameRule(GameRule* rule) {
+    current_rule_ = rule;
+}
+
+GameRule* Field::GetGameRule() {
+  return current_rule_;
+}
+
+void Field::SetColorPallette(std::vector<GameColor>* pallette) {
+    current_pallete_ = pallette;
+}
+
+void Field::SetFrameDelayMilliseconds(size_t val)  {
+  frame_milliseconds_delay_ = val;
+}
+
+float Field::GetFPS() {
+  return current_fps_;
+}
+
+void Field::SetPause(float val) {
+  paused_ = val;
+}
+
+void Field::StopThreads() {
+  processing_ = false;
 }
 
 void Field::SetPixelAt(int x, int y, uint8_t val) {
@@ -248,24 +293,5 @@ void Field::SetPixelAt(int x, int y, uint8_t val) {
   SetPixel(x_at, y_at, val, GetWriteBuffer());
 }
 
-void Field::SetController(Controller* controller) {
-  controller_ = controller;
-}
 
-void Field::SetPause(float val) {
-  paused_ = val;
-}
 
-void Field::SetFPS(size_t val)  {
-  frame_milliseconds_delay_ = val;
-}
-
-float Field::GetFPS() {
-  return current_fps_;
-}
-
-void Field::SetNewDimensions(size_t x, size_t y) {
-  reinitialize_width_ = x;
-  reinitialize_height_ = y;
-  should_reinitialize_.store(true, std::memory_order::release);
-}

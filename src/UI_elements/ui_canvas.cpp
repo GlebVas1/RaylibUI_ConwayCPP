@@ -16,6 +16,7 @@ void UICanvas::Draw() {
         Color* pixels = LoadImageColors(img);
         UpdateTexture(*main_texture_, pixels);
         UnloadImage(img);
+        UnloadImageColors(pixels);
 
         DrawTexturePro(
             *main_texture_,
@@ -36,8 +37,6 @@ void UICanvas::Draw() {
             WHITE
         );
 
-        UnloadImageColors(pixels);
-        
         DrawTexturePro(
             show_grid_ ? *main_grid_texture_ : *main_grid_empty_texture_,
             Rectangle{
@@ -78,22 +77,19 @@ void UICanvas::InitializeMainTexture() {
 }
 
 void UICanvas::InitializeMainGridTexture() {
-    uint8_t* data_grid_full = static_cast<uint8_t*>(malloc(width_ * height_ * 4));
-    memset(data_grid_full, 0, 4 * width_ * height_);
+
+    float cell_width = static_cast<float>(width_) / main_texture_width_;
+    float cell_height = static_cast<float>(height_) / main_texture_height_;
 
     RenderTexture2D grid_render_texture = LoadRenderTexture(width_, height_);
     SetTextureFilter(grid_render_texture.texture, TEXTURE_FILTER_TRILINEAR);
 
     BeginTextureMode(grid_render_texture);
 
-    float cell_width = static_cast<float>(width_) / main_texture_width_;
-    float cell_height = static_cast<float>(height_) / main_texture_height_;
     ClearBackground(Color{0, 0, 0, 0});
-    
     DrawRectangle(0, 0, width_, height_, WHITE);
 
     BeginBlendMode(BLEND_SUBTRACT_COLORS);
-
     for (size_t x = 0; x < main_texture_width_; ++x) {
         for (size_t y = 0; y < main_texture_height_; ++y) {
             DrawRectangleRounded(
@@ -114,9 +110,6 @@ void UICanvas::InitializeMainGridTexture() {
             );
         }
     }
-
-
-    
     EndBlendMode();
 
     EndTextureMode();
@@ -124,20 +117,15 @@ void UICanvas::InitializeMainGridTexture() {
     main_grid_texture_ = std::make_shared<Texture2D>(grid_render_texture.texture);
     SetTextureFilter(*main_grid_texture_, TEXTURE_FILTER_BILINEAR);
 
-    uint8_t* data_grid_empty = static_cast<uint8_t*>(malloc(width_ * height_ * 4));
-    memset(data_grid_empty, 0, 4 * width_ * height_);
-
     RenderTexture2D grid_empty_render_texture = LoadRenderTexture(width_, height_);
     SetTextureFilter(grid_empty_render_texture.texture, TEXTURE_FILTER_TRILINEAR);
 
     BeginTextureMode(grid_empty_render_texture);
 
     ClearBackground(Color{0, 0, 0, 0});
-    
     DrawRectangle(0, 0, width_, height_, WHITE);
 
     BeginBlendMode(BLEND_SUBTRACT_COLORS);
-
     DrawRectangleRounded(
     Rectangle{
             1.1f,
@@ -154,7 +142,6 @@ void UICanvas::InitializeMainGridTexture() {
             255
         })
     );
-
     EndBlendMode();
 
     EndTextureMode();
@@ -165,12 +152,19 @@ void UICanvas::InitializeMainGridTexture() {
 
 
 void UICanvas::ReinitializeMainTexture() {
-   // UnloadTexture(*main_texture_);
+    if (main_texture_ != nullptr) {
+        UnloadTexture(*main_texture_);
+    }
     InitializeMainTexture();
 }
 
 void UICanvas::ReinitializeMainGridTexture() {
-   // UnloadTexture(*main_grid_texture_);
+    if (main_grid_texture_ != nullptr) {
+        UnloadTexture(*main_grid_texture_);
+    }
+    if (main_grid_empty_texture_ != nullptr) {
+        UnloadTexture(*main_grid_empty_texture_);
+    }
     InitializeMainGridTexture();
 }
 
