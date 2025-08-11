@@ -107,7 +107,9 @@ class UI {
     std::shared_ptr<UILabel> palette_label_ = nullptr;
 
     std::shared_ptr<UIPanel> color_theme_panel_ = nullptr;
+    std::shared_ptr<UILabel> color_theme_label_ = nullptr;
     std::shared_ptr<UISpinBox<UIColorThemeIterator, false>> color_theme_spinbox_ = nullptr;
+    std::shared_ptr<UICheckbox> color_theme_from_palette_ = nullptr;
 
     void UpdateUIElements();
 

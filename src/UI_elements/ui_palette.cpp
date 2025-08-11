@@ -161,7 +161,13 @@ void UIPalette::Init() {
     SetDimensions(button_width_ + 2 * button_width_spacing_,
                   button_height_spacing_ * (buttons_count + 1) + button_height_ * (buttons_count));
     std::cout << "UIPalleteInit() wh " << width_ + 10 << " " << height_ + 10 << std::endl;
-    shadow_ = std::make_shared<UIShadowEffect>(GetAbsoluteXPosition() - 5, GetAbsoluteYPosition() - 5, width_ + 10, height_ + 10, 0.5f, 3); 
+    shadow_ = std::make_shared<UIShadowEffect>(
+        GetAbsoluteXPosition() - 5, 
+        GetAbsoluteYPosition() - 5, 
+        width_ + 10, 
+        height_ + 10,
+        10.0 / std::min(width_, height_), 
+        3); 
 
 }
 
@@ -204,8 +210,17 @@ void UIPalette::Draw() {
         static_cast<float> (height_ - 1)
     };
 
-    DrawRectangleRounded(main_field, roundness_, 4, background_color_);
-    DrawRectangleRoundedLinesEx(main_field_line, roundness_, 4, 2, BLACK);
+    const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
+    UITools::DrawRectangle(
+        GetAbsoluteXPosition(),
+        GetAbsoluteYPosition(),
+        width_,
+        height_,
+        this_theme.line_default_thikness,
+        this_theme.panel_corner_radius,
+        this_theme.ui_neutral_color,
+        this_theme.ui_line_color
+    );
 
 
 

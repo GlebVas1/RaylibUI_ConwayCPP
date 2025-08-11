@@ -26,28 +26,23 @@ struct UIColorTheme {
     float elements_corner_radius = 2.0f;
 };
 
-
-
-
-
 class UIColorThemeManager {
     private:
     std::vector<UIColorTheme> themes_;
     UIColorTheme current_theme_;
+
     UIColorThemeManager();
 
     public:
     static UIColorThemeManager& GetInstance();
+
     const UIColorTheme& GetTheme();
     void SetTheme(size_t ind);
+    const std::vector<UIColorTheme>& GetThemes();
 
     void LoadThemeFromFile(const std::string& name, const std::string& path);
     void LoadAllThemes(const std::string& path);
     void LoadFromPalette(const std::vector<GameColor>& palette);
-
-
-
-    const std::vector<UIColorTheme>& GetThemes();
 };
 
 // Just make for spinbox

@@ -32,6 +32,6 @@ void UITextureButton::Draw() {
         },
         Vector2{0.0f, 0.0f},
         0.0f,
-        UIColorThemeManager::GetInstance().GetTheme().ui_dark_color
+        UIColorThemeManager::GetInstance().GetTheme().ui_text_dark
     );
 }

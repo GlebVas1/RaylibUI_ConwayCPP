@@ -381,16 +381,38 @@ void UI::InitializeElements() {
     game_rule_list_->SetVector(game_rule_names);
     game_rule_list_->Init();
 
-    color_theme_panel_ = std::make_shared<UIPanel>(1120, 910, 150, 60, 5.0f);
+    color_theme_panel_ = std::make_shared<UIPanel>(1120, 910, 240, 60, 5.0f);
     color_theme_panel_->SetParrent(null_widget_.get());
     color_theme_panel_->Init();
 
+    color_theme_label_ = std::make_shared<UILabel>(10, 8, "UI Theme");
+    color_theme_label_->SetParrent(color_theme_panel_.get());
     color_theme_spinbox_ = std::make_shared<UISpinBox<UIColorThemeIterator, false>>(
         10, 
-        10, 
-        [](UIColorThemeIterator iter){ UIColorThemeManager::GetInstance().SetTheme(iter.GetValue()); });
+        30, 
+        [this](UIColorThemeIterator iter){ 
+            if (!color_theme_from_palette_->GetValue()) {
+                UIColorThemeManager::GetInstance().SetTheme(iter.GetValue());
+            }
+        }
+    );
+
+    color_theme_spinbox_->SetWidth(100);
     color_theme_spinbox_->SetParrent(color_theme_panel_.get());
 
+    color_theme_from_palette_ = std::make_shared<UICheckbox>(
+        120,
+        30,
+        [this](bool val){ 
+            if (val) {
+                UIColorThemeManager::GetInstance().LoadFromPalette(pallete_->GetColorPalette());
+            } else {
+                UIColorThemeManager::GetInstance().SetTheme(color_theme_spinbox_->GetValue().GetValue());
+            }
+        },
+        "Adaptive"
+    );
+    color_theme_from_palette_->SetParrent(color_theme_panel_.get());
 }
 
 void UI::AddUIElement(UIElement* elem_ptr) {
@@ -401,6 +423,9 @@ void UI::SetColorPallette(const std::vector<GameColor>& palette) {
     pallete_->SetColorPallette(palette);
     pallete_->Init();
     game_object_canvas_->UpdatePalette(palette);
+    if (color_theme_from_palette_->GetValue()) {
+        UIColorThemeManager::GetInstance().LoadFromPalette(palette);
+    }
 }
 
 const std::vector<GameColor>& UI::GetCurrentPalette() {
