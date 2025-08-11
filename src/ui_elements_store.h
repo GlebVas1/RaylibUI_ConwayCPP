@@ -69,6 +69,19 @@ class UIElementsStorage {
   std::shared_ptr<UIList> palette_list_ = nullptr;
   std::shared_ptr<UILabel> palette_label_ = nullptr;
 
+  std::shared_ptr<UIPanel> random_rule_panel_ = nullptr;
+  std::shared_ptr<UILabel> random_rule_label_ = nullptr;
+  std::shared_ptr<UISpinBox<int>> random_rule_survive_prob_ = nullptr;
+  std::shared_ptr<UILabel> random_rule_survive_label_ = nullptr;
+  std::shared_ptr<UISpinBox<int>> random_rule_arrive_prob_ = nullptr;
+  std::shared_ptr<UILabel> random_rule_arrive_label_ = nullptr;
+  std::shared_ptr<UISpinBox<int>> random_rule_generation_ = nullptr;
+  std::shared_ptr<UILabel> random_rule_generation_label_ = nullptr;
+  std::shared_ptr<UISpinBox<int, false>> random_rule_radius_ = nullptr;
+  std::shared_ptr<UILabel> random_rule_radius_label_ = nullptr;
+  std::shared_ptr<UICheckbox> random_central_ = nullptr;
+  std::shared_ptr<UITextButton> random_rule_set_ = nullptr;
+
   std::shared_ptr<UIPanel> color_theme_panel_ = nullptr;
   std::shared_ptr<UILabel> color_theme_label_ = nullptr;
   std::shared_ptr<UISpinBox<UIColorThemeIterator, false>> color_theme_spinbox_ = nullptr;

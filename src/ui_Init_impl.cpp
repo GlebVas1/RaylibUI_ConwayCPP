@@ -1,9 +1,12 @@
 #include "ui.h"
 #include "controller.h"
 #include "game_rule.h"
+#include "ui_color_theme.h"
 
 
 void UI::InitializeElements() {
+  const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
+
   null_widget_ = std::make_shared<UIElement>();
 
   right_upper_null_widget_ = std::make_shared<UIElement>(0, 0, 0, 0);
@@ -12,7 +15,7 @@ void UI::InitializeElements() {
   panel_null_widget_ = std::make_shared<UIElement>(-420, 40, 0, 0);
   panel_null_widget_->SetParrent(right_upper_null_widget_.get());
   
-  main_canvas_panel_ = std::make_shared<UIPanel>(10, 0, 1080, 1080, 5.0f);
+  main_canvas_panel_ = std::make_shared<UIPanel>(10, 0, 1080, 1080, this_theme.panel_corner_radius);
   main_canvas_panel_->SetParrent(null_widget_.get());
   main_canvas_panel_->Init();
 
@@ -21,7 +24,7 @@ void UI::InitializeElements() {
   main_canvas_->SetPosition(5, 5);
   main_canvas_->SetDimensions(1070, 1070);
 
-  game_control_panel_ = std::make_shared<UIPanel>(0, 0, 385, 50, 5.0f);
+  game_control_panel_ = std::make_shared<UIPanel>(0, 0, 385, 50, this_theme.panel_corner_radius);
   game_control_panel_->SetParrent(panel_null_widget_.get());
   game_control_panel_->Init();
   
@@ -30,7 +33,7 @@ void UI::InitializeElements() {
     5, 
     40, 
     40, 
-    0.1f,
+    this_theme.elements_corner_radius,
     [this](bool val) { controller_->SetPause(val); },
     "pause",
     "play",
@@ -56,7 +59,7 @@ void UI::InitializeElements() {
   );
   game_control_panel_fps_label_->SetParrent(game_control_panel_.get());
 
-  field_control_panel_ = std::make_shared<UIPanel>(0, 70, 385, 70, 5.0f);
+  field_control_panel_ = std::make_shared<UIPanel>(0, 70, 385, 70, this_theme.panel_corner_radius);
   field_control_panel_->SetParrent(panel_null_widget_.get());
   field_control_panel_->Init();
 
@@ -76,7 +79,7 @@ void UI::InitializeElements() {
     25, 
     20,
     20,
-    0.1f,
+    this_theme.elements_corner_radius,
     [this](bool val){}, 
     "lock",
     "unlock",
@@ -127,14 +130,14 @@ void UI::InitializeElements() {
     25, 
     70, 
     20, 
-    0.1f, 
+    this_theme.elements_corner_radius, 
     [this](){ SetFieldSize(); }, 
     "Resize"
   );
   field_set_button_->SetParrent(field_control_panel_.get());
 
 
-  brush_settings_panel_ = std::make_shared<UIPanel>(180, 160, 145, 160, 5.0f);
+  brush_settings_panel_ = std::make_shared<UIPanel>(180, 160, 145, 160, this_theme.panel_corner_radius);
   brush_settings_panel_->SetParrent(panel_null_widget_.get());
   brush_settings_panel_->Init();
 
@@ -186,7 +189,7 @@ void UI::InitializeElements() {
   pallete_->SetYPosition(160);
   pallete_->SetParrent(panel_null_widget_.get());
 
-  palette_panel_ = std::make_shared<UIPanel>(180, 340, 145, 290, 5.0f);
+  palette_panel_ = std::make_shared<UIPanel>(180, 340, 145, 290, this_theme.panel_corner_radius);
   palette_panel_->SetParrent(panel_null_widget_.get());
   palette_panel_->Init();
 
@@ -205,7 +208,7 @@ void UI::InitializeElements() {
   palette_label_ = std::make_shared<UILabel>(10, 10, "Palette");
   palette_label_->SetParrent(palette_panel_.get());
 
-  game_object_panel_ = std::make_shared<UIPanel>(0, 160, 160, 470, 5.0f);
+  game_object_panel_ = std::make_shared<UIPanel>(0, 160, 160, 470, this_theme.panel_corner_radius);
   game_object_panel_->SetParrent(panel_null_widget_.get());
   game_object_panel_->Init();
 
@@ -234,7 +237,7 @@ void UI::InitializeElements() {
     250, 
     25, 
     25, 
-    0.1f, 
+    this_theme.elements_corner_radius, 
     [this](){ game_object_canvas_->GameObjectRotateClockwise(); }, 
     "clock_wise");
   game_object_clockwise_button_->SetParrent(game_object_panel_.get());
@@ -244,7 +247,7 @@ void UI::InitializeElements() {
     250, 
     25, 
     25, 
-    0.1f, 
+    this_theme.elements_corner_radius, 
     [this](){ game_object_canvas_->GameObjectRotateCounterClockwise(); }, 
     "counter_clock_wise");
   game_object_counter_clockwise_button_->SetParrent(game_object_panel_.get());
@@ -254,7 +257,7 @@ void UI::InitializeElements() {
     280, 
     25, 
     25, 
-    0.1f, 
+    this_theme.elements_corner_radius, 
     [this](){ game_object_canvas_->GameObjectMirrorVertical(); }, 
     "mirror_v");
   game_object_mirror_v_button_->SetParrent(game_object_panel_.get());
@@ -264,7 +267,7 @@ void UI::InitializeElements() {
     280, 
     25, 
     25, 
-    0.1f, 
+    this_theme.elements_corner_radius, 
     [this](){ game_object_canvas_->GameObjectMirrorHorizontal(); }, 
     "mirror_h");
   game_object_mirror_h_button_->SetParrent(game_object_panel_.get());
@@ -274,16 +277,16 @@ void UI::InitializeElements() {
     250, 
     55, 
     55, 
-    0.1f, 
+    this_theme.elements_corner_radius, 
     [this](){ game_object_canvas_->GameObjectInvert(); }, 
     "invert");
   game_object_invert_button_->SetParrent(game_object_panel_.get());
 
-  game_rule_panel_ = std::make_shared<UIPanel>(0, 650, 385, 200, 5.0f);
+  game_rule_panel_ = std::make_shared<UIPanel>(0, 650, 180, 200, this_theme.panel_corner_radius);
   game_rule_panel_->SetParrent(panel_null_widget_.get());
   game_rule_panel_->Init();
 
-  game_rule_list_ = std::make_shared<UIList>(10, 40, 375, 150, [this](size_t ind) { SetRule(ind); });
+  game_rule_list_ = std::make_shared<UIList>(10, 40, 170, 150, [this](size_t ind) { SetRule(ind); });
   game_rule_list_->SetParrent(game_rule_panel_.get());
 
   game_rule_label_ = std::make_shared<UILabel>(10, 8, "Game rule settings");
@@ -296,7 +299,89 @@ void UI::InitializeElements() {
   game_rule_list_->SetVector(game_rule_names);
   game_rule_list_->Init();
 
-  color_theme_panel_ = std::make_shared<UIPanel>(0, 870, 240, 60, 5.0f);
+  random_rule_panel_ = std::make_shared<UIPanel>(200, 650, 185, 200, this_theme.panel_corner_radius);
+  random_rule_panel_->SetParrent(panel_null_widget_.get());
+  random_rule_panel_->Init();
+
+  random_rule_label_ = std::make_shared<UILabel>(10, 8, "Random rule");
+  random_rule_label_->SetParrent(random_rule_panel_.get());
+
+  random_rule_survive_prob_ = std::make_shared<UISpinBox<int>>(
+    10,
+    50,
+    [](int){},
+    1
+  );
+  random_rule_survive_prob_->SetMinValue(0);
+  random_rule_survive_prob_->SetMaxValue(100);
+  random_rule_survive_prob_->SetValue(50);
+  random_rule_survive_prob_->SetParrent(random_rule_panel_.get());
+
+  random_rule_survive_label_ = std::make_shared<UILabel>(80, 52, "Survive %");
+  random_rule_survive_label_->SetParrent(random_rule_panel_.get());
+
+  random_rule_arrive_prob_ = std::make_shared<UISpinBox<int>>(
+    10,
+    80,
+    [](int){},
+    1
+  );
+  random_rule_arrive_prob_->SetMinValue(0);
+  random_rule_arrive_prob_->SetMaxValue(100);
+  random_rule_arrive_prob_->SetValue(50);
+  random_rule_arrive_prob_->SetParrent(random_rule_panel_.get());
+
+  random_rule_arrive_label_ = std::make_shared<UILabel>(80, 82, "Arrive %");
+  random_rule_arrive_label_->SetParrent(random_rule_panel_.get());
+
+  random_rule_generation_ = std::make_shared<UISpinBox<int>>(
+    10,
+    110,
+    [](int){},
+    1
+  );
+  random_rule_generation_->SetMinValue(1);
+  random_rule_generation_->SetValue(1);
+  random_rule_generation_->SetMaxValue(250);
+  random_rule_generation_->SetParrent(random_rule_panel_.get());
+
+  random_rule_generation_label_ = std::make_shared<UILabel>(80, 112, "Max. age");
+  random_rule_generation_label_->SetParrent(random_rule_panel_.get());
+
+  random_rule_radius_ = std::make_shared<UISpinBox<int, false>>(
+    10,
+    140,
+    [](int){},
+    1
+  );
+  random_rule_radius_->SetMinValue(1);
+  random_rule_radius_->SetMaxValue(6);
+  random_rule_radius_->SetValue(1);
+  random_rule_radius_->SetParrent(random_rule_panel_.get());
+
+  random_rule_radius_label_ = std::make_shared<UILabel>(80, 142, "Radius");
+  random_rule_radius_label_->SetParrent(random_rule_panel_.get());
+
+  random_rule_set_ = std::make_shared<UITextButton>(
+    10,
+    290,
+    40,
+    20,
+    this_theme.elements_corner_radius,
+    [](){},
+    "Generate"
+  );
+  random_rule_set_->SetParrent(random_rule_panel_.get());
+
+  random_central_ = std::make_shared<UICheckbox>(
+    10,
+    170,
+    [](bool){},
+    "Count self"
+  );
+  random_central_->SetParrent(random_rule_panel_.get());
+
+  color_theme_panel_ = std::make_shared<UIPanel>(0, 870, 240, 60, this_theme.panel_corner_radius);
   color_theme_panel_->SetParrent(panel_null_widget_.get());
   color_theme_panel_->Init();
 

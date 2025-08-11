@@ -9,7 +9,7 @@ UIDualTextureButton::UIDualTextureButton(
   int y, 
   int width, 
   int height, 
-  float roundness,
+  float corner_radius,
   std::function<void(bool)> func, 
   const std::string& true_state, 
   const std::string& false_state,
@@ -20,7 +20,7 @@ UIDualTextureButton::UIDualTextureButton(
     y, 
     width, 
     height, 
-    roundness,
+    corner_radius,
   [](){}) 
 {
   current_state_ = initial_state;

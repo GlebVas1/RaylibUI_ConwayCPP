@@ -7,10 +7,10 @@ UITextureButton::UITextureButton(
   int y_pos, 
   int width, 
   int height, 
-  float roundness, 
+  float corner_radius, 
   std::function<void()> func, 
   const std::string& texture) :
-  UIButton(x_pos, y_pos, width, height, roundness, func) {
+  UIButton(x_pos, y_pos, width, height, corner_radius, func) {
     texture_ = UITextureLoader::GetInstance().GetTexture(texture);
 }
 
