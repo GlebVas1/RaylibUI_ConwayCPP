@@ -6,15 +6,25 @@
 void UI::InitializeElements() {
   null_widget_ = std::make_shared<UIElement>();
 
-  main_canvas_panel_ = std::make_shared<UIPanel>(0, 0, 1080, 1080, 5.0f);
+  right_upper_null_widget_ = std::make_shared<UIElement>(0, 0, 0, 0);
+  right_upper_null_widget_->SetParrent(null_widget_.get());
+
+  panel_null_widget_ = std::make_shared<UIElement>(-420, 40, 0, 0);
+  panel_null_widget_->SetParrent(right_upper_null_widget_.get());
+  
+  main_canvas_panel_ = std::make_shared<UIPanel>(10, 0, 1080, 1080, 5.0f);
   main_canvas_panel_->SetParrent(null_widget_.get());
   main_canvas_panel_->Init();
 
-  game_control_panel_ = std::make_shared<UIPanel>(1120, 40, 385, 50, 5.0f);
-  game_control_panel_->SetParrent(null_widget_.get());
+  main_canvas_ = std::make_shared<UIMainCanvas>();
+  main_canvas_->SetParrent(main_canvas_panel_.get());
+  main_canvas_->SetPosition(5, 5);
+  main_canvas_->SetDimensions(1070, 1070);
+
+  game_control_panel_ = std::make_shared<UIPanel>(0, 0, 385, 50, 5.0f);
+  game_control_panel_->SetParrent(panel_null_widget_.get());
   game_control_panel_->Init();
   
-
   game_control_play_button_ = std::make_shared<UIDualTextureButton>(
     5, 
     5, 
@@ -46,8 +56,8 @@ void UI::InitializeElements() {
   );
   game_control_panel_fps_label_->SetParrent(game_control_panel_.get());
 
-  field_control_panel_ = std::make_shared<UIPanel>(1120, 110, 385, 70, 5.0f);
-  field_control_panel_->SetParrent(null_widget_.get());
+  field_control_panel_ = std::make_shared<UIPanel>(0, 70, 385, 70, 5.0f);
+  field_control_panel_->SetParrent(panel_null_widget_.get());
   field_control_panel_->Init();
 
   field_control_label_ = std::make_shared<UILabel>(10, 8, "Field settings");
@@ -85,7 +95,7 @@ void UI::InitializeElements() {
     10
   );
 
-  field_width_spinbox_->SetMinValue(60);
+  field_width_spinbox_->SetMinValue(30);
   field_width_spinbox_->SetMaxValue(1060);
   field_width_spinbox_->SetValue(default_field_width_);
   field_width_spinbox_->SetParrent(field_control_panel_.get());
@@ -104,7 +114,7 @@ void UI::InitializeElements() {
     10
   );
 
-  field_height_spinbox_->SetMinValue(60);
+  field_height_spinbox_->SetMinValue(30);
   field_height_spinbox_->SetMaxValue(1060);
   field_height_spinbox_->SetValue(default_field_height_);
   field_height_spinbox_->SetParrent(field_control_panel_.get());
@@ -124,8 +134,8 @@ void UI::InitializeElements() {
   field_set_button_->SetParrent(field_control_panel_.get());
 
 
-  brush_settings_panel_ = std::make_shared<UIPanel>(1300, 200, 145, 160, 5.0f);
-  brush_settings_panel_->SetParrent(null_widget_.get());
+  brush_settings_panel_ = std::make_shared<UIPanel>(180, 160, 145, 160, 5.0f);
+  brush_settings_panel_->SetParrent(panel_null_widget_.get());
   brush_settings_panel_->Init();
 
   brush_settings_label_ = std::make_shared<UILabel>(10, 10, "Brush settings");
@@ -171,21 +181,13 @@ void UI::InitializeElements() {
   );
   brush_object_toogle_->SetParrent(brush_settings_panel_.get());
 
-  main_canvas_ = std::make_shared<UIMainCanvas>();
-  main_canvas_->SetParrent(main_canvas_panel_.get());
-  main_canvas_->SetPosition(5, 5);
-  main_canvas_->SetDimensions(1070, 1070);
-
-  
-
   pallete_ = std::make_shared<UIPalette>();
-  pallete_->SetXPosition(1465);
-  pallete_->SetYPosition(200);
-  pallete_->SetParrent(null_widget_.get());
+  pallete_->SetXPosition(345);
+  pallete_->SetYPosition(160);
+  pallete_->SetParrent(panel_null_widget_.get());
 
-
-  palette_panel_ = std::make_shared<UIPanel>(1300, 380, 145, 290, 5.0f);
-  palette_panel_->SetParrent(null_widget_.get());
+  palette_panel_ = std::make_shared<UIPanel>(180, 340, 145, 290, 5.0f);
+  palette_panel_->SetParrent(panel_null_widget_.get());
   palette_panel_->Init();
 
   palette_list_ = std::make_shared<UIList>(
@@ -203,8 +205,8 @@ void UI::InitializeElements() {
   palette_label_ = std::make_shared<UILabel>(10, 10, "Palette");
   palette_label_->SetParrent(palette_panel_.get());
 
-  game_object_panel_ = std::make_shared<UIPanel>(1120, 200, 160, 470, 5.0f);
-  game_object_panel_->SetParrent(null_widget_.get());
+  game_object_panel_ = std::make_shared<UIPanel>(0, 160, 160, 470, 5.0f);
+  game_object_panel_->SetParrent(panel_null_widget_.get());
   game_object_panel_->Init();
 
   game_object_label_ = std::make_shared<UILabel>(10, 10, "Game objects");
@@ -277,8 +279,8 @@ void UI::InitializeElements() {
     "invert");
   game_object_invert_button_->SetParrent(game_object_panel_.get());
 
-  game_rule_panel_ = std::make_shared<UIPanel>(1120, 690, 385, 200, 5.0f);
-  game_rule_panel_->SetParrent(null_widget_.get());
+  game_rule_panel_ = std::make_shared<UIPanel>(0, 650, 385, 200, 5.0f);
+  game_rule_panel_->SetParrent(panel_null_widget_.get());
   game_rule_panel_->Init();
 
   game_rule_list_ = std::make_shared<UIList>(10, 40, 375, 150, [this](size_t ind) { SetRule(ind); });
@@ -294,8 +296,8 @@ void UI::InitializeElements() {
   game_rule_list_->SetVector(game_rule_names);
   game_rule_list_->Init();
 
-  color_theme_panel_ = std::make_shared<UIPanel>(1120, 910, 240, 60, 5.0f);
-  color_theme_panel_->SetParrent(null_widget_.get());
+  color_theme_panel_ = std::make_shared<UIPanel>(0, 870, 240, 60, 5.0f);
+  color_theme_panel_->SetParrent(panel_null_widget_.get());
   color_theme_panel_->Init();
 
   color_theme_label_ = std::make_shared<UILabel>(10, 8, "UI Theme");

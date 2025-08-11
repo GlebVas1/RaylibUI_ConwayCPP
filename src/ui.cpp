@@ -26,6 +26,19 @@ void UI::DrawUIElements() {
   DrawElement(null_widget_.get());
 }
 
+void UI::ResizeMainField(int size_x, int size_y) {
+  const float width_height_aspect = static_cast<float>(size_x) / size_y;
+  int panel_height = window_height;
+  float estimated_panel_width = width_height_aspect * panel_height;
+  if (estimated_panel_width > GetScreenWidth() - 500) {
+    estimated_panel_width = GetScreenWidth() - 500;
+    panel_height = estimated_panel_width / width_height_aspect;
+  }
+  main_canvas_panel_->SetDimensions(static_cast<int>(estimated_panel_width), panel_height);
+  main_canvas_->SetDimensions(static_cast<int>(estimated_panel_width) - 10, panel_height - 10);
+  main_canvas_panel_->Init();
+}
+
 UI& UI::GetInstance() {
   static UI obj;
   return obj;
@@ -34,6 +47,7 @@ UI& UI::GetInstance() {
 void UI::InitializeWindow() {
   std::cout << "Start window initializing" << std::endl;
   SetConfigFlags(FLAG_MSAA_4X_HINT);
+  SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(window_width, window_height, "Conway");
   UITextureLoader::GetInstance().LoadAllTextures();
   UITools::GetMainFont();
@@ -65,6 +79,8 @@ void UI::Start() {
   
   while (!WindowShouldClose()) {
     UpdateUIElements();
+    right_upper_null_widget_->SetXPosition(GetScreenWidth());
+    main_canvas_panel_->SetYPosition((GetScreenHeight() - main_canvas_panel_->GetHeight()) / 2);
     if (IsKeyPressed(KEY_SPACE)) {
       pause = game_control_play_button_->GetState();
       pause = !pause;
@@ -167,6 +183,7 @@ float UI::GetFPS() {
 
 void UI::SetFieldSize() {
   main_canvas_->SetColorBuffer(nullptr);
-  main_canvas_->SetCanvasTextureDimensions(field_width_spinbox_->GetValue(), field_height_spinbox_->GetValue());
-  controller_->SetFieldSize(field_height_spinbox_->GetValue(), field_width_spinbox_->GetValue());
+  ResizeMainField(field_height_spinbox_->GetValue(), field_width_spinbox_->GetValue());
+  main_canvas_->SetCanvasTextureDimensions(field_height_spinbox_->GetValue(), field_width_spinbox_->GetValue());
+  controller_->SetFieldSize(field_width_spinbox_->GetValue(), field_height_spinbox_->GetValue());
 }

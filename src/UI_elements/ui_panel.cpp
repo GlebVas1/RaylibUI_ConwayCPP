@@ -19,8 +19,6 @@ void UIPanel::SetRoundness(float val) {
 void UIPanel::Init() {
   float roundness = static_cast<float>(corner_radius_) / std::min(width_, height_);
   shadow_ = std::make_unique<UIShadowEffect>(
-    x_position_ - 5,
-    y_position_ - 5,
     width_ + 10,
     height_ + 10,
     roundness,
@@ -29,11 +27,11 @@ void UIPanel::Init() {
 }
 
 void UIPanel::Draw() {
-  shadow_->Draw();
+  shadow_->Draw(GetAbsoluteXPosition() - 5, GetAbsoluteYPosition() - 5);
   const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
   UITools::DrawRectangle(
-    x_position_,
-    y_position_,
+    GetAbsoluteXPosition(),
+    GetAbsoluteYPosition(),
     width_,
     height_,
     this_theme.line_default_thikness,

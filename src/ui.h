@@ -26,15 +26,18 @@ class UI : UIElementsStorage {
 
   std::vector<UIElement*> elements_;
 
-  std::shared_ptr<UIElement> null_widget_;
+  std::shared_ptr<UIElement> null_widget_ = nullptr;
+  std::shared_ptr<UIElement> panel_null_widget_ = nullptr;
+  std::shared_ptr<UIElement> right_upper_null_widget_ = nullptr;
 
   Controller* controller_ = nullptr;
   
-
   void UpdateUIElements();
 
   void DrawElement(UIElement* root);
   void DrawUIElements();
+
+  void ResizeMainField(int size_x, int size_y);
 
  public:
   static UI& GetInstance();

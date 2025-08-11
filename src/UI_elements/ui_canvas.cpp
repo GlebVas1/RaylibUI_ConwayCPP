@@ -155,13 +155,14 @@ void UICanvas::Draw() {
       WHITE
     );
 
+    const auto texture_to_draw = show_grid_ ? main_grid_texture_ : main_grid_empty_texture_;
     DrawTexturePro(
-      show_grid_ ? *main_grid_texture_ : *main_grid_empty_texture_,
+      *texture_to_draw,
       Rectangle{
         0,
         0,
-        static_cast<float>(width_),
-        static_cast<float>(height_)
+        static_cast<float>(texture_to_draw->width),
+        static_cast<float>(texture_to_draw->height)
       },
       Rectangle({
         static_cast<float>(GetAbsoluteXPosition()),

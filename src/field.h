@@ -58,13 +58,14 @@ class Field {
   // average bool can be ovverding due to cache
   std::vector<std::atomic_bool> thread_should_start;
 
-  size_t frame_milliseconds_delay_ = 1000;
+  size_t frame_milliseconds_delay_ = 100;
 
   float current_fps_ = 0;
 
   inline size_t BufferIndex(size_t x, size_t y);
 
   void ReinitializeBuffer();
+  void ReinitializeBufferCropData(size_t old_width, size_t old_height, size_t new_width, size_t hew_height);
   void ReinitializeColorBuffer();
 
   void SetPixel(size_t x, size_t y, uint8_t val, uint8_t* buffer);

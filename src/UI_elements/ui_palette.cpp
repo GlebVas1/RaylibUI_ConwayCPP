@@ -36,8 +36,8 @@ void UIPalette::UIPaletteButton::Draw() {
   }
 
   UITools::DrawRectangle(
-    x_position_,
-    y_position_,
+    x_position_ + this_pallete_->GetAbsoluteXPosition(),
+    y_position_ + this_pallete_->GetAbsoluteYPosition(),
     width_,
     height_,
     this_pallete_->selected_button_ == id_ ? this_theme.line_thick_thikness : this_theme.line_narrow_thikness,
@@ -49,8 +49,8 @@ void UIPalette::UIPaletteButton::Draw() {
 
 void UIPalette::UIPaletteButton::Update() {
   const bool mouse_on_button = CheckCollisionPointRec(GetMousePosition(), Rectangle{
-    static_cast<float>(x_position_),
-    static_cast<float>(y_position_),
+    static_cast<float>(x_position_ + this_pallete_->GetAbsoluteXPosition()),
+    static_cast<float>(y_position_ + this_pallete_->GetAbsoluteYPosition()),
     static_cast<float>(width_),
     static_cast<float>(height_)
   });
@@ -107,8 +107,8 @@ void UIPalette::InitializeButtons() {
   buttons_.front().SetId(0);
   buttons_.front().SetPalette(this);
   buttons_.front().SetDimensions(button_width_, button_height_);
-  buttons_.front().SetXPosition(button_width_spacing_ + GetAbsoluteXPosition());
-  buttons_.front().SetYPosition(button_height_spacing_ + GetAbsoluteYPosition());
+  buttons_.front().SetXPosition(button_width_spacing_ );
+  buttons_.front().SetYPosition(button_height_spacing_ );
   buttons_.front().SetColors(color_pallete_[FULL_]);
   color_pallete_val_.front() = FULL_;
 
@@ -116,8 +116,8 @@ void UIPalette::InitializeButtons() {
     buttons_[i].SetId(i);
     buttons_[i].SetPalette(this);
     buttons_[i].SetDimensions(button_width_, button_height_);
-    buttons_[i].SetXPosition(button_width_spacing_ + GetAbsoluteXPosition());
-    buttons_[i].SetYPosition(button_height_spacing_ + GetAbsoluteYPosition() + (button_height_ + button_height_spacing_) * i);
+    buttons_[i].SetXPosition(button_width_spacing_);
+    buttons_[i].SetYPosition(button_height_spacing_+ (button_height_ + button_height_spacing_) * i);
     buttons_[i].SetColors(color_pallete_[FULL_ - i * offset * offset_mult]);
     color_pallete_val_[i] = FULL_ - i * offset * offset_mult;
   }
@@ -125,8 +125,8 @@ void UIPalette::InitializeButtons() {
   buttons_.back().SetId(buttons_count - 1);
   buttons_.back().SetPalette(this);
   buttons_.back().SetDimensions(button_width_, button_height_);
-  buttons_.back().SetXPosition(button_width_spacing_ + GetAbsoluteXPosition());
-  buttons_.back().SetYPosition(button_height_spacing_ + GetAbsoluteYPosition() + (button_height_ + button_height_spacing_) * (buttons_count - 1));
+  buttons_.back().SetXPosition(button_width_spacing_);
+  buttons_.back().SetYPosition(button_height_spacing_ + (button_height_ + button_height_spacing_) * (buttons_count - 1));
   buttons_.back().SetColors(color_pallete_[EMPTY_]);
 
   color_pallete_val_.back() = EMPTY_;
@@ -137,19 +137,16 @@ void UIPalette::Init() {
   const size_t buttons_count = std::min<size_t>(colors_count_ + 1, max_height_buttons_count);
   SetDimensions(button_width_ + 2 * button_width_spacing_,
          button_height_spacing_ * (buttons_count + 1) + button_height_ * (buttons_count));
-  std::cout << "UIPalleteInit() wh " << width_ + 10 << " " << height_ + 10 << std::endl;
   shadow_ = std::make_shared<UIShadowEffect>(
-    GetAbsoluteXPosition() - 5, 
-    GetAbsoluteYPosition() - 5, 
     width_ + 10, 
     height_ + 10,
     10.0 / std::min(width_, height_), 
-    3); 
-
+    3
+  ); 
 }
 
 void UIPalette::Draw() {
-  shadow_->Draw();
+  shadow_->Draw(GetAbsoluteXPosition() - 5, GetAbsoluteYPosition() - 5);
 
   const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
   UITools::DrawRectangle(

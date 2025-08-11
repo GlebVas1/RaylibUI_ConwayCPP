@@ -41,6 +41,30 @@ void Field::ReinitializeBuffer() {
   buffer_1_ = static_cast<uint8_t*>(malloc(field_width_ * field_height_));
 }
 
+void Field::ReinitializeBufferCropData(size_t old_width, size_t old_height, size_t new_width, size_t new_height) {
+  uint8_t* buffer_0_new = static_cast<uint8_t*>(calloc(new_width * new_height, sizeof(uint8_t)));
+  uint8_t* buffer_1_new = static_cast<uint8_t*>(calloc(new_width * new_height, sizeof(uint8_t)));
+  
+  for (size_t row = 0; row < std::min(old_height, new_height); ++row) {
+    std::memcpy(
+      buffer_0_new + new_width * row, 
+      buffer_0_ + old_width * row, 
+      std::min(old_width, new_width)
+    );
+    std::memcpy(
+      buffer_1_new + new_width * row, 
+      buffer_1_ + old_width * row, 
+      std::min(old_width, new_width)
+    );
+  }
+
+  free(buffer_0_);
+  free(buffer_1_);
+
+  buffer_0_ = buffer_0_new;
+  buffer_1_ = buffer_1_new;
+}
+
 void Field::ReinitializeColorBuffer() {
   free(color_buffer_);
   color_buffer_ = static_cast<uint8_t*>(malloc(field_width_ * field_height_ * 4));
@@ -68,7 +92,7 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
   if (!paused_) {
     for (size_t i = field_height_ - current_rule_->radius + x; i <= field_height_ + current_rule_->radius + x; ++i) {
         for (size_t j = field_width_ - current_rule_->radius + y; j <= field_width_ + current_rule_->radius + y; ++j) {
-            if (i == field_width_ + x && j == y + field_height_) {
+            if (i == field_height_ + x && j == y + field_width_) {
                 if (current_rule_->count_central && GetPixel(i % field_height_, j % field_width_, buffer_to_read) == FULL_) {
                   ++neigh_count;
                 }
@@ -228,9 +252,13 @@ void Field::MultiThreadUpdating() {
     SwitchBuffer();
 
     if (should_reinitialize_.load()) {
+      ReinitializeBufferCropData(
+        field_width_,
+        field_height_, 
+        reinitialize_width_, 
+        reinitialize_height_);
       field_width_ = reinitialize_width_;
       field_height_ = reinitialize_height_;
-      ReinitializeBuffer();
       ReinitializeColorBuffer();
       controller_->SetNewColorBuffer(color_buffer_);
       should_reinitialize_.store(false);
