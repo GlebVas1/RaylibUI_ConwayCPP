@@ -3,11 +3,16 @@
 #include "raylib.h"
 #include "ui_list.h"
 
+
 UIList::UIList() {}
 
+UIList::~UIList() {
+    UnloadRenderTexture(*list_render_texture_);
+}
 
-UIList::UIList(int x, int y, int width, int height, std::function<void(size_t)> call) : UIElement(x, y, width, height) {
-    call_ = call;
+UIList::UIList(int x, int y, int width, int height, std::function<void(size_t)> call) :
+    UIElement(x, y, width, height) {
+        call_ = call;
 }
 
 
@@ -25,11 +30,9 @@ void UIList::Init() {
 
 
 void UIList::Draw() {
-
     const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
 
     BeginTextureMode(*list_render_texture_);
-
     ClearBackground({0, 0, 0, 0});
     DrawRectangleRounded(
         Rectangle {
@@ -76,7 +79,6 @@ void UIList::Draw() {
             text_color
         );
     }
-
     EndTextureMode();
 
     // https://www.reddit.com/r/raylib/comments/14lk8fx/texture_is_rendering_coordinates_with_flipped_y/
@@ -84,15 +86,14 @@ void UIList::Draw() {
         list_render_texture_->texture, 
         (Rectangle){ 0, 0, (float)list_render_texture_->texture.width, -(float)list_render_texture_->texture.height },
         (Rectangle){ 
-            GetAbsoluteXPosition(), 
-            GetAbsoluteYPosition(), 
+            static_cast<float>(GetAbsoluteXPosition()), 
+            static_cast<float>(GetAbsoluteYPosition()), 
             static_cast<float>(list_render_texture_->texture.width), 
             static_cast<float>(list_render_texture_->texture.height)
         }, 
         (Vector2){ 0, 0 },
         0.0f, 
         WHITE);
-    //DrawTexture(list_texture.texture, GetAbsoluteXPosition(), GetAbsoluteYPosition(), WHITE);
 
     UITools::DrawRectangle(
         GetAbsoluteXPosition() + width_ - slider_box_x_space_ / 2 - slider_line_width_ / 2,

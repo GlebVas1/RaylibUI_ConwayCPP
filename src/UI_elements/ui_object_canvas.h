@@ -1,8 +1,11 @@
 #pragma once
 #include "game_colors.h"
 #include "game_objects.h"
+
 #include "stdafx.h"
+
 #include "ui_canvas.h"
+
 
 class UIObjectCanvas : public UICanvas {
  private:

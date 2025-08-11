@@ -1,82 +1,82 @@
-
 template <typename T>
 UIHorizontalSlider<T>::UIHorizontalSlider(int x, int y, int width, int height, std::function<void(T)> on_value_change):
-    UIElement(x, y, width, height)
+  UIElement(x, y, width, height)
 {
-    on_value_change_ = on_value_change;
+  on_value_change_ = on_value_change;
 }
-
-
 
 template<typename T>
 void UIHorizontalSlider<T>::Draw() {
-    const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
+  const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
 
-    int line_width = width_ - 2 * x_offset_;
-    int line_y_pos = height_ / 2 - line_height_ / 2;
-    float slider_relevant_pos = static_cast<float>(value_) / (max_value_ - min_value_);
-    int slider_x_pos = x_offset_ + static_cast<int>(slider_relevant_pos * (line_width - slider_width_));
-    int slider_y_pos = height_ / 2 - slider_height_ / 2;
-    
-    UITools::DrawRectangle(
-        GetAbsoluteXPosition() + x_offset_,
-        GetAbsoluteYPosition() + line_y_pos,
-        line_width,
-        line_height_,
-        0,
-        this_theme.elements_corner_radius,
-        UIColorThemeManager::GetInstance().GetTheme().ui_dark_color,
-        UIColorThemeManager::GetInstance().GetTheme().ui_line_color
-    );
+  int line_width = width_ - 2 * x_offset_;
+  int line_y_pos = height_ / 2 - line_height_ / 2;
+  float slider_relevant_pos = static_cast<float>(value_) / (max_value_ - min_value_);
+  int slider_x_pos = x_offset_ + static_cast<int>(slider_relevant_pos * (line_width - slider_width_));
+  int slider_y_pos = height_ / 2 - slider_height_ / 2;
+  
+  UITools::DrawRectangle(
+    GetAbsoluteXPosition() + x_offset_,
+    GetAbsoluteYPosition() + line_y_pos,
+    line_width,
+    line_height_,
+    0,
+    this_theme.elements_corner_radius,
+    UIColorThemeManager::GetInstance().GetTheme().ui_dark_color,
+    UIColorThemeManager::GetInstance().GetTheme().ui_line_color
+  );
 
-    UITools::DrawRectangle(
-        GetAbsoluteXPosition() + slider_x_pos,
-        GetAbsoluteYPosition() + slider_y_pos,
-        slider_width_,
-        slider_height_,
-        this_theme.line_narrow_thikness,
-        this_theme.elements_corner_radius,
-        this_theme.ui_neutral_color,
-        this_theme.ui_line_color
-    );
+  UITools::DrawRectangle(
+    GetAbsoluteXPosition() + slider_x_pos,
+    GetAbsoluteYPosition() + slider_y_pos,
+    slider_width_,
+    slider_height_,
+    this_theme.line_narrow_thikness,
+    this_theme.elements_corner_radius,
+    this_theme.ui_neutral_color,
+    this_theme.ui_line_color
+  );
 }
 
 template <typename T>
 void UIHorizontalSlider<T>::Update() {
-    int line_width = width_ - 2 * x_offset_;
-    bool mouse_on_slider = CheckCollisionPointRec(GetMousePosition(), Rectangle{
-        static_cast<float>(GetAbsoluteXPosition() + x_offset_),
-        static_cast<float>(GetAbsoluteYPosition()),
-        static_cast<float>(line_width),
-        static_cast<float>(height_)
-    });
+  const int line_width = width_ - 2 * x_offset_;
+  const bool mouse_on_slider = CheckCollisionPointRec(GetMousePosition(), Rectangle{
+    static_cast<float>(GetAbsoluteXPosition() + x_offset_),
+    static_cast<float>(GetAbsoluteYPosition()),
+    static_cast<float>(line_width),
+    static_cast<float>(height_)
+  });
 
-    if (mouse_on_slider) {
-        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            int mouse_x_position_on_line = std::max<int>(GetAbsoluteXPosition() + x_offset_, std::min<int>(GetAbsoluteXPosition() + width_ - x_offset_, GetMousePosition().x));
-            value_= static_cast<int>((static_cast<float>(mouse_x_position_on_line - (GetAbsoluteXPosition() + x_offset_)) / (width_ - 2 * x_offset_)) * (max_value_ - min_value_));
-            on_value_change_(value_);
-        }
+  if (mouse_on_slider) {
+    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+      int mouse_x_position_on_line = std::max<int>(GetAbsoluteXPosition() + x_offset_,
+                             std::min<int>(GetAbsoluteXPosition() + width_ - x_offset_, 
+                                GetMousePosition().x));
+      value_= static_cast<int>((
+        static_cast<float>(mouse_x_position_on_line - (GetAbsoluteXPosition() + x_offset_)) / 
+                    (width_ - 2 * x_offset_)) * (max_value_ - min_value_));
+      on_value_change_(value_);
     }
+  }
 }
 
 template<typename T>
 void UIHorizontalSlider<T>::SetMinValue(T val) {
-    min_value_ = val;
+  min_value_ = val;
 }
 
 template<typename T>
 void UIHorizontalSlider<T>::SetMaxValue(T val) {
-    max_value_ = val;
+  max_value_ = val;
 }
 
 template<typename T>
 void UIHorizontalSlider<T>::SetValue(T val) {
-    value_ = val;
-    NormalizeValue();
+  value_ = val;
 }
 
 template<typename T>
 T UIHorizontalSlider<T>::GetValue() {
-    return value_;
+  return value_;
 }

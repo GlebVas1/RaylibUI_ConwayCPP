@@ -28,26 +28,12 @@ UIShadowEffect::UIShadowEffect(int x, int y, int width, int height, float roundn
     shadow = std::make_shared<Texture2D>(rend_shadow.texture);
 
     SetTextureFilter(*shadow, TEXTURE_FILTER_TRILINEAR);
+}
 
+UIShadowEffect::~UIShadowEffect() {
+    UnloadTexture(*shadow);
 }
 
 void UIShadowEffect::Draw() {
-    // DrawTexturePro(*shadow,
-    //     Rectangle{
-    //         0,
-    //         0, 
-    //         static_cast<float>(shadow->width),
-    //         static_cast<float>(shadow->height)
-    //     },
-    //     Rectangle{
-    //         static_cast<float>(x), 
-    //         static_cast<float>(y), 
-    //         static_cast<float>(width), 
-    //         static_cast<float>(height)
-    //     },
-    //     Vector2{static_cast<float>(0), static_cast<float>(0)},
-    //     0.0f,
-    //     BLACK
-    // );
     DrawTexture(*shadow, x, y, WHITE);
 }

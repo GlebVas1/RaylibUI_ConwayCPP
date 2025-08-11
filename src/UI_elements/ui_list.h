@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "ui_element_class.h"
 
+
 class UIList : public UIElement {
     private:
     std::vector<std::string> elements_;
@@ -17,7 +18,7 @@ class UIList : public UIElement {
 
     static const int vertical_offset = 0;
 
-    // can change later
+    // can be changed later
     int slider_height_= 10;
     
     static const int slider_width_= 15;
@@ -26,7 +27,6 @@ class UIList : public UIElement {
     static const int slider_line_y_offset_ = 10;
     static const int slider_line_width_ = 5;
 
-
     float slider_position_ = 0.5f;
 
     size_t selected_ind_ = 0;
@@ -34,11 +34,12 @@ class UIList : public UIElement {
     std::function<void(size_t)> call_;
 
     public:
-    void Init() override;
     UIList();
+    ~UIList();
     UIList(int x, int y, int width, int height, std::function<void(size_t)> call_);
     void SetVector(const std::vector<std::string>& original);
+
+    void Init() override;
     void Draw() override;
     void Update() override;
-    //void Update() override;
 };

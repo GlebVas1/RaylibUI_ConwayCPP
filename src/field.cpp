@@ -6,23 +6,24 @@
 //////////////
 
 Field::Field() :
-    buffer_0_(static_cast<uint8_t*>(malloc(field_width_ * field_height_))),
-    buffer_1_(static_cast<uint8_t*>(malloc(field_width_ * field_height_))),
-    color_buffer_(static_cast<uint8_t*>(malloc(field_width_ * field_height_ * 4)))
+  buffer_0_(static_cast<uint8_t*>(malloc(field_width_ * field_height_))),
+  buffer_1_(static_cast<uint8_t*>(malloc(field_width_ * field_height_))),
+  color_buffer_(static_cast<uint8_t*>(malloc(field_width_ * field_height_ * 4)))
 { }
 
 Field::~Field() {
-    free(buffer_0_);
-    free(buffer_1_);
-    free(color_buffer_);
+  // will be deallocated after multiupdate_thread ends_work;
+  /* free(buffer_0_);
+  free(buffer_1_);
+  free(color_buffer_); */
 }
 
 uint8_t* Field::GetReadBuffer() {
-    return read_buffer_ == 0 ? buffer_0_ : buffer_1_;
+  return read_buffer_ == 0 ? buffer_0_ : buffer_1_;
 }
 
 uint8_t* Field::GetWriteBuffer() {
-    return read_buffer_ == 1 ? buffer_0_ : buffer_1_;
+  return read_buffer_ == 1 ? buffer_0_ : buffer_1_;
 }
 
 void Field::SwitchBuffer() {
@@ -30,35 +31,35 @@ void Field::SwitchBuffer() {
 }
 
 size_t Field::BufferIndex(size_t x, size_t y) {
-    return x * field_width_ + y;
+  return x * field_width_ + y;
 }
 
 void Field::ReinitializeBuffer() {
-    free(buffer_0_);
-    free(buffer_1_);
-    buffer_0_ = static_cast<uint8_t*>(malloc(field_width_ * field_height_));
-    buffer_1_ = static_cast<uint8_t*>(malloc(field_width_ * field_height_));
+  free(buffer_0_);
+  free(buffer_1_);
+  buffer_0_ = static_cast<uint8_t*>(malloc(field_width_ * field_height_));
+  buffer_1_ = static_cast<uint8_t*>(malloc(field_width_ * field_height_));
 }
 
 void Field::ReinitializeColorBuffer() {
-    free(color_buffer_);
-    color_buffer_ = static_cast<uint8_t*>(malloc(field_width_ * field_height_ * 4));
+  free(color_buffer_);
+  color_buffer_ = static_cast<uint8_t*>(malloc(field_width_ * field_height_ * 4));
 }
 
 void Field::SetPixel(size_t x, size_t y, uint8_t val, uint8_t* buffer) {
-    buffer[BufferIndex(x, y)] = val;
+  buffer[BufferIndex(x, y)] = val;
 }
 
 void Field::SetPixelColor(size_t x, size_t y,  uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-    size_t index = BufferIndex(x, y);
-    color_buffer_[4 * index] = r;
-    color_buffer_[4 * index + 1] = g;
-    color_buffer_[4 * index + 2] = b;
-    color_buffer_[4 * index + 3] = a;
+  const size_t index = BufferIndex(x, y);
+  color_buffer_[4 * index] = r;
+  color_buffer_[4 * index + 1] = g;
+  color_buffer_[4 * index + 2] = b;
+  color_buffer_[4 * index + 3] = a;
 }
 
 uint8_t Field::GetPixel(size_t x, size_t y, uint8_t* buffer) {
-    return buffer[BufferIndex(x, y)];
+  return buffer[BufferIndex(x, y)];
 }
 
 void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* buffer_to_write) {
@@ -140,14 +141,9 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
       compute_start_cv.wait(
         lk, 
         [&](){
-          return (thread_should_start[thread_id].load(std::memory_order_acq_rel)) || !processing_;
+          return (thread_should_start[thread_id].load(std::memory_order_acq_rel));
         }
       );
-    }
-
-    if (!processing_) {
-      compute_end_cv.notify_one();
-      return;
     }
 
     thread_should_start[thread_id].store(false, std::memory_order_acq_rel);
@@ -173,8 +169,8 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
 //////////////
 
 Field& Field::GetInstance() {
-    static Field obj;
-    return obj;
+  static Field obj;
+  return obj;
 }
 
 void Field::SetController(Controller* controller) {
@@ -249,7 +245,7 @@ void Field::MultiThreadUpdating() {
 }
 
 uint8_t* Field::GetColorBuffer() {
-    return color_buffer_;
+  return color_buffer_;
 }
 
 void Field::SetNewDimensions(size_t x, size_t y) {
@@ -259,7 +255,7 @@ void Field::SetNewDimensions(size_t x, size_t y) {
 }
 
 void Field::SetGameRule(GameRule* rule) {
-    current_rule_ = rule;
+  current_rule_ = rule;
 }
 
 GameRule* Field::GetGameRule() {
@@ -267,7 +263,7 @@ GameRule* Field::GetGameRule() {
 }
 
 void Field::SetColorPallette(std::vector<GameColor>* pallette) {
-    current_pallete_ = pallette;
+  current_pallete_ = pallette;
 }
 
 void Field::SetFrameDelayMilliseconds(size_t val)  {
@@ -287,8 +283,8 @@ void Field::StopThreads() {
 }
 
 void Field::SetPixelAt(int x, int y, uint8_t val) {
-  size_t x_at = static_cast<size_t>((x + field_width_) % field_width_);
-  size_t y_at = static_cast<size_t>((y + field_height_) % field_height_);
+  const size_t x_at = static_cast<size_t>((x + field_width_) % field_width_);
+  const size_t y_at = static_cast<size_t>((y + field_height_) % field_height_);
   SetPixel(x_at, y_at, val, GetReadBuffer());
   SetPixel(x_at, y_at, val, GetWriteBuffer());
 }

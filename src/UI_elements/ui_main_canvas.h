@@ -5,6 +5,6 @@
 
 
 class UIMainCanvas : public UICanvas {
-    public:
-    void Update() override;
+ public:
+  void Update() override;
 };

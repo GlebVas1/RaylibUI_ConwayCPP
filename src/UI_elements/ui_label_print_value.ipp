@@ -1,19 +1,20 @@
 #include "../UI_Tools/ui_tools.h"
 
+
 template<typename T>
 UILabelPrintValue<T>::UILabelPrintValue(int x, int y, const std::string& text_format, std::function<T()> get_value_function) :
-    UIElement(x, y, 10, 10) {
-    text_format_ = text_format;
-    get_value_ = get_value_function;
+  UIElement(x, y, 10, 10) {
+  text_format_ = text_format;
+  get_value_ = get_value_function;
 }
 
 template<typename T>
 void UILabelPrintValue<T>::Draw() {
-    UITools::DrawTextDefault(
-        GetAbsoluteXPosition(), 
-        GetAbsoluteYPosition(), 
-        TextFormat(text_format_.c_str(), get_value_()),
-        18,
-        UIColorThemeManager::GetInstance().GetTheme().ui_text_dark
-    );
+  UITools::DrawTextDefault(
+    GetAbsoluteXPosition(), 
+    GetAbsoluteYPosition(), 
+    TextFormat(text_format_.c_str(), get_value_()),
+    18,
+    UIColorThemeManager::GetInstance().GetTheme().ui_text_dark
+  );
 }

@@ -1,98 +1,98 @@
 #pragma once
-#include "stdafx.h"
-#include "game_rule.h"
 #include "game_colors.h"
+#include "game_rule.h"
+#include "stdafx.h"
 
 
 class Controller;
 
 class Field {
-    private:
-    Field();
-    ~Field();
+ private:
+  Field();
+  ~Field();
 
-    Controller* controller_;
+  Controller* controller_;
 
-    size_t field_width_ = 512;
-    size_t field_height_ = 512;
-    
-    uint8_t read_buffer_ = 0;
-    uint8_t* buffer_0_;
-    uint8_t* buffer_1_;
-    uint8_t* color_buffer_;
+  size_t field_width_ = 512;
+  size_t field_height_ = 512;
 
-    uint8_t* GetReadBuffer();
-    uint8_t* GetWriteBuffer();
-    void SwitchBuffer();
+  uint8_t read_buffer_ = 0;
+  uint8_t* buffer_0_;
+  uint8_t* buffer_1_;
+  uint8_t* color_buffer_;
 
-    const uint8_t ACTIVE_ = 0;
-    const uint8_t EMPTY_ = 0;
-    const uint8_t FULL_ = 255;
+  uint8_t* GetReadBuffer();
+  uint8_t* GetWriteBuffer();
+  void SwitchBuffer();
 
-    GameRule* current_rule_ = nullptr;
-    std::vector<GameColor>* current_pallete_ = nullptr;
+  const uint8_t ACTIVE_ = 0;
+  const uint8_t EMPTY_ = 0;
+  const uint8_t FULL_ = 255;
 
-    bool processing_ = true;
+  GameRule* current_rule_ = nullptr;
+  std::vector<GameColor>* current_pallete_ = nullptr;
 
-    bool paused_ = false;
+  bool processing_ = true;
 
-    std::atomic_bool should_reinitialize_ = false;
-    size_t reinitialize_width_ =  0;
-    size_t reinitialize_height_ = 0;
+  bool paused_ = false;
 
-    size_t threads_count = 56;
-    std::atomic<size_t> current_threads_finished;
+  std::atomic_bool should_reinitialize_ = false;
+  size_t reinitialize_width_ = 0;
+  size_t reinitialize_height_ = 0;
 
-    std::mutex thread_creation_mutex;
-    std::vector<std::thread> computing_threads_;
+  size_t threads_count = 56;
+  std::atomic<size_t> current_threads_finished;
 
-    std::mutex compute_start_mutex;
-    std::mutex compute_end_mutex;
-    std::mutex debug_m;
+  std::mutex thread_creation_mutex;
+  std::vector<std::thread> computing_threads_;
 
-    std::condition_variable compute_start_cv;
-    std::condition_variable compute_end_cv;
+  std::mutex compute_start_mutex;
+  std::mutex compute_end_mutex;
+  std::mutex debug_m;
 
-    //average bool can be ovverding due to cache
-    std::vector<std::atomic_bool> thread_should_start;
+  std::condition_variable compute_start_cv;
+  std::condition_variable compute_end_cv;
 
-    size_t frame_milliseconds_delay_ = 0;
+  // average bool can be ovverding due to cache
+  std::vector<std::atomic_bool> thread_should_start;
 
-    float current_fps_ = 0;
+  size_t frame_milliseconds_delay_ = 0;
 
-    inline size_t BufferIndex(size_t x, size_t y);
+  float current_fps_ = 0;
 
-    void ReinitializeBuffer();
-    void ReinitializeColorBuffer();
+  inline size_t BufferIndex(size_t x, size_t y);
 
-    void SetPixel(size_t x, size_t y, uint8_t val, uint8_t* buffer);
-    void SetPixelColor(size_t x, size_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
-    uint8_t GetPixel(size_t x, size_t y, uint8_t* buffer);
-    void UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* buffer_to_write);
+  void ReinitializeBuffer();
+  void ReinitializeColorBuffer();
 
-    void ThreadUpdateFunction(size_t thread_id, size_t start_x);
+  void SetPixel(size_t x, size_t y, uint8_t val, uint8_t* buffer);
+  void SetPixelColor(size_t x, size_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
+  uint8_t GetPixel(size_t x, size_t y, uint8_t* buffer);
+  void UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* buffer_to_write);
 
-    public:
-    static Field& GetInstance();
-    void SetController(Controller* controller);
+  void ThreadUpdateFunction(size_t thread_id, size_t start_x);
 
-    void CreateUpdateThreads();
-    void MultiThreadUpdating();
+ public:
+  static Field& GetInstance();
+  void SetController(Controller* controller);
 
-    uint8_t* GetColorBuffer();
+  void CreateUpdateThreads();
+  void MultiThreadUpdating();
 
-    void SetNewDimensions(size_t x, size_t y);
+  uint8_t* GetColorBuffer();
 
-    void SetGameRule(GameRule* rule);
-    GameRule* GetGameRule();
+  void SetNewDimensions(size_t x, size_t y);
 
-    void SetColorPallette(std::vector<GameColor>* pallette);
+  void SetGameRule(GameRule* rule);
+  GameRule* GetGameRule();
 
-    void SetFrameDelayMilliseconds(size_t val);
-    float GetFPS();
-    void SetPause(float val);
-    void StopThreads();
+  void SetColorPallette(std::vector<GameColor>* pallette);
 
-    void SetPixelAt(int x, int y, uint8_t val);
-    // uint8_t GetPixelAt(int x, int y);
+  void SetFrameDelayMilliseconds(size_t val);
+  float GetFPS();
+  void SetPause(float val);
+  void StopThreads();
+
+  void SetPixelAt(int x, int y, uint8_t val);
+  // uint8_t GetPixelAt(int x, int y);
 };

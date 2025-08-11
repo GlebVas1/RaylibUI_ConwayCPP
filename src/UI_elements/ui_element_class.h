@@ -2,49 +2,49 @@
 #include "stdafx.h"
 #include "ui_color_theme.h"
 
+
 class UIElement {
-    protected:
+ protected:
+  int width_ = 0;
+  int height_ = 0;
+  int x_position_ = 0;
+  int y_position_ = 0;
 
-    int width_ = 0;
-    int height_ = 0;
-    int x_position_ = 0;
-    int y_position_ = 0;
-    
-    UIElement* parrent_ = nullptr;
-    std::unordered_set<UIElement*> children_;
+  UIElement* parrent_ = nullptr;
+  std::unordered_set<UIElement*> children_;
 
-    public:
-    UIElement();
-    UIElement(int width, int height);
-    UIElement(int x_pos, int y_pos, int width, int height);
-    
-    // Don't want make it = 0, to not mandatory implement them after
-    virtual void Init();
-    virtual void Draw();
-    virtual void Update();
+ public:
+  UIElement();
+  UIElement(int width, int height);
+  UIElement(int x_pos, int y_pos, int width, int height);
 
-    void SetDimensions(int x, int y);
-    void SetPosition(int x, int y);
+  // Don't want make it = 0, to not mandatory implement them after
+  virtual void Init();
+  virtual void Draw();
+  virtual void Update();
 
-    void SetXPosition(int x);
-    void SetYPosition(int y);
+  void SetDimensions(int x, int y);
+  void SetPosition(int x, int y);
 
-    void SetWidth(int x);
-    void SetHeight(int y);
+  void SetXPosition(int x);
+  void SetYPosition(int y);
 
-    inline int GetWidth();
-    inline int GetHeight();
-    inline int GetXPosition();
-    inline int GetYPosition();
+  void SetWidth(int x);
+  void SetHeight(int y);
 
-    int GetAbsoluteXPosition();
-    int GetAbsoluteYPosition();
+  inline int GetWidth() const;
+  inline int GetHeight() const;
+  inline int GetXPosition() const;
+  inline int GetYPosition() const;
 
-    void SetParrent(UIElement* parrent);
-    UIElement* GetParrent();
+  int GetAbsoluteXPosition() const;
+  int GetAbsoluteYPosition() const;
 
-    std::unordered_set<UIElement*> GetChildren();
+  void SetParrent(UIElement* parrent);
+  UIElement* GetParrent() const;
 
-    // virtual ~UIElement() {}; 
-    // isn't used because there no such cases
+  std::unordered_set<UIElement*> GetChildren() const;
+
+  // virtual ~UIElement() {};
+  // isn't used because there no such cases
 };
