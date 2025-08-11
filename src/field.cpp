@@ -66,15 +66,15 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
   size_t neigh_count = 0;
 
   if (!paused_) {
-    for (size_t i = field_width_ - current_rule_->radius + x; i <= field_width_ + current_rule_->radius + x; ++i) {
-        for (size_t j = field_height_ - current_rule_->radius + y; j <= field_height_ + current_rule_->radius + y; ++j) {
+    for (size_t i = field_height_ - current_rule_->radius + x; i <= field_height_ + current_rule_->radius + x; ++i) {
+        for (size_t j = field_width_ - current_rule_->radius + y; j <= field_width_ + current_rule_->radius + y; ++j) {
             if (i == field_width_ + x && j == y + field_height_) {
-                if (current_rule_->count_central && GetPixel(i % field_width_, j % field_height_, buffer_to_read) == FULL_) {
+                if (current_rule_->count_central && GetPixel(i % field_height_, j % field_width_, buffer_to_read) == FULL_) {
                   ++neigh_count;
                 }
                 continue;
             }
-            if (GetPixel(i % field_width_, j % field_height_, buffer_to_read) == FULL_) {
+            if (GetPixel(i % field_height_, j % field_width_, buffer_to_read) == FULL_) {
                 ++neigh_count;
             }
         }
@@ -272,8 +272,8 @@ uint8_t* Field::GetColorBuffer() {
 }
 
 void Field::SetNewDimensions(size_t x, size_t y) {
-  reinitialize_width_ = x;
-  reinitialize_height_ = y;
+  reinitialize_width_ = y;
+  reinitialize_height_ = x;
   should_reinitialize_.store(true, std::memory_order::release);
 }
 
@@ -306,8 +306,8 @@ void Field::StopThreads() {
 }
 
 void Field::SetPixelAt(int x, int y, uint8_t val) {
-  const size_t x_at = static_cast<size_t>((x + field_width_) % field_width_);
-  const size_t y_at = static_cast<size_t>((y + field_height_) % field_height_);
+  const size_t x_at = static_cast<size_t>((x + field_height_) % field_height_);
+  const size_t y_at = static_cast<size_t>((y + field_width_) % field_width_);
   SetPixel(x_at, y_at, val, GetReadBuffer());
   SetPixel(x_at, y_at, val, GetWriteBuffer());
 }

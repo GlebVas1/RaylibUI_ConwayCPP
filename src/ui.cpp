@@ -167,6 +167,6 @@ float UI::GetFPS() {
 
 void UI::SetFieldSize() {
   main_canvas_->SetColorBuffer(nullptr);
-  main_canvas_->SetCanvasTextureDimensions(field_height_spinbox_->GetValue(), field_width_spinbox_->GetValue());
+  main_canvas_->SetCanvasTextureDimensions(field_width_spinbox_->GetValue(), field_height_spinbox_->GetValue());
   controller_->SetFieldSize(field_height_spinbox_->GetValue(), field_width_spinbox_->GetValue());
 }

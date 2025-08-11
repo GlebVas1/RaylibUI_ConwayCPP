@@ -13,8 +13,10 @@ class Field {
 
   Controller* controller_;
 
-  size_t field_width_ = 512;
-  size_t field_height_ = 512;
+  // x is going among height
+  // y -- among width
+  size_t field_width_ = 60;
+  size_t field_height_ = 60;
 
   uint8_t read_buffer_ = 0;
   uint8_t* buffer_0_;
@@ -56,7 +58,7 @@ class Field {
   // average bool can be ovverding due to cache
   std::vector<std::atomic_bool> thread_should_start;
 
-  size_t frame_milliseconds_delay_ = 0;
+  size_t frame_milliseconds_delay_ = 1000;
 
   float current_fps_ = 0;
 

@@ -2,11 +2,11 @@
 
 
 void UICanvas::InitializeMainTexture() {
-  uint8_t* data0 = static_cast<uint8_t*>(malloc(main_texture_width_ * main_texture_width_ * 4));
+  uint8_t* data0 = static_cast<uint8_t*>(malloc(main_texture_width_ * main_texture_height_ * 4));
   Image img0 = {
     .data = data0,
     .width = main_texture_width_,
-    .height = main_texture_width_,
+    .height = main_texture_height_,
     .mipmaps = 1,
     .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 
   };

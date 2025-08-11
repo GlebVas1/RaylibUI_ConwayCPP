@@ -15,8 +15,8 @@ class Controller;
 
 class UI : UIElementsStorage {
  private:
-  const size_t default_field_width_ = 512;
-  const size_t default_field_height_ = 512;
+  const size_t default_field_width_ = 60;
+  const size_t default_field_height_ = 60;
 
 	const int window_width = 1920;
   const int window_height = 1080;
