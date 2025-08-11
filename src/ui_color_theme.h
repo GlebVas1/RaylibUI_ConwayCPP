@@ -1,6 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include "stdafx.h"
+#include "game_colors.h"
 
 struct UIColorTheme {
     std::string name = "default";
@@ -10,28 +11,59 @@ struct UIColorTheme {
     Color ui_neutral_color = {120, 130, 130, 255 }; // neutral
     Color ui_dark_color = {50, 50, 50, 255 }; // dark
 
-    Color ui_color_hovered = {0, 0, 0, 40};
-    Color ui_color_pressed = {0, 0, 0, 90};
+    Color ui_color_hovered = {200, 200, 200, 255};
+    Color ui_color_pressed = {100, 100, 100, 255};
 
     Color ui_line_color = BLACK;
-    int line_thikness = 2;
+    float line_default_thikness = 2;
+    float line_narrow_thikness = 1;
+    float line_thick_thikness = 2;
 
     Color ui_text_dark = BLACK;
     Color ui_text_light = WHITE;
 
-    void LoadThemeFromFile(const std::string& path);
-
-    void LoadMap(const std::string& path);
+    float panel_corner_radius = 5.0f;
+    float elements_corner_radius = 2.0f;
 };
+
+
+
+
 
 class UIColorThemeManager {
     private:
-    std::unordered_map<std::string, std::string> map_;
+    std::vector<UIColorTheme> themes_;
     UIColorTheme current_theme_;
     UIColorThemeManager();
 
     public:
     static UIColorThemeManager& GetInstance();
     const UIColorTheme& GetTheme();
+    void SetTheme(size_t ind);
+
+    void LoadThemeFromFile(const std::string& name, const std::string& path);
+    void LoadAllThemes(const std::string& path);
+    void LoadFromPalette(const std::vector<GameColor>& palette);
+
+
+
+    const std::vector<UIColorTheme>& GetThemes();
 };
 
+// Just make for spinbox
+struct UIColorThemeIterator {
+    UIColorThemeIterator();
+    UIColorThemeIterator(int);
+    
+    bool operator<(const UIColorThemeIterator& other) const;
+
+    UIColorThemeIterator& operator+=(const UIColorThemeIterator&);
+    UIColorThemeIterator& operator-=(const UIColorThemeIterator&);
+    UIColorThemeIterator& operator=(const UIColorThemeIterator&);
+    
+    const std::string& GetName() const;
+    size_t GetValue();
+
+    private:
+    size_t current_index_ = 0;
+};

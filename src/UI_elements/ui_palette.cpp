@@ -1,4 +1,5 @@
 #include "ui_palette.h"
+#include "../UI_Tools/ui_tools.h"
 
 void UIPalette::UIPaletteButton::SetId(size_t id) {
     id_ = id;
@@ -6,6 +7,7 @@ void UIPalette::UIPaletteButton::SetId(size_t id) {
 
 void UIPalette::UIPaletteButton::Draw() {
 
+    const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
 
     Rectangle main_field{
         static_cast<float>(x_position_),
@@ -35,13 +37,16 @@ void UIPalette::UIPaletteButton::Draw() {
         break;
     }
 
-    DrawRectangleRounded(main_field, roundness_, 4, background_color);
-    DrawRectangleRoundedLinesEx(
-        main_field_line,
-        roundness_,
-        4,
-        id_ == this_pallete->selected_button_ ? 4 : 2,
-        BLACK);
+    UITools::DrawRectangle(
+        x_position_,
+        y_position_,
+        width_,
+        height_,
+        this_pallete->selected_button_ == id_ ? this_theme.line_thick_thikness : this_theme.line_narrow_thikness,
+        this_theme.elements_corner_radius,
+        background_color,
+        this_theme.ui_line_color
+    );
 }
 
 void UIPalette::UIPaletteButton::SetXPosition(int x) {
@@ -210,7 +215,7 @@ void UIPalette::Draw() {
 }
 
 uint8_t UIPalette::GetRandomVal() {
-    return color_pallete_val_[rand() % (colors_count_ + 1)];
+    return color_pallete_val_[rand() % color_pallete_val_.size()];
 }
 
 const std::vector<GameColor>& UIPalette::GetColorPalette() {

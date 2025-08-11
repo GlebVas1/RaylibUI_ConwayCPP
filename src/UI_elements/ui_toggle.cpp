@@ -14,16 +14,16 @@ UIToggle::UIToggle(int x, int y, std::function<void(bool)> func, const std::stri
 void UIToggle::Draw() {
     Color background_color;
     const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
+    background_color = this_theme.ui_neutral_color;
     switch (state_)
     {
     case MouseState::MOUSE_CLEAR:
-        background_color = this_theme.ui_neutral_color;
         break;
     case MouseState::MOUSE_HOVERED:
-        background_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_hovered, WHITE);
+        background_color = ColorTint(this_theme.ui_neutral_color, this_theme.ui_color_hovered);
         break;   
     case MouseState::MOUSE_PRESSED:
-        background_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_pressed, WHITE);
+        background_color = ColorTint(this_theme.ui_neutral_color, this_theme.ui_color_pressed);
         break;
     }
 
@@ -34,8 +34,8 @@ void UIToggle::Draw() {
         GetAbsoluteYPosition(),
         box_width_,
         height_,
-        2,
-        0.1,
+        this_theme.line_narrow_thikness,
+        this_theme.elements_corner_radius,
         value_ ? this_theme.ui_light_color : this_theme.ui_dark_color,
         this_theme.ui_line_color
     );
@@ -46,26 +46,17 @@ void UIToggle::Draw() {
         GetAbsoluteYPosition(),
         slider_width_,
         height_,
-        2,
-        0.1,
+        this_theme.line_narrow_thikness,
+        this_theme.elements_corner_radius,
         background_color,
         this_theme.ui_line_color
     );
-
-    /* DrawText(
-        text_.c_str(), 
-        GetAbsoluteXPosition() + x_pos_ + box_width_ + 10, 
-        GetAbsoluteYPosition() + height_ / 2 - 4, 
-        14, 
-        this_theme.ui_text_dark); */
-
     UITools::DrawTextDefault(
         GetAbsoluteXPosition() + x_pos_ + box_width_ + 10, 
         GetAbsoluteYPosition() + height_ / 2 - 8,
         text_.c_str(), 
         18, 
         this_theme.ui_text_dark);
-  //  UITools::DrawRectangle
 }
 
 void UIToggle::Update() {

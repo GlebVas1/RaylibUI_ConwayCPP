@@ -34,11 +34,12 @@
 
 #include "game_objects.h"
 
+
 class GameRule;
 
 class Controller;
 
-class UI : public UIColorTheme {
+class UI {
     private:
 
     const size_t default_field_width_ = 512;
@@ -97,12 +98,16 @@ class UI : public UIColorTheme {
 
     std::shared_ptr<UIPanel> game_rule_panel_ = nullptr;
     std::shared_ptr<UIList> game_rule_list_ = nullptr;
+    std::shared_ptr<UILabel> game_rule_label_ = nullptr;
 
     std::shared_ptr<UIPalette> pallete_ = nullptr;
 
     std::shared_ptr<UIPanel> palette_panel_ = nullptr;
     std::shared_ptr<UIList> palette_list_ = nullptr;
     std::shared_ptr<UILabel> palette_label_ = nullptr;
+
+    std::shared_ptr<UIPanel> color_theme_panel_ = nullptr;
+    std::shared_ptr<UISpinBox<UIColorThemeIterator, false>> color_theme_spinbox_ = nullptr;
 
     void UpdateUIElements();
 

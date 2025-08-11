@@ -54,9 +54,8 @@ void GamePaletteLoader::LoadAllPalettes(const std::string& path) {
         LoadPalette(palette_name, palette_path); 
     }
 
-    palettes_.push_back(GameColorPinkGreen());
-    names_.push_back("SHO");
-    
+    all_objects_file.close();
+
 }
 
 std::vector<GameColor>& GamePaletteLoader::GetPaleteeById(size_t id) {

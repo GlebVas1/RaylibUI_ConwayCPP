@@ -79,7 +79,7 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
         }
     }
   }
-  
+
   uint8_t current_cell = GetPixel(x, y, buffer_to_read);
   SetPixel(x, y, current_cell, buffer_to_write);
   
@@ -204,7 +204,7 @@ void Field::MultiThreadUpdating() {
     
     {
       std::lock_guard<std::mutex> l(debug_m);
-      std::cout << "Update start frame "  << ++frame_counter << std::endl;
+      //std::cout << "Update start frame "  << ++frame_counter << std::endl;
     }
 
     // ranged for will not work

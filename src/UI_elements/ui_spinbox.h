@@ -6,7 +6,7 @@
 #include "ui_element_class.h"
 #include "ui_text_fromat.h"
 
-template <typename T>
+template <typename T, bool MouseDown = true>
 class UISpinBox : public UIElement, UIMouseState, UITextFormat<T> {
     private:
     T value_ = 0;

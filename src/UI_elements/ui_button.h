@@ -6,14 +6,12 @@
 
 class UIButton : public UIElement, public UIMouseState {
     protected:
-        float roundness_;
+        float corner_radius_;
         std::function<void()> binding_;
 
     public: 
-        UIButton(int x_pos, int y_pos, int width, int height, float roundness, std::function<void()> func);
+        UIButton(int x_pos, int y_pos, int width, int height, float corner_radius, std::function<void()> func);
 
         void Draw() override;
         void Update() override;
-
-        void SetRoundness(float roundness);
 };

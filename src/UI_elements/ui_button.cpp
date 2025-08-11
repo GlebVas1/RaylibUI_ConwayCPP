@@ -1,7 +1,7 @@
 #include "ui_button.h"
-
-UIButton::UIButton(int x_pos, int y_pos, int width, int height, float roundness, std::function<void()> func) : UIElement(x_pos, y_pos, width, height) {
-    roundness_ = roundness;
+#include "../UI_Tools/ui_tools.h"
+UIButton::UIButton(int x_pos, int y_pos, int width, int height, float corner_radius, std::function<void()> func) : UIElement(x_pos, y_pos, width, height) {
+    corner_radius_ = corner_radius;
     binding_ = func;
 }
 
@@ -20,22 +20,31 @@ void UIButton::Draw() {
         static_cast<float> (height_ - 1)
     };
 
-    Color background_color;
+    const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
+    Color background_color = UIColorThemeManager::GetInstance().GetTheme().ui_neutral_color;
     switch (state_)
     {
     case MouseState::MOUSE_CLEAR:
-        background_color = UIColorThemeManager::GetInstance().GetTheme().ui_neutral_color;
         break;
     case MouseState::MOUSE_HOVERED:
-        background_color = ColorAlphaBlend(background_color, UIColorThemeManager::GetInstance().GetTheme().ui_color_hovered, WHITE);
+        background_color = ColorTint(background_color, this_theme.ui_color_hovered);
         break;   
     case MouseState::MOUSE_PRESSED:
-        background_color = ColorAlphaBlend(background_color, UIColorThemeManager::GetInstance().GetTheme().ui_color_pressed, WHITE);
+        background_color = ColorTint(background_color, this_theme.ui_color_pressed);
         break;
     }
 
-    DrawRectangleRounded(main_field, roundness_, 0, Fade(background_color, 0.9f));
-    DrawRectangleRoundedLinesEx(main_field_line, roundness_, 0, 2, Fade(BLACK, 1.0f));
+    UITools::DrawRectangle(
+        GetAbsoluteXPosition(),
+        GetAbsoluteYPosition(),
+        width_,
+        height_,
+        this_theme.line_narrow_thikness,
+        this_theme.elements_corner_radius,
+        background_color,
+        this_theme.ui_line_color
+    );
+
 }
 
 void UIButton::Update() {
@@ -56,8 +65,4 @@ void UIButton::Update() {
     } else {
         state_ = MouseState::MOUSE_CLEAR;
     }
-}
-
-void UIButton::SetRoundness(float roundness) {
-    roundness_ = std::max(0.0f, std::min(roundness, 1.0f));
 }

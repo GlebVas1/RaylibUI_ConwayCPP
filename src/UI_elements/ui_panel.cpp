@@ -3,40 +3,41 @@
 #include "ui.h"
 
 void UIPanel::Init() {
-    roundness_ = static_cast<float>(10) / std::min(width_, height_);
+    float roundness = static_cast<float>(corner_radius_) / std::min(width_, height_);
     shadow_ = std::make_unique<UIShadowEffect>(
         x_position_ - 5,
         y_position_ - 5,
         width_ + 10,
         height_ + 10,
-        roundness_,
+        roundness,
         4
     );
 }
 
 void UIPanel::Draw() {
     shadow_->Draw();
+    const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
     UITools::DrawRectangle(
         x_position_,
         y_position_,
         width_,
         height_,
-        2,
-        roundness_,
-        UIColorThemeManager::GetInstance().GetTheme().ui_neutral_color,
-        UIColorThemeManager::GetInstance().GetTheme().ui_line_color
+        this_theme.line_default_thikness,
+        corner_radius_,
+        this_theme.ui_neutral_color,
+        this_theme.ui_line_color
     );
 }
 
 void UIPanel::SetRoundness(float val) {
-    roundness_ = val;
+    corner_radius_ = val;
 }
 
 UIPanel::UIPanel() {}
 
-UIPanel::UIPanel(int x_pos, int y_pos, int width, int height, float roundness) : 
+UIPanel::UIPanel(int x_pos, int y_pos, int width, int height, float corner_radius) : 
     UIElement(x_pos, y_pos, width, height) 
 {
-    roundness_ = roundness;
+    corner_radius_ = corner_radius;
 }
 

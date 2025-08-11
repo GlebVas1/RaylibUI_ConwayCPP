@@ -3,7 +3,6 @@
 #include "game_rule.h"
 #include "game_objects.h"
 
-
 class UI;
 class Field;
 

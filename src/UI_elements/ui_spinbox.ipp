@@ -5,16 +5,16 @@
 #pragma GCC diagnostic ignored "-Wextra"
 
 
-template<typename T>
-void UISpinBox<T>::NormalizeValue() {
+template <typename T, bool MouseDown>
+void UISpinBox<T, MouseDown>::NormalizeValue() {
     value_ = std::min(max_value_, std::max(min_value_, value_));
 }
 
-template<typename T>
-const float UISpinBox<T>::roundness_ = 0.1f;
+template <typename T, bool MouseDown>
+const float UISpinBox<T, MouseDown>::roundness_ = 0.1f;
 
-template<typename T>
-void UISpinBox<T>::Draw() {
+template <typename T, bool MouseDown>
+void UISpinBox<T, MouseDown>::Draw() {
     Rectangle main_field{
         static_cast<float>(GetAbsoluteXPosition()),
         static_cast<float>(GetAbsoluteYPosition()),
@@ -58,46 +58,67 @@ void UISpinBox<T>::Draw() {
     };
 
     const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
-    Color left_color;
+    Color left_color = this_theme.ui_neutral_color;
     switch (left_state_)
     {
     case MouseState::MOUSE_CLEAR:
-        left_color = this_theme.ui_neutral_color;
         break;
     case MouseState::MOUSE_HOVERED:
-        left_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_hovered, WHITE);
+        left_color = ColorTint(this_theme.ui_neutral_color, this_theme.ui_color_hovered);
         break;   
     case MouseState::MOUSE_PRESSED:
-        left_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_pressed, WHITE);
+        left_color = ColorTint(this_theme.ui_neutral_color, this_theme.ui_color_pressed);
         break;
     }
 
-    Color right_color;
+    Color right_color = this_theme.ui_neutral_color;
     switch (right_state_)
     {
     case MouseState::MOUSE_CLEAR:
-        right_color = this_theme.ui_neutral_color;
         break;
     case MouseState::MOUSE_HOVERED:
-        right_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_hovered, WHITE);
+        right_color = ColorTint(this_theme.ui_neutral_color, this_theme.ui_color_hovered);
         break;   
     case MouseState::MOUSE_PRESSED:
-        right_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_pressed, WHITE);
+        right_color = ColorTint(this_theme.ui_neutral_color, this_theme.ui_color_pressed);
         break;
     }
 
-    DrawRectangleRounded(main_field, roundness_, 0, this_theme.ui_dark_color);
-    DrawRectangleRoundedLinesEx(main_field_line, roundness_, 0, 2, this_theme.ui_line_color);
+    UITools::DrawRectangle(
+        GetAbsoluteXPosition(), 
+        GetAbsoluteYPosition(), 
+        width_, 
+        height_, 
+        this_theme.line_narrow_thikness, 
+        this_theme.elements_corner_radius, 
+        this_theme.ui_dark_color, 
+        this_theme.ui_line_color
+    );
 
-    DrawRectangleRounded(main_field_left, roundness_, 0, left_color);
-    DrawRectangleRoundedLinesEx(main_field_left_line, roundness_, 0, 2, this_theme.ui_line_color);
+    UITools::DrawRectangle(
+        GetAbsoluteXPosition(), 
+        GetAbsoluteYPosition(), 
+        buttons_width_, 
+        height_, 
+        this_theme.line_narrow_thikness, 
+        this_theme.elements_corner_radius, 
+        this_theme.ui_neutral_color, 
+        this_theme.ui_line_color
+    );
 
-    DrawRectangleRounded(main_field_right, roundness_, 0, right_color);
-    DrawRectangleRoundedLinesEx(main_field_right_line, roundness_, 0, 2, this_theme.ui_line_color);
+    UITools::DrawRectangle(
+        GetAbsoluteXPosition() + width_ - buttons_width_, 
+        GetAbsoluteYPosition(), 
+        buttons_width_, 
+        height_, 
+        this_theme.line_narrow_thikness, 
+        this_theme.elements_corner_radius, 
+        this_theme.ui_neutral_color, 
+        this_theme.ui_line_color
+    );
 
     const auto text = UITextFormat<T>::Format(value_);
     const auto text_size = UITools::MeasureTextDefault(text, 18);
-
 
     UITools::DrawTextDefault(
         GetAbsoluteXPosition() + width_ / 2 - text_size.first / 2,
@@ -108,24 +129,24 @@ void UISpinBox<T>::Draw() {
     );
 
     
-    //DrawText(TextFormat(UITextFormat<T>::format_, *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 6, 14, WHITE);
+    //DrawText(TextFormat(UITextFormat<T, MouseDown>::format_, *value_), GetAbsoluteXPosition() + width_ / 2 - 8 , GetAbsoluteYPosition() + height_ / 2 - 6, 14, WHITE);
 }
 
 
-template<typename T>
-void UISpinBox<T>::IncreaseValue() {
+template <typename T, bool MouseDown>
+void UISpinBox<T, MouseDown>::IncreaseValue() {
     value_ += step_;
     NormalizeValue();
 }
 
-template<typename T>
-void UISpinBox<T>::DecreaseValue() {
+template <typename T, bool MouseDown>
+void UISpinBox<T, MouseDown>::DecreaseValue() {
     value_ -= step_;
     NormalizeValue();
 }
 
-template<typename T>
-void UISpinBox<T>::Update() {
+template <typename T, bool MouseDown>
+void UISpinBox<T, MouseDown>::Update() {
     bool mouse_on_left_button = CheckCollisionPointRec(GetMousePosition(), Rectangle{
         static_cast<float>(GetAbsoluteXPosition()),
         static_cast<float>(GetAbsoluteYPosition()),
@@ -141,24 +162,44 @@ void UISpinBox<T>::Update() {
     });
 
     if (mouse_on_left_button) {
-        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            left_state_ = MouseState::MOUSE_PRESSED;
-            DecreaseValue();
-            binding_(value_);
+        if constexpr(MouseDown) {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+                left_state_ = MouseState::MOUSE_PRESSED;
+                DecreaseValue();
+                binding_(value_);
+            } else {
+                left_state_ = MouseState::MOUSE_HOVERED;
+            }
         } else {
-            left_state_ = MouseState::MOUSE_HOVERED;
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                left_state_ = MouseState::MOUSE_PRESSED;
+                DecreaseValue();
+                binding_(value_);
+            } else {
+                left_state_ = MouseState::MOUSE_HOVERED;
+            }
         }
     } else {
         left_state_ = MouseState::MOUSE_CLEAR;
     }
 
     if (mouse_on_right_button) {
-        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            right_state_ = MouseState::MOUSE_PRESSED;
-            IncreaseValue();
-            binding_(value_);
+        if constexpr(MouseDown) {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+                right_state_ = MouseState::MOUSE_PRESSED;
+                IncreaseValue();
+                binding_(value_);
+            } else {
+                right_state_ = MouseState::MOUSE_HOVERED;
+            }
         } else {
-            right_state_ = MouseState::MOUSE_HOVERED;
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                right_state_ = MouseState::MOUSE_PRESSED;
+                IncreaseValue();
+                binding_(value_);
+            } else {
+                right_state_ = MouseState::MOUSE_HOVERED;
+            }
         }
     } else {
         right_state_ = MouseState::MOUSE_CLEAR;
@@ -166,39 +207,39 @@ void UISpinBox<T>::Update() {
 
 }
 
-template<typename T>
-void UISpinBox<T>::SetMaxValue(T val) {
+template <typename T, bool MouseDown>
+void UISpinBox<T, MouseDown>::SetMaxValue(T val) {
     max_value_ = val;
 }
 
-template<typename T>
-void UISpinBox<T>::SetMinValue(T val) {
+template <typename T, bool MouseDown>
+void UISpinBox<T, MouseDown>::SetMinValue(T val) {
     min_value_ = val;
 }
 
-template<typename T>
-void UISpinBox<T>::SetStep(T val) {
+template <typename T, bool MouseDown>
+void UISpinBox<T, MouseDown>::SetStep(T val) {
     step_ = val;
 }
 
-template<typename T>
-UISpinBox<T>::UISpinBox() {}
+template <typename T, bool MouseDown>
+UISpinBox<T, MouseDown>::UISpinBox() {}
 
-template<typename T>
-UISpinBox<T>::UISpinBox(int x, int y, std::function<void(T)> func, T step) {
+template <typename T, bool MouseDown>
+UISpinBox<T, MouseDown>::UISpinBox(int x, int y, std::function<void(T)> func, T step) {
     binding_ = func;
     SetPosition(x, y);
     SetDimensions(60, 20);
     SetStep(step);
 }
 
-template<typename T>
-T UISpinBox<T>::GetValue() {
+template <typename T, bool MouseDown>
+T UISpinBox<T, MouseDown>::GetValue() {
     return value_;
 }
 
-template<typename T>
-void UISpinBox<T>::SetValue(T val) {
+template <typename T, bool MouseDown>
+void UISpinBox<T, MouseDown>::SetValue(T val) {
     value_ = val;
 }
 

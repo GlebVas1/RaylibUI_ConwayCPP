@@ -62,7 +62,7 @@ void GameObjectLoader::LoadAllObjects(const std::string& path) {
         all_objects_file >> object_name >> object_path;
         LoadObject(object_name, object_path); 
     }
-    
+    all_objects_file.close();
 }
 
 const GameObject& GameObjectLoader::GetObjectById(size_t id) {

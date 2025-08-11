@@ -51,8 +51,7 @@ void UI::Start() {
             std::cout << "Mouse x " << GetMousePosition().x << " y " << GetMousePosition().y << std::endl;
         }  */
         BeginDrawing();
-        
-        ClearBackground(ui_background_color);
+        ClearBackground(UIColorThemeManager::GetInstance().GetTheme().ui_background_color);
         DrawUIElements();
         EndDrawing();
     }
@@ -94,11 +93,11 @@ void UI::InitializeElements() {
 
     null_widget_ = std::make_shared<UIElement>();
 
-    main_canvas_panel_ = std::make_shared<UIPanel>(0, 0, 1080, 1080, 0.015f);
+    main_canvas_panel_ = std::make_shared<UIPanel>(0, 0, 1080, 1080, 5.0f);
     main_canvas_panel_->SetParrent(null_widget_.get());
     main_canvas_panel_->Init();
 
-    game_control_panel_ = std::make_shared<UIPanel>(1120, 40, 385, 50, 0.2f);
+    game_control_panel_ = std::make_shared<UIPanel>(1120, 40, 385, 50, 5.0f);
     game_control_panel_->SetParrent(null_widget_.get());
     game_control_panel_->Init();
     
@@ -134,7 +133,7 @@ void UI::InitializeElements() {
     );
     game_control_panel_fps_label_->SetParrent(game_control_panel_.get());
 
-    field_control_panel_ = std::make_shared<UIPanel>(1120, 110, 385, 70, 0.2f);
+    field_control_panel_ = std::make_shared<UIPanel>(1120, 110, 385, 70, 5.0f);
     field_control_panel_->SetParrent(null_widget_.get());
     field_control_panel_->Init();
 
@@ -143,7 +142,7 @@ void UI::InitializeElements() {
 
     field_grid_toogle_ = std::make_shared<UIToggle>(
         10, 
-        30, 
+        40, 
         [this](bool val){ main_canvas_->SetShowGrid(val); }, 
         "Grid"
     );
@@ -202,8 +201,8 @@ void UI::InitializeElements() {
 
     field_set_button_ = std::make_shared<UITextButton>(
         180, 
-        10, 
-        80, 
+        25, 
+        70, 
         20, 
         0.1f, 
         [this](){ SetFieldSize(); }, 
@@ -212,7 +211,7 @@ void UI::InitializeElements() {
     field_set_button_->SetParrent(field_control_panel_.get());
 
 
-    brush_settings_panel_ = std::make_shared<UIPanel>(1300, 200, 145, 160, 0.1f);
+    brush_settings_panel_ = std::make_shared<UIPanel>(1300, 200, 145, 160, 5.0f);
     brush_settings_panel_->SetParrent(null_widget_.get());
     brush_settings_panel_->Init();
 
@@ -261,7 +260,6 @@ void UI::InitializeElements() {
 
     main_canvas_ = std::make_shared<UIMainCanvas>();
     main_canvas_->SetParrent(main_canvas_panel_.get());
-    main_canvas_->SetCanvasGridColor(ui_neutral_color);
     main_canvas_->SetPosition(5, 5);
     main_canvas_->SetDimensions(1070, 1070);
 
@@ -273,7 +271,7 @@ void UI::InitializeElements() {
     pallete_->SetParrent(null_widget_.get());
 
 
-    palette_panel_ = std::make_shared<UIPanel>(1300, 380, 145, 290, 0.1f);
+    palette_panel_ = std::make_shared<UIPanel>(1300, 380, 145, 290, 5.0f);
     palette_panel_->SetParrent(null_widget_.get());
     palette_panel_->Init();
 
@@ -292,7 +290,7 @@ void UI::InitializeElements() {
     palette_label_ = std::make_shared<UILabel>(10, 10, "Palette");
     palette_label_->SetParrent(palette_panel_.get());
 
-    game_object_panel_ = std::make_shared<UIPanel>(1120, 200, 160, 470, 0.1f);
+    game_object_panel_ = std::make_shared<UIPanel>(1120, 200, 160, 470, 5.0f);
     game_object_panel_->SetParrent(null_widget_.get());
     game_object_panel_->Init();
 
@@ -313,7 +311,6 @@ void UI::InitializeElements() {
 
     game_object_canvas_ = std::make_shared<UIObjectCanvas>();
     game_object_canvas_->SetParrent(game_object_panel_.get());
-    game_object_canvas_->SetCanvasGridColor(ui_neutral_color);
     game_object_canvas_->SetPosition(5, 315);
     game_object_canvas_->SetDimensions(150, 150); 
 
@@ -367,12 +364,15 @@ void UI::InitializeElements() {
         "invert");
     game_object_invert_button_->SetParrent(game_object_panel_.get());
 
-    game_rule_panel_ = std::make_shared<UIPanel>(1120, 690, 385, 200, 0.08f);
+    game_rule_panel_ = std::make_shared<UIPanel>(1120, 690, 385, 200, 5.0f);
     game_rule_panel_->SetParrent(null_widget_.get());
     game_rule_panel_->Init();
 
-    game_rule_list_ = std::make_shared<UIList>(10, 10, 365, 180, [this](size_t ind) { SetRule(ind); });
+    game_rule_list_ = std::make_shared<UIList>(10, 40, 375, 150, [this](size_t ind) { SetRule(ind); });
     game_rule_list_->SetParrent(game_rule_panel_.get());
+
+    game_rule_label_ = std::make_shared<UILabel>(10, 8, "Game rule settings");
+    game_rule_label_->SetParrent(game_rule_panel_.get());
 
     std::vector<std::string> game_rule_names;
     for (const auto& elem : ALL_RULES) {
@@ -380,6 +380,16 @@ void UI::InitializeElements() {
     }
     game_rule_list_->SetVector(game_rule_names);
     game_rule_list_->Init();
+
+    color_theme_panel_ = std::make_shared<UIPanel>(1120, 910, 150, 60, 5.0f);
+    color_theme_panel_->SetParrent(null_widget_.get());
+    color_theme_panel_->Init();
+
+    color_theme_spinbox_ = std::make_shared<UISpinBox<UIColorThemeIterator, false>>(
+        10, 
+        10, 
+        [](UIColorThemeIterator iter){ UIColorThemeManager::GetInstance().SetTheme(iter.GetValue()); });
+    color_theme_spinbox_->SetParrent(color_theme_panel_.get());
 
 }
 

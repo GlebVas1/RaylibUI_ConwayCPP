@@ -3,6 +3,7 @@
 #include "field.h"
 #include "game_objects_loader.h"
 #include "game_palette_loader.h"
+#include "ui_color_theme.h"
 
 Controller::Controller() {
     ui = &UI::GetInstance();
@@ -90,7 +91,8 @@ void Controller::Start() {
     //GameObjectLoader::GetInstance();
     GameObjectLoader::GetInstance().LoadAllObjects("../GameObjects/all_objects.txt");
     GamePaletteLoader::GetInstance().LoadAllPalettes("../Palettes/all_palettes.txt");
-
+    UIColorThemeManager::GetInstance().LoadAllThemes("../Themes/all_themes.txt");
+    
     auto gcp = GamePaletteLoader::GetInstance().GetPaleteeById(0);
     auto gr = ALL_RULES[0];
     field->SetColorPallette(&gcp);

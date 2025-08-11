@@ -10,13 +10,12 @@ class UICheckbox : public UIElement, UIMouseState {
     private:
     bool value_ = false;
     std::function<void(bool)> binding_;
-    int x_pos_ = 0;
-    int y_pos_ = 0;
-    int box_size_ = 20;
-    int check_size_ = 12;
+    static const int x_pos_ = 0;
+    static const int y_pos_ = 0;
+    static const int box_size_ = 20;
+    static const int check_size_ = 12;
 
-    float box_roundness_ = 0.2f;
-    float check_roundness_ = 0.9f;
+    float check_roundness_ = 6.0f;
     std::string text_;
      
     public:

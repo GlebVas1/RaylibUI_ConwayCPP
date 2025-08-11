@@ -13,7 +13,9 @@ UIList::UIList(int x, int y, int width, int height, std::function<void(size_t)> 
 
 void UIList::SetVector(const std::vector<std::string>& original) {
     elements_ = original;
-    slider_height_ = static_cast<int>((static_cast<float>(height_) / (y_item_size_ * elements_.size())) * (height_ - 2 * slider_line_y_offset_));
+    slider_height_ = static_cast<int>((static_cast<float>(height_) / 
+                                        (y_item_size_ * elements_.size())) * 
+                                            (height_ - 2 * slider_line_y_offset_));
 }
 
 
@@ -36,7 +38,7 @@ void UIList::Draw() {
             static_cast<float>(width_ - slider_box_x_space_),
             static_cast<float>(height_)
         },
-        static_cast<float>(10) / std::min(width_ - slider_box_x_space_, height_),
+        static_cast<float>(this_theme.elements_corner_radius) / std::min(width_ - slider_box_x_space_, height_),
         5,
         WHITE
     );
@@ -51,10 +53,28 @@ void UIList::Draw() {
             this_theme.ui_text_dark : this_theme.ui_text_light;
 
         BeginBlendMode(BLEND_MULTIPLIED); 
-        DrawRectangle(0, i * y_item_size_ - y_offset , width_ - slider_box_x_space_, y_item_size_ , item_color);
-        DrawRectangleLines(0, i * y_item_size_ - y_offset, width_ - slider_box_x_space_, y_item_size_, this_theme.ui_line_color);
+        DrawRectangle(
+            0, 
+            i * y_item_size_ - y_offset, 
+            width_ - slider_box_x_space_, 
+            y_item_size_ , 
+            item_color
+        );
+        DrawRectangleLines(
+            0, 
+            i * y_item_size_ - y_offset, 
+            width_ - slider_box_x_space_, 
+            y_item_size_, 
+            this_theme.ui_line_color
+        );
         EndBlendMode();
-        UITools::DrawTextDefault(text_x_offset_ , i * y_item_size_ + text_y_offset_ - y_offset, elements_[i].c_str(), 18, text_color);
+        UITools::DrawTextDefault(
+            text_x_offset_, 
+            i * y_item_size_ + text_y_offset_ - y_offset, 
+            elements_[i].c_str(), 
+            18, 
+            text_color
+        );
     }
 
     EndTextureMode();
@@ -63,7 +83,12 @@ void UIList::Draw() {
     DrawTexturePro(
         list_render_texture_->texture, 
         (Rectangle){ 0, 0, (float)list_render_texture_->texture.width, -(float)list_render_texture_->texture.height },
-        (Rectangle){ GetAbsoluteXPosition(), GetAbsoluteYPosition(), (float)list_render_texture_->texture.width, (float)list_render_texture_->texture.height}, 
+        (Rectangle){ 
+            GetAbsoluteXPosition(), 
+            GetAbsoluteYPosition(), 
+            static_cast<float>(list_render_texture_->texture.width), 
+            static_cast<float>(list_render_texture_->texture.height)
+        }, 
         (Vector2){ 0, 0 },
         0.0f, 
         WHITE);
@@ -75,34 +100,38 @@ void UIList::Draw() {
         slider_line_width_,
         height_ - 2 * slider_line_y_offset_,
         0,
-        1.0f,
+        this_theme.elements_corner_radius,
         this_theme.ui_dark_color,
         BLACK
     );
 
     UITools::DrawRectangle(
         GetAbsoluteXPosition() + width_ - slider_box_x_space_ / 2 - slider_width_ / 2,
-        GetAbsoluteYPosition() + slider_line_y_offset_ + static_cast<int>(slider_position_ * (height_ - 2 * slider_line_y_offset_ - slider_height_)),
+        GetAbsoluteYPosition() + slider_line_y_offset_ + 
+                                    static_cast<int>(slider_position_ * 
+                                        (height_ - 2 * slider_line_y_offset_ - slider_height_)),
         slider_width_,
         slider_height_,
-        2,
-        0.3f,
+        this_theme.line_narrow_thikness,
+        this_theme.elements_corner_radius,
         this_theme.ui_neutral_color,
         this_theme.ui_line_color
     );
 
-    DrawRectangleRoundedLinesEx(
-        Rectangle {
-            static_cast<float>(GetAbsoluteXPosition()),
-            static_cast<float>(GetAbsoluteYPosition()),
-            static_cast<float>(width_ - slider_box_x_space_),
-            static_cast<float>(height_)
-        },
-        0.1f,
-        0,
-        2,
-        this_theme.ui_line_color
-    );
+    if (this_theme.line_default_thikness > 0) {
+        DrawRectangleRoundedLinesEx(
+            Rectangle {
+                static_cast<float>(GetAbsoluteXPosition()),
+                static_cast<float>(GetAbsoluteYPosition()),
+                static_cast<float>(width_ - slider_box_x_space_),
+                static_cast<float>(height_)
+            },
+            static_cast<float>(this_theme.elements_corner_radius) / std::min(width_ - slider_box_x_space_, height_),
+            3,
+            this_theme.line_default_thikness,
+            this_theme.ui_line_color
+        );
+    }
 }
 
 void UIList::Update() {
@@ -118,7 +147,9 @@ void UIList::Update() {
 
     if (mouse_on_list) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            size_t y = static_cast<size_t>(static_cast<float>(elements_.size()) * (GetMousePosition().y - GetAbsoluteYPosition() + y_offset) / full_list_height);
+            size_t y = static_cast<size_t>(static_cast<float>(elements_.size()) * 
+                                            (GetMousePosition().y - GetAbsoluteYPosition() + y_offset)
+                                                / full_list_height);
             selected_ind_ = y;
             call_(selected_ind_);
         }
@@ -134,8 +165,12 @@ void UIList::Update() {
 
     if (mouse_on_slider) {
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            int mouse_y_position_on_line = std::max<int>(GetAbsoluteYPosition() + slider_line_y_offset_, std::min<int>(GetAbsoluteYPosition() + height_ - slider_line_y_offset_, GetMousePosition().y));
-            slider_position_ = static_cast<float>(mouse_y_position_on_line - (GetAbsoluteYPosition() + slider_line_y_offset_)) / (height_ - 2 * slider_line_y_offset_);
+            int mouse_y_position_on_line = std::max<int>(GetAbsoluteYPosition() + slider_line_y_offset_,
+                std::min<int>(GetAbsoluteYPosition() + height_ - slider_line_y_offset_,
+                    GetMousePosition().y));
+            slider_position_ = static_cast<float>(mouse_y_position_on_line - 
+                                                    (GetAbsoluteYPosition() + slider_line_y_offset_)) / 
+                                                        (height_ - 2 * slider_line_y_offset_);
         }
     }
 }

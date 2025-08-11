@@ -14,16 +14,16 @@ void UICheckbox::Draw() {
     Color background_color;
 
     const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
+    background_color = this_theme.ui_dark_color;
     switch (state_)
     {
     case MouseState::MOUSE_CLEAR:
-        background_color = this_theme.ui_dark_color;
         break;
     case MouseState::MOUSE_HOVERED:
-        background_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_hovered, WHITE);;
+        background_color = ColorTint(background_color, this_theme.ui_color_hovered);
         break;   
     case MouseState::MOUSE_PRESSED:
-        background_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_pressed, WHITE);;
+        background_color = ColorTint(background_color, this_theme.ui_color_pressed);
         break;
     }
 
@@ -32,8 +32,8 @@ void UICheckbox::Draw() {
         GetAbsoluteYPosition() + y_pos_,
         box_size_,
         box_size_,
-        2, 
-        box_roundness_,
+        this_theme.line_narrow_thikness, 
+        this_theme.elements_corner_radius,
         background_color,
         this_theme.ui_line_color
     );
@@ -45,19 +45,12 @@ void UICheckbox::Draw() {
             GetAbsoluteYPosition() + y_pos_ + offset,
             check_size_,
             check_size_,
-            1, 
+            0, 
             check_roundness_,
             this_theme.ui_light_color,
             this_theme.ui_line_color
         );
     }
-
-    /* DrawText(
-        text_.c_str(), 
-        GetAbsoluteXPosition() + x_pos_ + box_size_ + 10, 
-        GetAbsoluteYPosition() + y_pos_ + box_size_ / 2 - 4, 
-        14, 
-        this_theme.ui_text_dark); */
 
     UITools::DrawTextDefault(
         GetAbsoluteXPosition() + x_pos_ + box_size_ + 10, 

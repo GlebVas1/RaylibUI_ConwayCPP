@@ -11,7 +11,7 @@ UIHorizontalSlider<T>::UIHorizontalSlider(int x, int y, int width, int height, s
 template<typename T>
 void UIHorizontalSlider<T>::Draw() {
     const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
-    
+
     int line_width = width_ - 2 * x_offset_;
     int line_y_pos = height_ / 2 - line_height_ / 2;
     float slider_relevant_pos = static_cast<float>(value_) / (max_value_ - min_value_);
@@ -24,7 +24,7 @@ void UIHorizontalSlider<T>::Draw() {
         line_width,
         line_height_,
         0,
-        1.0f,
+        this_theme.elements_corner_radius,
         UIColorThemeManager::GetInstance().GetTheme().ui_dark_color,
         UIColorThemeManager::GetInstance().GetTheme().ui_line_color
     );
@@ -34,8 +34,8 @@ void UIHorizontalSlider<T>::Draw() {
         GetAbsoluteYPosition() + slider_y_pos,
         slider_width_,
         slider_height_,
-        0,
-        0.1f,
+        this_theme.line_narrow_thikness,
+        this_theme.elements_corner_radius,
         this_theme.ui_neutral_color,
         this_theme.ui_line_color
     );

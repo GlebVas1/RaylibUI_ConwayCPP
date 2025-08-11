@@ -1,5 +1,6 @@
 #include "ui_canvas.h"
-#include "ui.h"
+#include "ui_color_theme.h"
+
 void UICanvas::Draw() {
     if (color_buffer_ != nullptr) {
         uint8_t* data = static_cast<uint8_t*>(malloc(main_texture_width_ * main_texture_height_ * 4));
@@ -53,7 +54,7 @@ void UICanvas::Draw() {
             }),
             Vector2{0.0f, 0.0f},
             0.0f,
-            WHITE
+            UIColorThemeManager::GetInstance().GetTheme().ui_neutral_color
         );
     } 
 
@@ -89,7 +90,7 @@ void UICanvas::InitializeMainGridTexture() {
     float cell_height = static_cast<float>(height_) / main_texture_height_;
     ClearBackground(Color{0, 0, 0, 0});
     
-    DrawRectangle(0, 0, width_, height_, grid_color_);
+    DrawRectangle(0, 0, width_, height_, WHITE);
 
     BeginBlendMode(BLEND_SUBTRACT_COLORS);
 
@@ -133,7 +134,7 @@ void UICanvas::InitializeMainGridTexture() {
 
     ClearBackground(Color{0, 0, 0, 0});
     
-    DrawRectangle(0, 0, width_, height_, grid_color_);
+    DrawRectangle(0, 0, width_, height_, WHITE);
 
     BeginBlendMode(BLEND_SUBTRACT_COLORS);
 
@@ -142,7 +143,7 @@ void UICanvas::InitializeMainGridTexture() {
             1.1f,
             1.1f,
             static_cast<float>(width_) - 1.1f,
-            static_cast<float>(height_) -1.1f
+            static_cast<float>(height_) - 1.1f
         },
         static_cast<float>(10) / width_, 
         4,
@@ -195,6 +196,3 @@ void UICanvas::SetColorBuffer(uint8_t* buffer) {
 
 void UICanvas::Update() {}
 
-void UICanvas::SetCanvasGridColor(Color c) {
-    grid_color_ = c;
-}

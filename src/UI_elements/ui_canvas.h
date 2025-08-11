@@ -23,8 +23,6 @@ class UICanvas : public UIElement {
 
     bool show_grid_ = false;
 
-    Color grid_color_ = WHITE;
-
     public: 
     
     virtual void Draw();
@@ -36,7 +34,5 @@ class UICanvas : public UIElement {
     void SetCanvasTextureDimensions(int x, int y);
 
     void SetColorBuffer(uint8_t* buffer);
-
-    void SetCanvasGridColor(Color c);
 
 };

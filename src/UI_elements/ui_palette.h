@@ -48,10 +48,10 @@ class UIPalette : public UIElement {
     size_t selected_button_ = 0;
 
     static const int button_width_ = 30;
-    static const int button_height_ = 30;
+    static const int button_height_ = 26;
     static const int button_width_spacing_= 5;
     static const int button_height_spacing_ = 5;
-    static const int max_height_buttons_count = 12;
+    static const int max_height_buttons_count = 15;
 
     float button_roundness_ = 0.4f;
 
