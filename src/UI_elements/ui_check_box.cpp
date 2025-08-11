@@ -1,6 +1,6 @@
 #include "ui_check_box.h"
 #include "../UI_Tools/ui_tools.h"
-#include "ui.h"
+
 UICheckbox::UICheckbox() {
 
 }
@@ -13,16 +13,17 @@ UICheckbox::UICheckbox(int x, int y, std::function<void(bool)> func, const std::
 void UICheckbox::Draw() {
     Color background_color;
 
+    const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
     switch (state_)
     {
     case MouseState::MOUSE_CLEAR:
-        background_color = ui.ui_accent_color_1;
+        background_color = this_theme.ui_dark_color;
         break;
     case MouseState::MOUSE_HOVERED:
-        background_color = ui.ui_accent_color_3;
+        background_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_hovered, WHITE);;
         break;   
     case MouseState::MOUSE_PRESSED:
-        background_color = ui.ui_accent_color_3;
+        background_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_pressed, WHITE);;
         break;
     }
 
@@ -34,7 +35,7 @@ void UICheckbox::Draw() {
         2, 
         box_roundness_,
         background_color,
-        ui.ui_line_color
+        this_theme.ui_line_color
     );
 
     if (value_) {
@@ -44,10 +45,10 @@ void UICheckbox::Draw() {
             GetAbsoluteYPosition() + y_pos_ + offset,
             check_size_,
             check_size_,
-            0, 
+            1, 
             check_roundness_,
-            ui.ui_text_dark,
-            ui.ui_line_color
+            this_theme.ui_light_color,
+            this_theme.ui_line_color
         );
     }
 
@@ -56,14 +57,14 @@ void UICheckbox::Draw() {
         GetAbsoluteXPosition() + x_pos_ + box_size_ + 10, 
         GetAbsoluteYPosition() + y_pos_ + box_size_ / 2 - 4, 
         14, 
-        ui.ui_text_dark); */
+        this_theme.ui_text_dark); */
 
     UITools::DrawTextDefault(
         GetAbsoluteXPosition() + x_pos_ + box_size_ + 10, 
         GetAbsoluteYPosition() + y_pos_ + box_size_ / 2 - 8,
         text_.c_str(), 
         18, 
-        ui.ui_text_dark);
+        this_theme.ui_text_dark);
 }
 
 void UICheckbox::Update() {

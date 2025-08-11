@@ -14,6 +14,6 @@ void UILabelPrintValue<T>::Draw() {
         GetAbsoluteYPosition(), 
         TextFormat(text_format_.c_str(), get_value_()),
         18,
-        ui.ui_text_dark
+        UIColorThemeManager::GetInstance().GetTheme().ui_text_dark
     );
 }

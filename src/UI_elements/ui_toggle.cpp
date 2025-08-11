@@ -1,7 +1,6 @@
 #include "raylib.h"
 #include "ui_toogle.h"
 #include "../UI_Tools/ui_tools.h"
-#include "ui.h"
 
 UIToggle::UIToggle() {
 
@@ -14,17 +13,17 @@ UIToggle::UIToggle(int x, int y, std::function<void(bool)> func, const std::stri
 
 void UIToggle::Draw() {
     Color background_color;
-
+    const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
     switch (state_)
     {
     case MouseState::MOUSE_CLEAR:
-        background_color = ui.ui_button_default;
+        background_color = this_theme.ui_neutral_color;
         break;
     case MouseState::MOUSE_HOVERED:
-        background_color = ui.ui_button_hovered;
+        background_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_hovered, WHITE);
         break;   
     case MouseState::MOUSE_PRESSED:
-        background_color = ui.ui_button_pressed;
+        background_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_pressed, WHITE);
         break;
     }
 
@@ -37,8 +36,8 @@ void UIToggle::Draw() {
         height_,
         2,
         0.1,
-        value_ ? ui.ui_accent_color_2 : ui.ui_accent_color_3,
-        ui.ui_line_color
+        value_ ? this_theme.ui_light_color : this_theme.ui_dark_color,
+        this_theme.ui_line_color
     );
 
     int x_position_of_slider = value_ ? GetAbsoluteXPosition() + x_pos_ :  GetAbsoluteXPosition() + x_pos_ + box_width_ - slider_width_;
@@ -50,7 +49,7 @@ void UIToggle::Draw() {
         2,
         0.1,
         background_color,
-        ui.ui_line_color
+        this_theme.ui_line_color
     );
 
     /* DrawText(
@@ -58,14 +57,14 @@ void UIToggle::Draw() {
         GetAbsoluteXPosition() + x_pos_ + box_width_ + 10, 
         GetAbsoluteYPosition() + height_ / 2 - 4, 
         14, 
-        ui.ui_text_dark); */
+        this_theme.ui_text_dark); */
 
     UITools::DrawTextDefault(
         GetAbsoluteXPosition() + x_pos_ + box_width_ + 10, 
         GetAbsoluteYPosition() + height_ / 2 - 8,
         text_.c_str(), 
         18, 
-        ui.ui_text_dark);
+        this_theme.ui_text_dark);
   //  UITools::DrawRectangle
 }
 

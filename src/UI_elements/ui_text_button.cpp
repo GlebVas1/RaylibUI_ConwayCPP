@@ -16,5 +16,10 @@ UITextButton::UITextButton(
 
 void UITextButton::Draw() {
     UIButton::Draw();
-    UITools::DrawTextDefault(GetAbsoluteXPosition() + 5, GetAbsoluteYPosition() + height_ / 2 - 9, text_, 18, ui.ui_text_dark);
+    UITools::DrawTextDefault(
+        GetAbsoluteXPosition() + 5, 
+        GetAbsoluteYPosition() + height_ / 2 - 9, 
+        text_, 
+        18, 
+        UIColorThemeManager::GetInstance().GetTheme().ui_text_dark);
 }

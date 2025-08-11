@@ -1,5 +1,4 @@
 #include "ui_button.h"
-#include "ui.h"
 
 UIButton::UIButton(int x_pos, int y_pos, int width, int height, float roundness, std::function<void()> func) : UIElement(x_pos, y_pos, width, height) {
     roundness_ = roundness;
@@ -25,13 +24,13 @@ void UIButton::Draw() {
     switch (state_)
     {
     case MouseState::MOUSE_CLEAR:
-        background_color = ui.ui_button_default;
+        background_color = UIColorThemeManager::GetInstance().GetTheme().ui_neutral_color;
         break;
     case MouseState::MOUSE_HOVERED:
-        background_color = ui.ui_button_hovered;
+        background_color = ColorAlphaBlend(background_color, UIColorThemeManager::GetInstance().GetTheme().ui_color_hovered, WHITE);
         break;   
     case MouseState::MOUSE_PRESSED:
-        background_color = ui.ui_button_pressed;
+        background_color = ColorAlphaBlend(background_color, UIColorThemeManager::GetInstance().GetTheme().ui_color_pressed, WHITE);
         break;
     }
 

@@ -1,5 +1,6 @@
 #include "ui_object_canvas.h"
- #include "ui.h"
+#include "ui.h"
+
 void UIObjectCanvas::Init() {
     InitializeMainTexture();
     InitializeMainGridTexture();
@@ -32,9 +33,9 @@ void UIObjectCanvas::DrawObject() {
         for (size_t y = 0; y < this_object_.size; ++y) {
             GameColor this_color;
             if (this_object_.array[x][y] == 1) {
-                this_color = ui.GetCurrentPalette()[255];
+                this_color = UI::GetInstance().GetCurrentPalette()[255];
             } else {
-                this_color = ui.GetCurrentPalette()[0];
+                this_color = UI::GetInstance().GetCurrentPalette()[0];
             }
             size_t this_ind = BufferIndex(this_object_.size, x, y);
             color_buffer_[this_ind] = this_color.r;
@@ -76,7 +77,7 @@ void UIObjectCanvas::UpdatePalette(const std::vector<GameColor>& palette) {
 void UIObjectCanvas::SetPixel(size_t x, size_t y, uint8_t val) {
     std::cout << "UIObjectCanvas::SetPixel " << x << " " << y << " " << (int)val << std::endl;
     this_object_.array[x][y] = val;
-    GameColor this_color = ui.GetCurrentPalette()[val == 1 ? 255 : 0];
+    GameColor this_color = UI::GetInstance().GetCurrentPalette()[val == 1 ? 255 : 0];
     size_t this_ind = BufferIndex(this_object_.size, x, y);
     color_buffer_[this_ind] = this_color.r;
     color_buffer_[this_ind + 1] = this_color.g;

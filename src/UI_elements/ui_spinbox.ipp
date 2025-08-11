@@ -57,17 +57,18 @@ void UISpinBox<T>::Draw() {
         static_cast<float> (height_ - 1)
     };
 
+    const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
     Color left_color;
     switch (left_state_)
     {
     case MouseState::MOUSE_CLEAR:
-        left_color = ui.ui_button_default;
+        left_color = this_theme.ui_neutral_color;
         break;
     case MouseState::MOUSE_HOVERED:
-        left_color = ui.ui_button_hovered;
+        left_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_hovered, WHITE);
         break;   
     case MouseState::MOUSE_PRESSED:
-        left_color = ui.ui_button_pressed;
+        left_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_pressed, WHITE);
         break;
     }
 
@@ -75,33 +76,35 @@ void UISpinBox<T>::Draw() {
     switch (right_state_)
     {
     case MouseState::MOUSE_CLEAR:
-        right_color = ui.ui_button_default;
+        right_color = this_theme.ui_neutral_color;
         break;
     case MouseState::MOUSE_HOVERED:
-        right_color = ui.ui_button_hovered;
+        right_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_hovered, WHITE);
         break;   
     case MouseState::MOUSE_PRESSED:
-        right_color = ui.ui_button_pressed;
+        right_color = ColorAlphaBlend(this_theme.ui_neutral_color, this_theme.ui_color_pressed, WHITE);
         break;
     }
 
-    DrawRectangleRounded(main_field, roundness_, 0, ui.ui_accent_color_3);
-    DrawRectangleRoundedLinesEx(main_field_line, roundness_, 0, 2, ui.ui_line_color);
+    DrawRectangleRounded(main_field, roundness_, 0, this_theme.ui_dark_color);
+    DrawRectangleRoundedLinesEx(main_field_line, roundness_, 0, 2, this_theme.ui_line_color);
 
     DrawRectangleRounded(main_field_left, roundness_, 0, left_color);
-    DrawRectangleRoundedLinesEx(main_field_left_line, roundness_, 0, 2, ui.ui_line_color);
+    DrawRectangleRoundedLinesEx(main_field_left_line, roundness_, 0, 2, this_theme.ui_line_color);
 
     DrawRectangleRounded(main_field_right, roundness_, 0, right_color);
-    DrawRectangleRoundedLinesEx(main_field_right_line, roundness_, 0, 2, ui.ui_line_color);
+    DrawRectangleRoundedLinesEx(main_field_right_line, roundness_, 0, 2, this_theme.ui_line_color);
 
-    const auto text_size = UITools::MeasureTextDefault(TextFormat(UITextFormat<T>::format_, value_), 18);
+    const auto text = UITextFormat<T>::Format(value_);
+    const auto text_size = UITools::MeasureTextDefault(text, 18);
+
 
     UITools::DrawTextDefault(
         GetAbsoluteXPosition() + width_ / 2 - text_size.first / 2,
         GetAbsoluteYPosition() + height_ / 2 - text_size.second / 2, 
-        TextFormat(UITextFormat<T>::format_, value_), 
+        TextFormat(text, value_), 
         18, 
-        ui.ui_text_light
+        this_theme.ui_text_light
     );
 
     

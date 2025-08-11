@@ -1,11 +1,10 @@
 #pragma once
 #include "stdafx.h"
-
-class UI;
+#include "ui_color_theme.h"
 
 class UIElement {
     protected:
-    UI& ui;
+
     int width_ = 0;
     int height_ = 0;
     int x_position_ = 0;

@@ -26,28 +26,24 @@ void UIElement::Init() {}
 void UIElement::Update() {}
 
 //UIElement::UIElement() : ui(UI::GetInstance()) {}
-UIElement::UIElement() :
-    ui(UI::GetInstance())
-{
-    ui.AddUIElement(this);
+UIElement::UIElement() {
+    UI::GetInstance().AddUIElement(this);
 }
 
 UIElement::UIElement(int width, int height) :
     width_(width),
-    height_(height),
-    ui(UI::GetInstance())
+    height_(height)
 {
-    ui.AddUIElement(this);
+    UI::GetInstance().AddUIElement(this);
 }
 
 UIElement::UIElement(int x_pos, int y_pos, int width, int height) :
     width_(width),
     height_(height),
     x_position_(x_pos),
-    y_position_(y_pos),
-    ui(UI::GetInstance())
+    y_position_(y_pos)
 {
-    ui.AddUIElement(this);
+    UI::GetInstance().AddUIElement(this);
 }
 
 void UIElement::SetXPosition(int x) {

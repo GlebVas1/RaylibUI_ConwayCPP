@@ -46,6 +46,7 @@ class UI : public UIColorTheme {
 
     UI();
     ~UI();
+
     std::vector<UIElement*> elements_;
 
     std::shared_ptr<UIElement> null_widget_;
@@ -54,10 +55,8 @@ class UI : public UIColorTheme {
     int window_width = 1920;
     int window_height = 1080;
 
-    
     std::shared_ptr<UIPanel> main_canvas_panel_ = nullptr;
     std::shared_ptr<UIMainCanvas> main_canvas_ = nullptr;
-
 
     std::shared_ptr<UIPanel> game_control_panel_ = nullptr;
     std::shared_ptr<UIDualTextureButton> game_control_play_button_ = nullptr;
@@ -96,18 +95,14 @@ class UI : public UIColorTheme {
     std::shared_ptr<UITextureButton> game_object_mirror_h_button_ = nullptr;
     std::shared_ptr<UITextureButton> game_object_invert_button_ = nullptr;
 
-
     std::shared_ptr<UIPanel> game_rule_panel_ = nullptr;
     std::shared_ptr<UIList> game_rule_list_ = nullptr;
 
-
     std::shared_ptr<UIPalette> pallete_ = nullptr;
-
 
     std::shared_ptr<UIPanel> palette_panel_ = nullptr;
     std::shared_ptr<UIList> palette_list_ = nullptr;
     std::shared_ptr<UILabel> palette_label_ = nullptr;
-
 
     void UpdateUIElements();
 
@@ -115,7 +110,6 @@ class UI : public UIColorTheme {
 
     void DrawUIElements();
 
-   
 
     public: 
 
@@ -150,8 +144,6 @@ class UI : public UIColorTheme {
     void SetRule(size_t ind);
 
     void UpdatePalette(size_t ind);
-
-    
 
     void SetGameObject(size_t ind);
 

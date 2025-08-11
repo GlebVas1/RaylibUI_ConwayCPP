@@ -23,8 +23,8 @@ void UIPanel::Draw() {
         height_,
         2,
         roundness_,
-        ui.ui_accent_color_1,
-        ui.ui_line_color
+        UIColorThemeManager::GetInstance().GetTheme().ui_neutral_color,
+        UIColorThemeManager::GetInstance().GetTheme().ui_line_color
     );
 }
 

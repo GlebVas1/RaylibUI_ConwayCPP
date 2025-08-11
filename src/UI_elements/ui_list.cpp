@@ -2,7 +2,6 @@
 #include "../UI_Tools/ui_tools.h"
 #include "raylib.h"
 #include "ui_list.h"
-#include "ui.h"
 
 UIList::UIList() {}
 
@@ -25,10 +24,10 @@ void UIList::Init() {
 
 void UIList::Draw() {
 
-    
-
+    const auto& this_theme = UIColorThemeManager::GetInstance().GetTheme();
 
     BeginTextureMode(*list_render_texture_);
+
     ClearBackground({0, 0, 0, 0});
     DrawRectangleRounded(
         Rectangle {
@@ -41,23 +40,23 @@ void UIList::Draw() {
         5,
         WHITE
     );
+
     int full_list_height = elements_.size() * y_item_size_;
     int y_offset = static_cast<int>(slider_position_ * (full_list_height - height_));
     
     for (size_t i = 0; i < elements_.size();  ++i) {
-        Color item_color = (i == selected_ind_) ? ui.ui_accent_color_2 : ui.ui_accent_color_3;
-        Color text_color = (i == selected_ind_) ? ui.ui_text_dark : ui.ui_text_light;
+        Color item_color = (i == selected_ind_) ? 
+            this_theme.ui_light_color : this_theme.ui_dark_color;
+        Color text_color = (i == selected_ind_) ? 
+            this_theme.ui_text_dark : this_theme.ui_text_light;
 
         BeginBlendMode(BLEND_MULTIPLIED); 
         DrawRectangle(0, i * y_item_size_ - y_offset , width_ - slider_box_x_space_, y_item_size_ , item_color);
-        DrawRectangleLines(0, i * y_item_size_ - y_offset, width_ - slider_box_x_space_, y_item_size_, ui.ui_line_color);
+        DrawRectangleLines(0, i * y_item_size_ - y_offset, width_ - slider_box_x_space_, y_item_size_, this_theme.ui_line_color);
         EndBlendMode();
         UITools::DrawTextDefault(text_x_offset_ , i * y_item_size_ + text_y_offset_ - y_offset, elements_[i].c_str(), 18, text_color);
     }
 
-    
-
-    
     EndTextureMode();
 
     // https://www.reddit.com/r/raylib/comments/14lk8fx/texture_is_rendering_coordinates_with_flipped_y/
@@ -77,7 +76,7 @@ void UIList::Draw() {
         height_ - 2 * slider_line_y_offset_,
         0,
         1.0f,
-        ui.ui_accent_color_3,
+        this_theme.ui_dark_color,
         BLACK
     );
 
@@ -88,8 +87,8 @@ void UIList::Draw() {
         slider_height_,
         2,
         0.3f,
-        ui.ui_accent_color_1,
-        ui.ui_line_color
+        this_theme.ui_neutral_color,
+        this_theme.ui_line_color
     );
 
     DrawRectangleRoundedLinesEx(
@@ -102,10 +101,8 @@ void UIList::Draw() {
         0.1f,
         0,
         2,
-        ui.ui_line_color
+        this_theme.ui_line_color
     );
-
-
 }
 
 void UIList::Update() {

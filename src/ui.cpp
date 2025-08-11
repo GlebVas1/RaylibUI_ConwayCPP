@@ -261,7 +261,7 @@ void UI::InitializeElements() {
 
     main_canvas_ = std::make_shared<UIMainCanvas>();
     main_canvas_->SetParrent(main_canvas_panel_.get());
-    main_canvas_->SetCanvasGridColor(ui_accent_color_1);
+    main_canvas_->SetCanvasGridColor(ui_neutral_color);
     main_canvas_->SetPosition(5, 5);
     main_canvas_->SetDimensions(1070, 1070);
 
@@ -313,7 +313,7 @@ void UI::InitializeElements() {
 
     game_object_canvas_ = std::make_shared<UIObjectCanvas>();
     game_object_canvas_->SetParrent(game_object_panel_.get());
-    game_object_canvas_->SetCanvasGridColor(ui_accent_color_1);
+    game_object_canvas_->SetCanvasGridColor(ui_neutral_color);
     game_object_canvas_->SetPosition(5, 315);
     game_object_canvas_->SetDimensions(150, 150); 
 
