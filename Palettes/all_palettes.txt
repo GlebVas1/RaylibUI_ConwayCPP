@@ -19,6 +19,9 @@ Pink&Green ../Palettes/pink_green.png
 Purple ../Palettes/purple.png
 Rainbow ../Palettes/rainbow.png
 Red ../Palettes/red.png
+Red&Green ../Palettes/red_green.png
+Red&Green2 ../Palettes/red_green2.png
+Sand ../Palettes/sand.png
 Snow ../Palettes/snow.png
 Summer ../Palettes/summer.png
 Yellow&Orange ../Palettes/yellow_orange.png

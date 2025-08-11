@@ -1,0 +1,2 @@
+default ../Themes/default.txt
+light ../Themes/light.txt

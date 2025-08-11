@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 
+
 struct GameRule {
   std::string name = "DEFAULT";
 /* 1 for this byte val

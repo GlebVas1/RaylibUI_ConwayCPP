@@ -1,5 +1,6 @@
 #include "game_rule.h"
 
+
 GameRule::GameRule() {}
 
 GameRule::GameRule(

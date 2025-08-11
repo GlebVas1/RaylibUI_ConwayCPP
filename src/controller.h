@@ -9,39 +9,36 @@ class Field;
 
 // there cycled dependences obviously cause crush;
 class Controller {
-    private:
-    Field* field;
-    UI* ui;
-    Controller();
-    ~Controller();
-    std::thread* field_multi_thread_ = nullptr;
+ private:
+  Field* field;
+  UI* ui;
+  Controller();
+  ~Controller();
+  std::thread* field_multi_thread_ = nullptr;
 
-    public:
-    static Controller& GetInstance();
+ public:
+  static Controller& GetInstance();
 
-    const std::vector<std::string>& GetAllObjectsNames();
-    void SetObject(size_t ind);
+  const std::vector<std::string>& GetAllObjectsNames();
+  void SetObject(size_t ind);
 
-    void SetFieldPixel(int x, int y, uint8_t val);
+  void SetFieldPixel(int x, int y, uint8_t val);
 
-    void SetFieldRule(size_t ind);
-    GameRule* GetFieldRule();
+  void SetFieldRule(size_t ind);
+  GameRule* GetFieldRule();
 
-    const std::vector<std::string>& GetAllPalettesNames();
-    void SetPalette(size_t ind);
-    
-    void SetFieldSize(size_t x, size_t y);
-    
-    void SetFPS(size_t val);
-    float GetFPS();
-    void SetPause(float val);
+  const std::vector<std::string>& GetAllPalettesNames();
+  void SetPalette(size_t ind);
+  
+  void SetFieldSize(size_t x, size_t y);
+  
+  void SetFPS(size_t val);
+  float GetFPS();
+  void SetPause(float val);
 
-    void SetNewColorBuffer(uint8_t* buffer);
+  void SetNewColorBuffer(uint8_t* buffer);
 
-
-    void ThreadsJoin();
-
-    void StartUI();
-    void Start();
+  void StartUI();
+  void Start();
 };
 

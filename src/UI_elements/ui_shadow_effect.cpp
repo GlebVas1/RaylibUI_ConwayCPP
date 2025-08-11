@@ -4,10 +4,6 @@
 UIShadowEffect::UIShadowEffect(int x, int y, int width, int height, float roundness, int iterations) : x(x), y(y), height(height), width(width) {
     const int new_height = (height / 1);
     const int new_width = (width / 1);
-    uint8_t* data = static_cast<uint8_t*>(malloc(new_height * new_width * 4));
-    // set all alpha to 255
-    memset(data, 0, 4 * new_height * new_width);
-    
    
     RenderTexture2D rend_shadow = LoadRenderTexture(new_width, new_height);
     SetTextureFilter(rend_shadow.texture, TEXTURE_FILTER_TRILINEAR);
@@ -32,26 +28,12 @@ UIShadowEffect::UIShadowEffect(int x, int y, int width, int height, float roundn
     shadow = std::make_shared<Texture2D>(rend_shadow.texture);
 
     SetTextureFilter(*shadow, TEXTURE_FILTER_TRILINEAR);
+}
 
+UIShadowEffect::~UIShadowEffect() {
+    UnloadTexture(*shadow);
 }
 
 void UIShadowEffect::Draw() {
-    // DrawTexturePro(*shadow,
-    //     Rectangle{
-    //         0,
-    //         0, 
-    //         static_cast<float>(shadow->width),
-    //         static_cast<float>(shadow->height)
-    //     },
-    //     Rectangle{
-    //         static_cast<float>(x), 
-    //         static_cast<float>(y), 
-    //         static_cast<float>(width), 
-    //         static_cast<float>(height)
-    //     },
-    //     Vector2{static_cast<float>(0), static_cast<float>(0)},
-    //     0.0f,
-    //     BLACK
-    // );
     DrawTexture(*shadow, x, y, WHITE);
 }
