@@ -135,7 +135,7 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
   thread_creation_mutex.lock();
   thread_creation_mutex.unlock();
 
-  while (processing_) {
+  while (true) {
     {
       std::unique_lock<std::mutex> lk(compute_start_mutex);
       compute_start_cv.wait(
@@ -144,6 +144,14 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
           return (thread_should_start[thread_id].load(std::memory_order_acq_rel));
         }
       );
+    }
+
+    if (!processing_) {
+      current_threads_finished.fetch_add(1, std::memory_order_acq_rel);
+      if (current_threads_finished.load() == threads_count) {
+        compute_end_cv.notify_one();
+      }
+      return;
     }
 
     thread_should_start[thread_id].store(false, std::memory_order_acq_rel);
@@ -193,7 +201,7 @@ void Field::CreateUpdateThreads() {
 void Field::MultiThreadUpdating() {
   size_t frame_counter = 0;
 
-  while (processing_) {
+  while (true) {
     float fps_count = 0;
     std::chrono::steady_clock::time_point fps_begin = std::chrono::steady_clock::now();
     std::this_thread::sleep_for(std::chrono::milliseconds(frame_milliseconds_delay_));
@@ -205,11 +213,6 @@ void Field::MultiThreadUpdating() {
 
     for (auto& state : thread_should_start) {
       state.store(true, std::memory_order_acq_rel);
-    }
-
-    if (!processing_) {
-      compute_start_cv.notify_all();
-      return;
     }
 
     compute_start_cv.notify_all();
@@ -238,9 +241,29 @@ void Field::MultiThreadUpdating() {
     auto fps_result = std::chrono::duration_cast<std::chrono::milliseconds>(fps_end - fps_begin).count();
     current_fps_ = 1.0 / static_cast<float>(fps_result) * 1000.0f;
     current_threads_finished.store(0, std::memory_order_release);
+
+    if (!processing_) {
+        for (auto& state : thread_should_start) {
+        state.store(true, std::memory_order_acq_rel);
+      }
+
+      compute_start_cv.notify_all();
+      break;
+    }
   }
 
-  compute_start_cv.notify_all();
+  std::unique_lock<std::mutex> lk(compute_end_mutex);
+    compute_end_cv.wait(
+      lk, 
+      [&](){ 
+        return (current_threads_finished.load(std::memory_order_acquire) == threads_count) || !processing_; 
+      }
+  );
+  
+  free(buffer_0_);
+  free(buffer_1_);
+  free(color_buffer_);
+
   return;
 }
 
