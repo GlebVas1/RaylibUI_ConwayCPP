@@ -38,4 +38,6 @@ void UITextureLoader::LoadAllTextures() {
   LoadTextureFromFile("lock", "../resources/textures/lock.png");
   LoadTextureFromFile("unlock", "../resources/textures/unlock.png");
   LoadTextureFromFile("load", "../resources/textures/load.png");
+  LoadTextureFromFile("arrow_left", "../resources/textures/arrow_left.png");
+  LoadTextureFromFile("arrow_right", "../resources/textures/arrow_right.png");
 }

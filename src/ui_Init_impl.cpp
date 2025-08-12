@@ -103,6 +103,7 @@ void UI::InitializeElements() {
   field_width_spinbox_->SetMaxValue(1060);
   field_width_spinbox_->SetValue(default_field_width_);
   field_width_spinbox_->SetParrent(field_control_panel_.get());
+  field_width_spinbox_->Init();
 
   field_control_size_H_label_ = std::make_shared<UILabel>(295, 12, "H:");
   field_control_size_H_label_->SetParrent(field_control_panel_.get());
@@ -123,6 +124,7 @@ void UI::InitializeElements() {
   field_height_spinbox_->SetMaxValue(1060);
   field_height_spinbox_->SetValue(default_field_height_);
   field_height_spinbox_->SetParrent(field_control_panel_.get());
+  field_height_spinbox_->Init();
 
   field_control_size_W_label_ = std::make_shared<UILabel>(295, 42, "W:");
   field_control_size_W_label_->SetParrent(field_control_panel_.get());
@@ -157,6 +159,7 @@ void UI::InitializeElements() {
   brush_size_spinbox_->SetMinValue(1);
   brush_size_spinbox_->SetValue(1);
   brush_size_spinbox_->SetParrent(brush_settings_panel_.get());
+  brush_size_spinbox_->Init();
 
   brush_settings_size_label_ = std::make_shared<UILabel>(80, 43, "Size");
   brush_settings_size_label_->SetParrent(brush_settings_panel_.get());
@@ -314,6 +317,7 @@ void UI::InitializeElements() {
   random_rule_survive_prob_->SetMaxValue(100);
   random_rule_survive_prob_->SetValue(50);
   random_rule_survive_prob_->SetParrent(random_rule_panel_.get());
+  random_rule_survive_prob_->Init();
 
   random_rule_survive_label_ = std::make_shared<UILabel>(80, 52, "Survive %");
   random_rule_survive_label_->SetParrent(random_rule_panel_.get());
@@ -328,6 +332,7 @@ void UI::InitializeElements() {
   random_rule_arrive_prob_->SetMaxValue(100);
   random_rule_arrive_prob_->SetValue(50);
   random_rule_arrive_prob_->SetParrent(random_rule_panel_.get());
+  random_rule_arrive_prob_->Init();
 
   random_rule_arrive_label_ = std::make_shared<UILabel>(80, 82, "Arrive %");
   random_rule_arrive_label_->SetParrent(random_rule_panel_.get());
@@ -342,6 +347,7 @@ void UI::InitializeElements() {
   random_rule_generation_->SetValue(1);
   random_rule_generation_->SetMaxValue(250);
   random_rule_generation_->SetParrent(random_rule_panel_.get());
+  random_rule_generation_->Init();
 
   random_rule_generation_label_ = std::make_shared<UILabel>(80, 112, "Max. age");
   random_rule_generation_label_->SetParrent(random_rule_panel_.get());
@@ -356,6 +362,7 @@ void UI::InitializeElements() {
   random_rule_radius_->SetMaxValue(6);
   random_rule_radius_->SetValue(1);
   random_rule_radius_->SetParrent(random_rule_panel_.get());
+  random_rule_radius_->Init();
 
   random_rule_radius_label_ = std::make_shared<UILabel>(80, 142, "Radius");
   random_rule_radius_label_->SetParrent(random_rule_panel_.get());
@@ -402,10 +409,10 @@ void UI::InitializeElements() {
       }
     }
   );
-
   color_theme_spinbox_->SetWidth(100);
   color_theme_spinbox_->SetParrent(color_theme_panel_.get());
-
+  color_theme_spinbox_->Init();
+  
   color_theme_from_palette_ = std::make_shared<UICheckbox>(
     120,
     30,
