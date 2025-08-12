@@ -29,12 +29,14 @@ struct GameRule {
   virtual bool is_surviving(size_t neigh_count);
   const std::string& GetName();
 
-  virtual void SafeRuleToFile(const std::string& path);
+  virtual void SaveRuleToFile(const std::string& path);
 };
 
 struct GameRuleInterval : public GameRule {
   std::vector<bool> neight_to_arrive;
   std::vector<bool> neigh_to_survive;
+  std::vector<std::pair<size_t, size_t>> neight_to_arrive_vect;
+  std::vector<std::pair<size_t, size_t>> neigh_to_survive_vect;
   GameRuleInterval(
     const std::string& name, 
     std::vector<std::pair<size_t, size_t>> neight_to_arrive_v, 
@@ -45,10 +47,10 @@ struct GameRuleInterval : public GameRule {
   );
   bool is_arriving(size_t neigh_count) override;
   bool is_surviving(size_t neigh_count) override;
-  //void SafeRuleToFile(const std::string& path) override;
+  void SaveRuleToFile(const std::string& path) override;
 };
 
 //https://habr.com/ru/articles/719324/
 extern std::vector<GameRule*> ALL_RULES;
 
-void SafeAllRulesToFiles(const std::string& path);
+void SaveAllRulesToFiles(const std::string& path);

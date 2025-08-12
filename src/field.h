@@ -31,7 +31,9 @@ class Field {
   const uint8_t EMPTY_ = 0;
   const uint8_t FULL_ = 255;
 
+  bool rule_should_be_changed_ = false;
   GameRule* current_rule_ = nullptr;
+  GameRule* new_rule_ = nullptr;
   std::vector<GameColor>* current_pallete_ = nullptr;
 
   bool processing_ = true;
@@ -58,7 +60,7 @@ class Field {
   // average bool can be ovverding due to cache
   std::vector<std::atomic_bool> thread_should_start;
 
-  size_t frame_milliseconds_delay_ = 100;
+  size_t frame_milliseconds_delay_ = 10;
 
   float current_fps_ = 0;
 

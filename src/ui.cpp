@@ -9,7 +9,7 @@
 UI::UI() { };
 
 UI::~UI() {
-  // CloseWindow();
+  CloseWindow();
 }
 
 void UI::DrawElement(UIElement* root) {
@@ -28,7 +28,7 @@ void UI::DrawUIElements() {
 
 void UI::ResizeMainField(int size_x, int size_y) {
   const float width_height_aspect = static_cast<float>(size_x) / size_y;
-  int panel_height = window_height;
+  int panel_height = window_height - 40;
   float estimated_panel_width = width_height_aspect * panel_height;
   if (estimated_panel_width > GetScreenWidth() - 500) {
     estimated_panel_width = GetScreenWidth() - 500;
@@ -37,6 +37,12 @@ void UI::ResizeMainField(int size_x, int size_y) {
   main_canvas_panel_->SetDimensions(static_cast<int>(estimated_panel_width), panel_height);
   main_canvas_->SetDimensions(static_cast<int>(estimated_panel_width) - 10, panel_height - 10);
   main_canvas_panel_->Init();
+  CalculateMinimumSize();
+  SetWindowMinSize(minimum_window_width, minimum_window_height);
+}
+
+void UI::CalculateMinimumSize() {
+  minimum_window_width = main_canvas_panel_->GetWidth() + right_panel_width + 4 * 20;
 }
 
 UI& UI::GetInstance() {
@@ -49,6 +55,7 @@ void UI::InitializeWindow() {
   SetConfigFlags(FLAG_MSAA_4X_HINT);
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(window_width, window_height, "Conway");
+  SetWindowMinSize(window_width, window_height);
   UITextureLoader::GetInstance().LoadAllTextures();
   UITools::GetMainFont();
   SetTextLineSpacing(2); 
@@ -81,15 +88,13 @@ void UI::Start() {
     UpdateUIElements();
     right_upper_null_widget_->SetXPosition(GetScreenWidth());
     main_canvas_panel_->SetYPosition((GetScreenHeight() - main_canvas_panel_->GetHeight()) / 2);
+
     if (IsKeyPressed(KEY_SPACE)) {
       pause = game_control_play_button_->GetState();
       pause = !pause;
       game_control_play_button_->SetState(pause);
       controller_->SetPause(pause);
     }
-    /* if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-      std::cout << "Mouse x " << GetMousePosition().x << " y " << GetMousePosition().y << std::endl;
-    } */
     BeginDrawing();
     ClearBackground(UIColorThemeManager::GetInstance().GetTheme().ui_background_color);
     DrawUIElements();

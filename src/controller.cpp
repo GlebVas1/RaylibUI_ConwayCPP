@@ -3,6 +3,7 @@
 #include "field.h"
 #include "game_objects_loader.h"
 #include "game_palette_loader.h"
+#include "game_rule_loader.h"
 #include "ui_color_theme.h"
 
 
@@ -33,9 +34,33 @@ void Controller::SetFieldPixel(int x, int y, uint8_t val) {
   field->SetPixelAt(x, y, val);
 }
 
+const std::vector<std::string>& Controller::GetAllRuleNames() {
+  return GameRuleLoader::GetInstance().GetAllNames();
+}
+
 void Controller::SetFieldRule(size_t ind) {
-  field->SetGameRule(ALL_RULES[ind]);
-  ui->SetColorCount(ALL_RULES[ind]->maximum_age);
+  field->SetGameRule(GameRuleLoader::GetInstance().GetRuleById(ind));
+  ui->SetColorCount(GameRuleLoader::GetInstance().GetRuleById(ind)->maximum_age);
+}
+
+void Controller::SetRandomRule(
+    int arrive_probability,
+    int survive_probability,
+    int max_age,
+    int radius,
+    bool count_central
+  ) {
+
+  GameRule* rule = GameRuleLoader::GetInstance().GetRandomRule(
+    arrive_probability,
+    survive_probability,
+    max_age,
+    radius,
+    count_central
+  );
+
+  field->SetGameRule(rule);
+  ui->SetColorCount(rule->maximum_age);
 }
 
 GameRule* Controller::GetFieldRule() {
@@ -77,7 +102,7 @@ void Controller::StartUI() {
   ui->SetColorBuffer(field->GetColorBuffer());
 
   auto gcp = GamePaletteLoader::GetInstance().GetPaleteeById(0);
-  auto gr = ALL_RULES[0];
+  auto gr = GameRuleLoader::GetInstance().GetRuleById(0);
 
   ui->SetColorPallette(gcp);
   ui->SetColorCount(gr->maximum_age);
@@ -92,10 +117,11 @@ void Controller::Start() {
   ui->InitializeWindow();
   GameObjectLoader::GetInstance().LoadAllObjects("../GameObjects/all_objects.txt");
   GamePaletteLoader::GetInstance().LoadAllPalettes("../Palettes/all_palettes.txt");
+  GameRuleLoader::GetInstance().LoadAllRules("../GameRules/all_rules.txt");
   UIColorThemeManager::GetInstance().LoadAllThemes("../Themes/all_themes.txt");
   
   auto gcp = GamePaletteLoader::GetInstance().GetPaleteeById(0);
-  auto gr = ALL_RULES[0];
+  auto gr = GameRuleLoader::GetInstance().GetRuleById(0);
   field->SetColorPallette(&gcp);
   field->SetGameRule(gr);
 

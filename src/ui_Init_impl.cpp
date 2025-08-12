@@ -15,7 +15,7 @@ void UI::InitializeElements() {
   panel_null_widget_ = std::make_shared<UIElement>(-420, 40, 0, 0);
   panel_null_widget_->SetParrent(right_upper_null_widget_.get());
   
-  main_canvas_panel_ = std::make_shared<UIPanel>(10, 0, 1080, 1080, this_theme.panel_corner_radius);
+  main_canvas_panel_ = std::make_shared<UIPanel>(20, 0, 1080, 1080, this_theme.panel_corner_radius);
   main_canvas_panel_->SetParrent(null_widget_.get());
   main_canvas_panel_->Init();
 
@@ -92,7 +92,8 @@ void UI::InitializeElements() {
     10, 
     [this](size_t val) {
       if (field_dim_lock_button_->GetState()) {
-        field_height_spinbox_->SetValue(field_width_spinbox_->GetValue());
+        float ratio = static_cast<float>(main_canvas_->GetWidth()) / main_canvas_->GetHeight();
+        field_height_spinbox_->SetValue(static_cast<int>(ratio * field_width_spinbox_->GetValue()));
       }
     }, 
     10
@@ -111,7 +112,8 @@ void UI::InitializeElements() {
     40, 
     [this](size_t val) {
       if (field_dim_lock_button_->GetState()) {
-        field_width_spinbox_->SetValue(field_height_spinbox_->GetValue());
+        float ratio = static_cast<float>(main_canvas_->GetHeight()) / main_canvas_->GetWidth();
+        field_width_spinbox_->SetValue(static_cast<int>(ratio * field_height_spinbox_->GetValue()));
       }
     }, 
     10
@@ -292,11 +294,7 @@ void UI::InitializeElements() {
   game_rule_label_ = std::make_shared<UILabel>(10, 8, "Game rule settings");
   game_rule_label_->SetParrent(game_rule_panel_.get());
 
-  std::vector<std::string> game_rule_names;
-  for (const auto& elem : ALL_RULES) {
-    game_rule_names.push_back(elem->name);
-  }
-  game_rule_list_->SetVector(game_rule_names);
+  game_rule_list_->SetVector(controller_->GetAllRuleNames());
   game_rule_list_->Init();
 
   random_rule_panel_ = std::make_shared<UIPanel>(200, 650, 185, 200, this_theme.panel_corner_radius);
@@ -362,14 +360,22 @@ void UI::InitializeElements() {
   random_rule_radius_label_ = std::make_shared<UILabel>(80, 142, "Radius");
   random_rule_radius_label_->SetParrent(random_rule_panel_.get());
 
-  random_rule_set_ = std::make_shared<UITextButton>(
+  random_rule_set_ = std::make_shared<UITextureButton>(
+    145,
     10,
-    290,
-    40,
-    20,
+    30,
+    30,
     this_theme.elements_corner_radius,
-    [](){},
-    "Generate"
+    [this](){
+      controller_->SetRandomRule(
+        random_rule_arrive_prob_->GetValue(),
+        random_rule_survive_prob_->GetValue(),
+        random_rule_generation_->GetValue(),
+        random_rule_radius_->GetValue(),
+        random_central_->GetValue()
+      );
+    },
+    "load"
   );
   random_rule_set_->SetParrent(random_rule_panel_.get());
 

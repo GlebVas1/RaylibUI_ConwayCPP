@@ -1,0 +1,31 @@
+Default ../GameRules/default.txt
+Bosco2 ../GameRules/bosco_2.txt
+Bosco3 ../GameRules/bosco_3.txt
+Bosco4 ../GameRules/bosco_4.txt
+Bosco ../GameRules/bosco_default.txt
+BugsR3 ../GameRules/bugs_radius_3.txt
+Bugs ../GameRules/bugs.txt
+Default100gen ../GameRules/default_100_gen.txt
+Default_Interval ../GameRules/default_interval.txt
+Diameba ../GameRules/diameba.txt
+Fades ../GameRules/fades.txt
+Freestar ../GameRules/freestar.txt
+Globe ../GameRules/globe.txt 
+Inf ../GameRules/inf.txt 
+Lines ../GameRules/lines.txt
+Liquid ../GameRules/liquid_methuseblob_soup.txt
+ModernArt_2 ../GameRules/modern_art_2.txt
+ModernArt_3 ../GameRules/modern_art_3.txt
+ModernArt ../GameRules/modern_art.txt
+Replicators ../GameRules/replicators.txt
+Spirals ../GameRules/spirals.txt 
+Static ../GameRules/static.txt
+Sticks ../GameRules/sticks.txt
+Test ../GameRules/test.txt
+Thrill_Grill ../GameRules/thrill_grill.txt
+TransersI ../GameRules/transersI.txt
+TransersII ../GameRules/transersII.txt
+TreeGen ../GameRules/tree_gen.txt
+Tree ../GameRules/tree.txt
+
+

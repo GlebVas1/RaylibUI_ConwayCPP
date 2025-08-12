@@ -18,8 +18,14 @@ class UI : UIElementsStorage {
   const size_t default_field_width_ = 60;
   const size_t default_field_height_ = 60;
 
-	const int window_width = 1920;
-  const int window_height = 1080;
+  const size_t right_panel_width = 385;
+  const size_t right_panel_height = 850;
+
+	int window_width = 1920;
+  int window_height = 1120;
+
+  int minimum_window_width = 1920;
+  int minimum_window_height = 1120;
 
   UI();
   ~UI();
@@ -38,6 +44,7 @@ class UI : UIElementsStorage {
   void DrawUIElements();
 
   void ResizeMainField(int size_x, int size_y);
+  void CalculateMinimumSize();
 
  public:
   static UI& GetInstance();

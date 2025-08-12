@@ -233,6 +233,27 @@ void Field::MultiThreadUpdating() {
       std::cout << "Update start frame "  << ++frame_counter << std::endl;
     }
 
+    if (should_reinitialize_.load()) {
+      ReinitializeBufferCropData(
+        field_width_,
+        field_height_, 
+        reinitialize_width_, 
+        reinitialize_height_);
+      field_width_ = reinitialize_width_;
+      field_height_ = reinitialize_height_;
+      ReinitializeColorBuffer();
+      controller_->SetNewColorBuffer(color_buffer_);
+      should_reinitialize_.store(false);
+    }
+
+    if (rule_should_be_changed_) {
+      if (new_rule_ != nullptr) {
+        current_rule_ = new_rule_;
+      }
+      rule_should_be_changed_ = false;
+    }
+
+    
     for (auto& state : thread_should_start) {
       state.store(true, std::memory_order_acq_rel);
     }
@@ -249,20 +270,7 @@ void Field::MultiThreadUpdating() {
 
     SwitchBuffer();
 
-    if (should_reinitialize_.load()) {
-      ReinitializeBufferCropData(
-        field_width_,
-        field_height_, 
-        reinitialize_width_, 
-        reinitialize_height_);
-      field_width_ = reinitialize_width_;
-      field_height_ = reinitialize_height_;
-      ReinitializeColorBuffer();
-      controller_->SetNewColorBuffer(color_buffer_);
-      should_reinitialize_.store(false);
-    }
-
-
+    
     std::chrono::steady_clock::time_point fps_end = std::chrono::steady_clock::now();
     auto fps_result = std::chrono::duration_cast<std::chrono::milliseconds>(fps_end - fps_begin).count();
     current_fps_ = 1.0 / static_cast<float>(fps_result) * 1000.0f;
@@ -304,7 +312,8 @@ void Field::SetNewDimensions(size_t x, size_t y) {
 }
 
 void Field::SetGameRule(GameRule* rule) {
-  current_rule_ = rule;
+  rule_should_be_changed_ = true;
+  new_rule_ = rule;
 }
 
 GameRule* Field::GetGameRule() {

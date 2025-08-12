@@ -80,7 +80,7 @@ class UIElementsStorage {
   std::shared_ptr<UISpinBox<int, false>> random_rule_radius_ = nullptr;
   std::shared_ptr<UILabel> random_rule_radius_label_ = nullptr;
   std::shared_ptr<UICheckbox> random_central_ = nullptr;
-  std::shared_ptr<UITextButton> random_rule_set_ = nullptr;
+  std::shared_ptr<UITextureButton> random_rule_set_ = nullptr;
 
   std::shared_ptr<UIPanel> color_theme_panel_ = nullptr;
   std::shared_ptr<UILabel> color_theme_label_ = nullptr;

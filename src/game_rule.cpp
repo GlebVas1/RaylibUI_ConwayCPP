@@ -26,16 +26,17 @@ bool GameRule::is_surviving(size_t neigh_count) { return neight_to_survive & (1u
 
 const std::string& GameRule::GetName() { return name; } 
 
-void GameRule::SafeRuleToFile(const std::string& path) {
+void GameRule::SaveRuleToFile(const std::string& path) {
   std::ofstream out(path + "/" + name + ".txt");
   out << "DEFAULT" << std::endl;
-  std::bitset<sizeof(size_t)> neigh_to_arrive_bit(neigh_to_arrive);
-  std::bitset<sizeof(size_t)> neigh_to_getting_older_bit(neight_to_survive);
+  std::bitset<sizeof(size_t) * 8> neigh_to_arrive_bit(neigh_to_arrive);
+  std::bitset<sizeof(size_t) * 8> neight_to_survive_bit(neight_to_survive);
   out << neigh_to_arrive_bit << std::endl;
-  out << neigh_to_getting_older_bit << std::endl;
-  out << maximum_age;
-  out << radius;
-  out << count_central;
+  out << neight_to_survive_bit << std::endl;
+  out << static_cast<int>(maximum_age) << std::endl;
+  out << radius << std::endl;
+  out << count_central << std::endl;
+  out.close();
 }
 
 
@@ -53,6 +54,8 @@ GameRuleInterval::GameRuleInterval(
   //GameRule::maximum_age(maximum_age), 
   //GameRule::radius(radius)
   {
+    neight_to_arrive_vect = neight_to_arrive_v;
+    neigh_to_survive_vect = neigh_to_survive_v;
     GameRule::name = name0;
     GameRule::maximum_age = maximum_age0;
     GameRule::radius = radius0;
@@ -77,11 +80,28 @@ bool GameRuleInterval::is_arriving(size_t neigh_count) {
   }
   return neight_to_arrive[neigh_count];
 }
+
 bool GameRuleInterval::is_surviving(size_t neigh_count) {
   if (neigh_count >= neigh_to_survive.size()) {
     return false;
   }
   return neigh_to_survive[neigh_count];
+}
+
+void GameRuleInterval::SaveRuleToFile(const std::string& path) {
+  std::ofstream out(path + "/" + name + ".txt");
+  out << "INTERVAL" << std::endl;
+  out << neight_to_arrive_vect.size() << std::endl;
+  for (const auto& p : neight_to_arrive_vect) {
+    out << p.first << " " << p.second << std::endl;
+  }
+  out << neigh_to_survive_vect.size() << std::endl;
+  for (const auto& p : neigh_to_survive_vect) {
+    out << p.first << " " << p.second << std::endl;
+  }
+  out << static_cast<int>(maximum_age) << std::endl;
+  out << radius << std::endl;
+  out << count_central << std::endl;
 }
 
 
@@ -172,6 +192,8 @@ std::vector<GameRule*> ALL_RULES = std::vector<GameRule*>({
  &GameRule_BUGSR3
 });
 
-void SafeAllRulesToFiles(const::std::string& path) {
-
+void SaveAllRulesToFiles(const::std::string& path) {
+  for (const auto ptr : ALL_RULES) {
+    ptr->SaveRuleToFile(path);
+  }
 }
