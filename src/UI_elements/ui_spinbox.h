@@ -26,10 +26,14 @@ class UISpinBox : public UIElement, UIMouseState, UITextFormat<T> {
   MouseState left_state_;
   MouseState right_state_;
 
+  const Texture2D* arrow_left = nullptr;
+  const Texture2D* arrow_right = nullptr;
+
  public:
   UISpinBox();
   UISpinBox(int x, int y, std::function<void(T)> func, T step = 0.1f);
 
+  void Init() override;
   void Draw() override;
   void Update() override;
 

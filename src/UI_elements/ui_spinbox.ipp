@@ -1,5 +1,5 @@
 #include "../UI_Tools/ui_tools.h"
-
+#include "../UI_Tools/ui_textures_loader.h"
 
 template <typename T, bool MouseDown>
 const float UISpinBox<T, MouseDown>::roundness_ = 0.1f;
@@ -13,6 +13,12 @@ UISpinBox<T, MouseDown>::UISpinBox(int x, int y, std::function<void(T)> func, T 
     SetPosition(x, y);
     SetDimensions(default_width_, default_height_);
     SetStep(step);
+}
+
+template <typename T, bool MouseDown>
+void UISpinBox<T, MouseDown>::Init() {
+    arrow_left = UITextureLoader::GetInstance().GetTexture("arrow_left");
+    arrow_right = UITextureLoader::GetInstance().GetTexture("arrow_right");
 }
 
 template <typename T, bool MouseDown>
@@ -55,6 +61,7 @@ void UISpinBox<T, MouseDown>::Draw() {
         this_theme.ui_line_color
     );
 
+
     UITools::DrawRectangle(
         GetAbsoluteXPosition(), 
         GetAbsoluteYPosition(), 
@@ -64,6 +71,25 @@ void UISpinBox<T, MouseDown>::Draw() {
         this_theme.elements_corner_radius, 
         this_theme.ui_neutral_color, 
         this_theme.ui_line_color
+    );
+
+    DrawTexturePro(
+        *arrow_left,
+        Rectangle{
+            0.0f,
+            0.0f,
+            static_cast<float>(arrow_left->width),
+            static_cast<float>(arrow_left->height),
+        },
+        Rectangle{
+            static_cast<float>(GetAbsoluteXPosition()),
+            static_cast<float>(GetAbsoluteYPosition() + height_ / 2 - buttons_width_ / 2),
+            static_cast<float>(buttons_width_),
+            static_cast<float>(buttons_width_)
+        },
+        Vector2{0.0f, 0.0f},
+        0.0f,
+        this_theme.ui_text_dark
     );
 
     UITools::DrawRectangle(
@@ -77,8 +103,29 @@ void UISpinBox<T, MouseDown>::Draw() {
         this_theme.ui_line_color
     );
 
+    DrawTexturePro(
+        *arrow_right,
+        Rectangle{
+            0.0f,
+            0.0f,
+            static_cast<float>(arrow_right->width),
+            static_cast<float>(arrow_right->height),
+        },
+        Rectangle{
+            static_cast<float>(GetAbsoluteXPosition() + width_ - buttons_width_),
+            static_cast<float>(GetAbsoluteYPosition() + height_ / 2 - buttons_width_ / 2),
+            static_cast<float>(buttons_width_),
+            static_cast<float>(buttons_width_)
+        },
+        Vector2{0.0f, 0.0f},
+        0.0f,
+        this_theme.ui_text_dark
+    );
+
     const auto text = UITextFormat<T>::Format(value_);
     const auto text_size = UITools::MeasureTextDefault(text, 18);
+
+    
 
     UITools::DrawTextDefault(
         GetAbsoluteXPosition() + width_ / 2 - text_size.first / 2,
