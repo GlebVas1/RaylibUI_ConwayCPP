@@ -125,9 +125,7 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
       SetPixelColor(x, y, this_color.r, this_color.g, this_color.b);
     }
   } else if (current_cell == FULL_) {
-    if (current_rule_->is_dying(neigh_count)) {
-      SetPixel(x, y, EMPTY_, buffer_to_write);
-    } else if (current_rule_->is_getting_older(neigh_count)) {
+    if (!current_rule_->is_surviving(neigh_count)) {
       unsigned char offset = (FULL_ - EMPTY_) / current_rule_->maximum_age;
       if (offset > current_cell) {
         current_cell = EMPTY_;
