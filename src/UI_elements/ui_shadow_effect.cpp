@@ -1,11 +1,8 @@
 #include "ui_shadow_effect.h"
 
 
-UIShadowEffect::UIShadowEffect(int x, int y, int width, int height, float roundness, int iterations) : x(x), y(y), height(height), width(width) {
-    const int new_height = (height / 1);
-    const int new_width = (width / 1);
-   
-    RenderTexture2D rend_shadow = LoadRenderTexture(new_width, new_height);
+UIShadowEffect::UIShadowEffect(int width, int height, float roundness, int iterations) : height(height), width(width) {
+    RenderTexture2D rend_shadow = LoadRenderTexture(width, height);
     SetTextureFilter(rend_shadow.texture, TEXTURE_FILTER_TRILINEAR);
 
     BeginTextureMode(rend_shadow);
@@ -14,8 +11,8 @@ UIShadowEffect::UIShadowEffect(int x, int y, int width, int height, float roundn
         Rectangle{
                 static_cast<float>(i),
                 static_cast<float>(i),
-                static_cast<float>(new_width - 2 * i),
-                static_cast<float>(new_height - 2 * i)
+                static_cast<float>(width - 2 * i),
+                static_cast<float>(height - 2 * i)
             },
             roundness,
             0,
@@ -34,6 +31,6 @@ UIShadowEffect::~UIShadowEffect() {
     UnloadTexture(*shadow);
 }
 
-void UIShadowEffect::Draw() {
-    DrawTexture(*shadow, x, y, WHITE);
+void UIShadowEffect::Draw(int x_pos, int y_pos) {
+    DrawTexture(*shadow, x_pos, y_pos, WHITE);
 }

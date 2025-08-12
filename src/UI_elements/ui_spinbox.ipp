@@ -190,4 +190,5 @@ T UISpinBox<T, MouseDown>::GetValue() {
 template <typename T, bool MouseDown>
 void UISpinBox<T, MouseDown>::SetValue(T val) {
     value_ = val;
+    NormalizeValue();
 }

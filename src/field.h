@@ -13,8 +13,10 @@ class Field {
 
   Controller* controller_;
 
-  size_t field_width_ = 512;
-  size_t field_height_ = 512;
+  // x is going among height
+  // y -- among width
+  size_t field_width_ = 60;
+  size_t field_height_ = 60;
 
   uint8_t read_buffer_ = 0;
   uint8_t* buffer_0_;
@@ -29,7 +31,9 @@ class Field {
   const uint8_t EMPTY_ = 0;
   const uint8_t FULL_ = 255;
 
+  bool rule_should_be_changed_ = false;
   GameRule* current_rule_ = nullptr;
+  GameRule* new_rule_ = nullptr;
   std::vector<GameColor>* current_pallete_ = nullptr;
 
   bool processing_ = true;
@@ -56,13 +60,14 @@ class Field {
   // average bool can be ovverding due to cache
   std::vector<std::atomic_bool> thread_should_start;
 
-  size_t frame_milliseconds_delay_ = 0;
+  size_t frame_milliseconds_delay_ = 10;
 
   float current_fps_ = 0;
 
   inline size_t BufferIndex(size_t x, size_t y);
 
   void ReinitializeBuffer();
+  void ReinitializeBufferCropData(size_t old_width, size_t old_height, size_t new_width, size_t hew_height);
   void ReinitializeColorBuffer();
 
   void SetPixel(size_t x, size_t y, uint8_t val, uint8_t* buffer);

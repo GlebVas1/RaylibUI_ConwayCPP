@@ -24,8 +24,17 @@ class Controller {
 
   void SetFieldPixel(int x, int y, uint8_t val);
 
+  const std::vector<std::string>& GetAllRuleNames();
   void SetFieldRule(size_t ind);
+  void SetRandomRule(
+    int arrive_probability,
+    int survive_probability,
+    int max_age,
+    int radius,
+    bool count_central
+  );
   GameRule* GetFieldRule();
+  
 
   const std::vector<std::string>& GetAllPalettesNames();
   void SetPalette(size_t ind);

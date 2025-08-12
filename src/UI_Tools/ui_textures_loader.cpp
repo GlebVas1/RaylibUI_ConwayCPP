@@ -37,4 +37,5 @@ void UITextureLoader::LoadAllTextures() {
   LoadTextureFromFile("pause", "../resources/textures/pause.png");
   LoadTextureFromFile("lock", "../resources/textures/lock.png");
   LoadTextureFromFile("unlock", "../resources/textures/unlock.png");
+  LoadTextureFromFile("load", "../resources/textures/load.png");
 }

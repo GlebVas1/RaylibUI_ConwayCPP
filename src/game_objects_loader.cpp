@@ -55,7 +55,6 @@ void GameObjectLoader::AddGameObject(const GameObject& obj) {
 }
 
 void GameObjectLoader::LoadAllObjects(const std::string& path) {
-
   std::ifstream all_objects_file(path);
   std::string object_name;
   std::string object_path;

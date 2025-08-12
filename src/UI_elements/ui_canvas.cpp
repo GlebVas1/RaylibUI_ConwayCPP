@@ -2,11 +2,11 @@
 
 
 void UICanvas::InitializeMainTexture() {
-  uint8_t* data0 = static_cast<uint8_t*>(malloc(main_texture_width_ * main_texture_width_ * 4));
+  uint8_t* data0 = static_cast<uint8_t*>(malloc(main_texture_width_ * main_texture_height_ * 4));
   Image img0 = {
     .data = data0,
     .width = main_texture_width_,
-    .height = main_texture_width_,
+    .height = main_texture_height_,
     .mipmaps = 1,
     .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 
   };
@@ -155,13 +155,14 @@ void UICanvas::Draw() {
       WHITE
     );
 
+    const auto texture_to_draw = show_grid_ ? main_grid_texture_ : main_grid_empty_texture_;
     DrawTexturePro(
-      show_grid_ ? *main_grid_texture_ : *main_grid_empty_texture_,
+      *texture_to_draw,
       Rectangle{
         0,
         0,
-        static_cast<float>(width_),
-        static_cast<float>(height_)
+        static_cast<float>(texture_to_draw->width),
+        static_cast<float>(texture_to_draw->height)
       },
       Rectangle({
         static_cast<float>(GetAbsoluteXPosition()),

@@ -41,6 +41,30 @@ void Field::ReinitializeBuffer() {
   buffer_1_ = static_cast<uint8_t*>(malloc(field_width_ * field_height_));
 }
 
+void Field::ReinitializeBufferCropData(size_t old_width, size_t old_height, size_t new_width, size_t new_height) {
+  uint8_t* buffer_0_new = static_cast<uint8_t*>(calloc(new_width * new_height, sizeof(uint8_t)));
+  uint8_t* buffer_1_new = static_cast<uint8_t*>(calloc(new_width * new_height, sizeof(uint8_t)));
+  
+  for (size_t row = 0; row < std::min(old_height, new_height); ++row) {
+    std::memcpy(
+      buffer_0_new + new_width * row, 
+      buffer_0_ + old_width * row, 
+      std::min(old_width, new_width)
+    );
+    std::memcpy(
+      buffer_1_new + new_width * row, 
+      buffer_1_ + old_width * row, 
+      std::min(old_width, new_width)
+    );
+  }
+
+  free(buffer_0_);
+  free(buffer_1_);
+
+  buffer_0_ = buffer_0_new;
+  buffer_1_ = buffer_1_new;
+}
+
 void Field::ReinitializeColorBuffer() {
   free(color_buffer_);
   color_buffer_ = static_cast<uint8_t*>(malloc(field_width_ * field_height_ * 4));
@@ -66,15 +90,15 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
   size_t neigh_count = 0;
 
   if (!paused_) {
-    for (size_t i = field_width_ - current_rule_->radius + x; i <= field_width_ + current_rule_->radius + x; ++i) {
-        for (size_t j = field_height_ - current_rule_->radius + y; j <= field_height_ + current_rule_->radius + y; ++j) {
-            if (i == field_width_ + x && j == y + field_height_) {
-                if (current_rule_->count_central && GetPixel(i % field_width_, j % field_height_, buffer_to_read) == FULL_) {
+    for (size_t i = field_height_ - current_rule_->radius + x; i <= field_height_ + current_rule_->radius + x; ++i) {
+        for (size_t j = field_width_ - current_rule_->radius + y; j <= field_width_ + current_rule_->radius + y; ++j) {
+            if (i == field_height_ + x && j == y + field_width_) {
+                if (current_rule_->count_central && GetPixel(i % field_height_, j % field_width_, buffer_to_read) == FULL_) {
                   ++neigh_count;
                 }
                 continue;
             }
-            if (GetPixel(i % field_width_, j % field_height_, buffer_to_read) == FULL_) {
+            if (GetPixel(i % field_height_, j % field_width_, buffer_to_read) == FULL_) {
                 ++neigh_count;
             }
         }
@@ -101,9 +125,7 @@ void Field::UpdatePixel(size_t x, size_t y, uint8_t* buffer_to_read, uint8_t* bu
       SetPixelColor(x, y, this_color.r, this_color.g, this_color.b);
     }
   } else if (current_cell == FULL_) {
-    if (current_rule_->is_dying(neigh_count)) {
-      SetPixel(x, y, EMPTY_, buffer_to_write);
-    } else if (current_rule_->is_getting_older(neigh_count)) {
+    if (!current_rule_->is_surviving(neigh_count)) {
       unsigned char offset = (FULL_ - EMPTY_) / current_rule_->maximum_age;
       if (offset > current_cell) {
         current_cell = EMPTY_;
@@ -135,7 +157,7 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
   thread_creation_mutex.lock();
   thread_creation_mutex.unlock();
 
-  while (processing_) {
+  while (true) {
     {
       std::unique_lock<std::mutex> lk(compute_start_mutex);
       compute_start_cv.wait(
@@ -144,6 +166,14 @@ void Field::ThreadUpdateFunction(size_t thread_id, size_t start_x) {
           return (thread_should_start[thread_id].load(std::memory_order_acq_rel));
         }
       );
+    }
+
+    if (!processing_) {
+      current_threads_finished.fetch_add(1, std::memory_order_acq_rel);
+      if (current_threads_finished.load() == threads_count) {
+        compute_end_cv.notify_one();
+      }
+      return;
     }
 
     thread_should_start[thread_id].store(false, std::memory_order_acq_rel);
@@ -193,7 +223,7 @@ void Field::CreateUpdateThreads() {
 void Field::MultiThreadUpdating() {
   size_t frame_counter = 0;
 
-  while (processing_) {
+  while (true) {
     float fps_count = 0;
     std::chrono::steady_clock::time_point fps_begin = std::chrono::steady_clock::now();
     std::this_thread::sleep_for(std::chrono::milliseconds(frame_milliseconds_delay_));
@@ -203,13 +233,29 @@ void Field::MultiThreadUpdating() {
       std::cout << "Update start frame "  << ++frame_counter << std::endl;
     }
 
-    for (auto& state : thread_should_start) {
-      state.store(true, std::memory_order_acq_rel);
+    if (should_reinitialize_.load()) {
+      ReinitializeBufferCropData(
+        field_width_,
+        field_height_, 
+        reinitialize_width_, 
+        reinitialize_height_);
+      field_width_ = reinitialize_width_;
+      field_height_ = reinitialize_height_;
+      ReinitializeColorBuffer();
+      controller_->SetNewColorBuffer(color_buffer_);
+      should_reinitialize_.store(false);
     }
 
-    if (!processing_) {
-      compute_start_cv.notify_all();
-      return;
+    if (rule_should_be_changed_) {
+      if (new_rule_ != nullptr) {
+        current_rule_ = new_rule_;
+      }
+      rule_should_be_changed_ = false;
+    }
+
+    
+    for (auto& state : thread_should_start) {
+      state.store(true, std::memory_order_acq_rel);
     }
 
     compute_start_cv.notify_all();
@@ -224,23 +270,34 @@ void Field::MultiThreadUpdating() {
 
     SwitchBuffer();
 
-    if (should_reinitialize_.load()) {
-      field_width_ = reinitialize_width_;
-      field_height_ = reinitialize_height_;
-      ReinitializeBuffer();
-      ReinitializeColorBuffer();
-      controller_->SetNewColorBuffer(color_buffer_);
-      should_reinitialize_.store(false);
-    }
-
-
+    
     std::chrono::steady_clock::time_point fps_end = std::chrono::steady_clock::now();
     auto fps_result = std::chrono::duration_cast<std::chrono::milliseconds>(fps_end - fps_begin).count();
     current_fps_ = 1.0 / static_cast<float>(fps_result) * 1000.0f;
     current_threads_finished.store(0, std::memory_order_release);
+
+    if (!processing_) {
+        for (auto& state : thread_should_start) {
+        state.store(true, std::memory_order_acq_rel);
+      }
+
+      compute_start_cv.notify_all();
+      break;
+    }
   }
 
-  compute_start_cv.notify_all();
+  std::unique_lock<std::mutex> lk(compute_end_mutex);
+    compute_end_cv.wait(
+      lk, 
+      [&](){ 
+        return (current_threads_finished.load(std::memory_order_acquire) == threads_count) || !processing_; 
+      }
+  );
+  
+  free(buffer_0_);
+  free(buffer_1_);
+  free(color_buffer_);
+
   return;
 }
 
@@ -249,13 +306,14 @@ uint8_t* Field::GetColorBuffer() {
 }
 
 void Field::SetNewDimensions(size_t x, size_t y) {
-  reinitialize_width_ = x;
-  reinitialize_height_ = y;
+  reinitialize_width_ = y;
+  reinitialize_height_ = x;
   should_reinitialize_.store(true, std::memory_order::release);
 }
 
 void Field::SetGameRule(GameRule* rule) {
-  current_rule_ = rule;
+  rule_should_be_changed_ = true;
+  new_rule_ = rule;
 }
 
 GameRule* Field::GetGameRule() {
@@ -283,8 +341,8 @@ void Field::StopThreads() {
 }
 
 void Field::SetPixelAt(int x, int y, uint8_t val) {
-  const size_t x_at = static_cast<size_t>((x + field_width_) % field_width_);
-  const size_t y_at = static_cast<size_t>((y + field_height_) % field_height_);
+  const size_t x_at = static_cast<size_t>((x + field_height_) % field_height_);
+  const size_t y_at = static_cast<size_t>((y + field_width_) % field_width_);
   SetPixel(x_at, y_at, val, GetReadBuffer());
   SetPixel(x_at, y_at, val, GetWriteBuffer());
 }

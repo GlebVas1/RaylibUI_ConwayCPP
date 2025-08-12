@@ -6,10 +6,10 @@ UITextButton::UITextButton(
   int y_pos, 
   int width, 
   int height, 
-  float roundness, 
+  float corner_radius, 
   std::function<void()> func, 
   const std::string& text) :
-  UIButton(x_pos, y_pos, width, height, roundness, func) {
+  UIButton(x_pos, y_pos, width, height, corner_radius, func) {
     text_ = text;
 }
 

@@ -13,7 +13,7 @@ class UITextButton : public UIButton {
     int y_pos, 
     int width, 
     int height, 
-    float roundness, 
+    float corner_radius, 
     std::function<void()> func, 
     const std::string& text
   );

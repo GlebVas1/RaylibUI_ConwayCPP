@@ -32,10 +32,10 @@ class UIElement {
   void SetWidth(int x);
   void SetHeight(int y);
 
-  inline int GetWidth() const;
-  inline int GetHeight() const;
-  inline int GetXPosition() const;
-  inline int GetYPosition() const;
+  int GetWidth() const;
+  int GetHeight() const;
+  int GetXPosition() const;
+  int GetYPosition() const;
 
   int GetAbsoluteXPosition() const;
   int GetAbsoluteYPosition() const;

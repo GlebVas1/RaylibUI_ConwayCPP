@@ -17,7 +17,7 @@ class UIDualTextureButton : public UIButton {
     int y, 
     int width, 
     int height,
-    float roundness, 
+    float corner_radius, 
     std::function<void(bool)> func, 
     const std::string& true_state, 
     const std::string& false_state,
