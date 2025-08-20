@@ -5,6 +5,11 @@ Bosco4 ../GameRules/bosco_4.txt
 Bosco ../GameRules/bosco_default.txt
 BugsR3 ../GameRules/bugs_radius_3.txt
 Bugs ../GameRules/bugs.txt
+Carpet ../GameRules/carpet.txt
+Carpet2 ../GameRules/carpet_2.txt
+Carpet3 ../GameRules/carpet_3.txt
+Carpet4 ../GameRules/carpet_4.txt
+Carpet5 ../GameRules/carpet_5.txt
 Default100gen ../GameRules/default_100_gen.txt
 Default_Interval ../GameRules/default_interval.txt
 Diameba ../GameRules/diameba.txt
@@ -20,6 +25,7 @@ ModernArt ../GameRules/modern_art.txt
 Replicators ../GameRules/replicators.txt
 Spirals ../GameRules/spirals.txt 
 Static ../GameRules/static.txt
+StarWars ../GameRules/starwars.txt
 Sticks ../GameRules/sticks.txt
 Test ../GameRules/test.txt
 Thrill_Grill ../GameRules/thrill_grill.txt
@@ -27,5 +33,3 @@ TransersI ../GameRules/transersI.txt
 TransersII ../GameRules/transersII.txt
 TreeGen ../GameRules/tree_gen.txt
 Tree ../GameRules/tree.txt
-
-
